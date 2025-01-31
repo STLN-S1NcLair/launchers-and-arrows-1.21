@@ -14,6 +14,8 @@
   "item.launchers_and_arrows.reverberating_arrow": "Reverberating Arrow",
   "item.launchers_and_arrows.wave_arrow": "Wave Arrow",
   "item.launchers_and_arrows.piercing_arrow": "Piercing Arrow",
+  "item.launchers_and_arrows.homing_arrow": "Homing Arrow",
+  "item.launchers_and_arrows.glitch_arrow": "Glitch Arrow",
   "item.launchers_and_arrows.boxed_bolts": "Boxed Bolts",
   "item.launchers_and_arrows.boxed_flame_bolts": "Boxed Flame Bolts",
   "item.launchers_and_arrows.boxed_freezing_bolts": "Boxed Freezing Bolts",
@@ -73,5 +75,6 @@
   "tooltip.launchers_and_arrows.bow_modifier": "Hold the Bow in Your Off-hand and This in Your Main Hand",
   "tooltip.launchers_and_arrows.bow_modifier_2": "and Sneak Right Click to Install It",
   "tooltip.launchers_and_arrows.bolt_thrower_modifier": "Hold the Bolt Thrower in Your Off-hand and This in Your Main Hand",
-  "tooltip.launchers_and_arrows.bolt_thrower_modifier_2": "and Sneak Right Click to Install It"
+  "tooltip.launchers_and_arrows.bolt_thrower_modifier_2": "and Sneak Right Click to Install It",
+  "tooltip.launchers_and_arrows.warning": "Warning! This item can completely mess up your world!"
 }

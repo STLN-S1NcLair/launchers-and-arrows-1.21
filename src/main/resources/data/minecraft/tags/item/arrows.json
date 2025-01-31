@@ -8,6 +8,8 @@
     "launchers_and_arrows:flood_arrow",
     "launchers_and_arrows:reverberating_arrow",
     "launchers_and_arrows:wave_arrow",
-    "launchers_and_arrows:piercing_arrow"
+    "launchers_and_arrows:piercing_arrow",
+    "launchers_and_arrows:homing_arrow",
+    "launchers_and_arrows:glitch_arrow"
   ]
 }

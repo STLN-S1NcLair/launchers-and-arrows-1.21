@@ -30,6 +30,8 @@ public final class ItemGroupInit {
                 entries.add(ItemInit.REVERBERATING_ARROW);
                 entries.add(ItemInit.WAVE_ARROW);
                 entries.add(ItemInit.PIERCING_ARROW);
+                entries.add(ItemInit.HOMING_ARROW);
+                entries.add(ItemInit.GLITCH_ARROW);
                 entries.add(ItemInit.BOXED_BOLTS);
                 entries.add(ItemInit.BOXED_FLAME_BOLTS);
                 entries.add(ItemInit.BOXED_FREEZING_BOLTS);

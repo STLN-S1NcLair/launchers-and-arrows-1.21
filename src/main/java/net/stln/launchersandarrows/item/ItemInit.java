@@ -54,6 +54,8 @@ public class ItemInit {
     public static final Item REVERBERATING_ARROW = registerItem("reverberating_arrow", new ArrowItem(new Item.Settings()));
     public static final Item WAVE_ARROW = registerItem("wave_arrow", new ArrowItem(new Item.Settings()));
     public static final Item PIERCING_ARROW = registerItem("piercing_arrow", new ArrowItem(new Item.Settings()));
+    public static final Item HOMING_ARROW = registerItem("homing_arrow", new ArrowItem(new Item.Settings()));
+    public static final Item GLITCH_ARROW = registerItem("glitch_arrow", new ArrowItem(new Item.Settings()));
 
     public static final Item BOXED_BOLTS = registerItem("boxed_bolts", new BoltItem(new Item.Settings()));
     public static final Item BOXED_FLAME_BOLTS = registerItem("boxed_flame_bolts", new BoltItem(new Item.Settings()));

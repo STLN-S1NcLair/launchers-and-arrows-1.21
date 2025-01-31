@@ -12,6 +12,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.stln.launchersandarrows.LaunchersAndArrows;
 import net.stln.launchersandarrows.item.BoltThrowerModifierItem;
+import net.stln.launchersandarrows.item.ItemInit;
 import net.stln.launchersandarrows.item.bow.ModfiableBowItem;
 import net.stln.launchersandarrows.item.component.ModComponentInit;
 import net.stln.launchersandarrows.item.launcher.BoltThrowerItem;
@@ -139,6 +140,11 @@ public class ItemTooltipMixin {
                 getAttributeModifierTooltip(tooltip, attributeModifier, iconFont);
                 getOtherModifierTooltip(tooltip, otherModifier, iconFont);
             }
+        }
+
+        if (stack.getItem() == ItemInit.GLITCH_ARROW) {
+            tooltip.add(Text.empty());
+            tooltip.add(Text.translatable("tooltip.launchers_and_arrows.warning").withColor(0xFF0000));
         }
     }
 

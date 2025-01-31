@@ -1,6 +1,12 @@
 package net.stln.launchersandarrows.mixin;
 
+import net.fabricmc.loader.impl.lib.sat4j.core.Vec;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -15,6 +21,9 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.BlockPointer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.stln.launchersandarrows.entity.AttributedProjectile;
@@ -38,6 +47,8 @@ public abstract class ArrowEffectMixin {
 
     @Unique
     private int inGroundTime = 0;
+    @Unique
+    private int glitchCount = 0;
 
     @Unique
     private static final TrackedData<ItemStack> ITEM_STACK =
@@ -47,6 +58,8 @@ public abstract class ArrowEffectMixin {
     ArrowEntity arrowEntity = (ArrowEntity) (Object) this;
     @Unique
     ItemStack itemStack = ItemStack.EMPTY;
+    @Unique
+    LivingEntity target = null;
 
     @Unique
     private ParticleEffect getparticleEffect() {
@@ -57,6 +70,8 @@ public abstract class ArrowEffectMixin {
          else if (itemStack.isOf(ItemInit.FLOOD_ARROW)) return ParticleInit.FLOOD_EFFECT;
          else if (itemStack.isOf(ItemInit.REVERBERATING_ARROW)) return ParticleInit.ECHO_EFFECT;
          else if (itemStack.isOf(ItemInit.WAVE_ARROW)) return ParticleInit.WAVE_EFFECT;
+         else if (itemStack.isOf(ItemInit.HOMING_ARROW)) return ParticleInit.HOMING_EFFECT;
+         else if (itemStack.isOf(ItemInit.GLITCH_ARROW)) return ParticleInit.GLITCH_EFFECT;
         return null;
     }
 
@@ -68,6 +83,52 @@ public abstract class ArrowEffectMixin {
                 2.0F, false, World.ExplosionSourceType.TRIGGER,
                 ParticleTypes.GUST_EMITTER_SMALL, ParticleTypes.GUST_EMITTER_LARGE, SoundEvents.ENTITY_WIND_CHARGE_WIND_BURST);
         arrowEntity.kill();
+    }
+
+    @Unique
+    private void trackEntity(ArrowEntity arrowEntity) {
+        Vec3d pos = arrowEntity.getPos();
+        LivingEntity closestEntity = arrowEntity.getWorld().getClosestEntity(LivingEntity.class, TargetPredicate.DEFAULT, (LivingEntity) arrowEntity.getOwner(), pos.x, pos.y, pos.z, Box.of(pos, 16, 16, 16));
+        if (target == null || target.isDead()) {
+        target = closestEntity;
+        }
+        if (target != null) {
+            Vec3d tarPos = target.getPos();
+            Vec3d distance = new Vec3d(tarPos.x - pos.x, tarPos.y - pos.y, tarPos.z - pos.z);
+            if (distance.length() > 6 && closestEntity != null) {
+                target = closestEntity;
+            }
+            distance = distance.multiply(1 / distance.length() / 8);
+            arrowEntity.addVelocity(distance);
+        }
+    }
+
+    @Unique
+    private void invertBlock(ArrowEntity arrowEntity, BlockPos pos) {
+
+        BlockState[][][] array = new BlockState[5][5][5];
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                for (int k = 0; k < 5; k++) {
+                    BlockPos currentBlockPos = pos.add(i - 2, j - 2, k - 2);
+                    array[i][j][k] = arrowEntity.getWorld().getBlockState(currentBlockPos);
+                }
+            }
+        }
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                for (int k = 0; k < 5; k++) {
+                    BlockPos currentBlockPos = pos.add(2 - i, 2 - j, 2 - k);
+                    boolean flag1 = array[i][j][k].getBlock().getHardness() > 0;
+                    boolean flag2 = arrowEntity.getWorld().getBlockState(currentBlockPos).getBlock().getHardness() > 0;
+                    boolean flag3 = array[i][j][k].getBlock() == Blocks.AIR;
+                    boolean flag4 = arrowEntity.getWorld().getBlockState(currentBlockPos).getBlock() == Blocks.AIR;
+                    if ((flag1 && flag2) || (flag1 && flag4) || (flag2 && flag3)) {
+                        arrowEntity.getWorld().setBlockState(currentBlockPos, array[i][j][k]);
+                    }
+                }
+            }
+        }
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
@@ -90,6 +151,18 @@ public abstract class ArrowEffectMixin {
             }
             if (inGroundTime > 50) {
                 generateWindExplosion();
+            }
+        } else if (itemStack.isOf(ItemInit.HOMING_ARROW)) {
+            trackEntity(arrowEntity);
+        } else if (itemStack.isOf(ItemInit.GLITCH_ARROW)) {
+            NbtCompound nbt = new NbtCompound();
+            arrowEntity.writeCustomDataToNbt(nbt);
+            if (nbt.getBoolean("inGround")) {
+                glitchCount++;
+                invertBlock(arrowEntity, arrowEntity.getBlockPos());
+            }
+            if (glitchCount >= 1) {
+                arrowEntity.discard();
             }
         }
     }
@@ -123,6 +196,8 @@ public abstract class ArrowEffectMixin {
             if (itemStack.isOf(ItemInit.WAVE_ARROW)) {
                 StatusEffectUtil.stackStatusEffect(livingEntity, new StatusEffectInstance(StatusEffectInit.SHOCK_EXPLOSION, 50, 0));
                 arrowEntity.getWorld().playSound(null, arrowEntity.getBlockPos(), SoundInit.WAVE, SoundCategory.PLAYERS);
+            } else if (itemStack.isOf(ItemInit.GLITCH_ARROW)) {
+                invertBlock(arrowEntity, target.getBlockPos());
             }
             StatusEffectUtil.applyAttributeModifier(livingEntity, ((AttributedProjectile) arrowEntity).getAttributes());
             StatusEffectUtil.applyAttributeRatioModifier(livingEntity, this.itemStack, ((AttributedProjectile) arrowEntity).getRatioAttributes());

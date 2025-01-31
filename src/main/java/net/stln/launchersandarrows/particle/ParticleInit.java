@@ -17,6 +17,8 @@ public class ParticleInit {
     public static final SimpleParticleType FLOOD_EFFECT = FabricParticleTypes.simple(true);
     public static final SimpleParticleType ECHO_EFFECT = FabricParticleTypes.simple(true);
     public static final SimpleParticleType WAVE_EFFECT = FabricParticleTypes.simple(true);
+    public static final SimpleParticleType HOMING_EFFECT = FabricParticleTypes.simple(true);
+    public static final SimpleParticleType GLITCH_EFFECT = FabricParticleTypes.simple(true);
 
     public static void registerParticleTypes() {
         LaunchersAndArrows.LOGGER.info("Registering Particle Types for " + LaunchersAndArrows.MOD_ID);
@@ -27,6 +29,8 @@ public class ParticleInit {
         Registry.register(Registries.PARTICLE_TYPE, Identifier.of(LaunchersAndArrows.MOD_ID, "flood_effect"), FLOOD_EFFECT);
         Registry.register(Registries.PARTICLE_TYPE, Identifier.of(LaunchersAndArrows.MOD_ID, "echo_effect"), ECHO_EFFECT);
         Registry.register(Registries.PARTICLE_TYPE, Identifier.of(LaunchersAndArrows.MOD_ID, "wave_effect"), WAVE_EFFECT);
+        Registry.register(Registries.PARTICLE_TYPE, Identifier.of(LaunchersAndArrows.MOD_ID, "homing_effect"), HOMING_EFFECT);
+        Registry.register(Registries.PARTICLE_TYPE, Identifier.of(LaunchersAndArrows.MOD_ID, "glitch_effect"), GLITCH_EFFECT);
     }
 
     public static void registerParticleClient() {
@@ -38,5 +42,7 @@ public class ParticleInit {
         ParticleFactoryRegistry.getInstance().register(ParticleInit.FLOOD_EFFECT, FloodEffectParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(ParticleInit.ECHO_EFFECT, EchoEffectParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(ParticleInit.WAVE_EFFECT, WaveEffectParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(ParticleInit.HOMING_EFFECT, HomingEffectParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(ParticleInit.GLITCH_EFFECT, GlitchEffectParticle.Factory::new);
     }
 }

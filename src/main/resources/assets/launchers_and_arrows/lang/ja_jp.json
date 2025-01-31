@@ -14,6 +14,8 @@
   "item.launchers_and_arrows.reverberating_arrow": "残響の矢",
   "item.launchers_and_arrows.wave_arrow": "波動の矢",
   "item.launchers_and_arrows.piercing_arrow": "貫通の矢",
+  "item.launchers_and_arrows.homing_arrow": "追尾の矢",
+  "item.launchers_and_arrows.glitch_arrow": "グリッチの矢",
   "item.launchers_and_arrows.boxed_bolts": "ボルトの箱",
   "item.launchers_and_arrows.boxed_flame_bolts": "炎のボルトの箱",
   "item.launchers_and_arrows.boxed_freezing_bolts": "氷のボルトの箱",
@@ -73,5 +75,6 @@
   "tooltip.launchers_and_arrows.bow_modifier": "オフハンドに弓を、メインハンドに改造パーツを持って",
   "tooltip.launchers_and_arrows.bow_modifier_2": "しゃがみ右クリックで装着",
   "tooltip.launchers_and_arrows.bolt_thrower_modifier": "オフハンドにボルトスロワーを、メインハンドに改造パーツを持って",
-  "tooltip.launchers_and_arrows.bolt_thrower_modifier_2": "しゃがみ右クリックで装着"
+  "tooltip.launchers_and_arrows.bolt_thrower_modifier_2": "しゃがみ右クリックで装着",
+  "tooltip.launchers_and_arrows.warning": "警告！ このアイテムはワールドをめちゃくちゃにする可能性があります！"
 }
