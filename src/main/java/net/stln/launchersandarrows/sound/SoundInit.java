@@ -34,6 +34,8 @@ public class SoundInit {
     public static SoundEvent WAVE = SoundEvent.of(WAVE_ID);
     public static final Identifier RELOAD_ID = Identifier.of("launchers_and_arrows:reload");
     public static SoundEvent RELOAD = SoundEvent.of(RELOAD_ID);
+    public static final Identifier GLITCH_ID = Identifier.of("launchers_and_arrows:glitch");
+    public static SoundEvent GLITCH = SoundEvent.of(GLITCH_ID);
 
     public static void registerSoundEvents() {
         LaunchersAndArrows.LOGGER.info("Registering Sounds for " + LaunchersAndArrows.MOD_ID);
@@ -49,5 +51,6 @@ public class SoundInit {
         Registry.register(Registries.SOUND_EVENT, EXPLODE_ID, EXPLODE);
         Registry.register(Registries.SOUND_EVENT, WAVE_ID, WAVE);
         Registry.register(Registries.SOUND_EVENT, RELOAD_ID, RELOAD);
+        Registry.register(Registries.SOUND_EVENT, GLITCH_ID, GLITCH);
     }
 }

@@ -12,6 +12,7 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
@@ -26,6 +27,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.explosion.AdvancedExplosionBehavior;
+import net.minecraft.world.explosion.Explosion;
+import net.minecraft.world.explosion.ExplosionBehavior;
 import net.stln.launchersandarrows.entity.AttributedProjectile;
 import net.stln.launchersandarrows.item.ItemInit;
 import net.stln.launchersandarrows.item.ModItemTags;
@@ -40,6 +44,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Optional;
+
 import static net.minecraft.entity.projectile.AbstractWindChargeEntity.EXPLOSION_BEHAVIOR;
 
 @Mixin(ArrowEntity.class)
@@ -48,7 +54,15 @@ public abstract class ArrowEffectMixin {
     @Unique
     private int inGroundTime = 0;
     @Unique
+    private int bounceCount = 0;
+    @Unique
+    private Vec3d prevVelocity = new Vec3d(0, 0, 0);
+    @Unique
     private int glitchCount = 0;
+
+    @Unique
+    private static ExplosionBehavior EXPLOSION_BEHAVIOR = new AdvancedExplosionBehavior(
+            false, true, Optional.of(1.0F), Optional.empty());
 
     @Unique
     private static final TrackedData<ItemStack> ITEM_STACK =
@@ -72,6 +86,7 @@ public abstract class ArrowEffectMixin {
          else if (itemStack.isOf(ItemInit.WAVE_ARROW)) return ParticleInit.WAVE_EFFECT;
          else if (itemStack.isOf(ItemInit.HOMING_ARROW)) return ParticleInit.HOMING_EFFECT;
          else if (itemStack.isOf(ItemInit.GLITCH_ARROW)) return ParticleInit.GLITCH_EFFECT;
+        else if (itemStack.isOf(ItemInit.BURST_ARROW)) return ParticleTypes.SMOKE;
         return null;
     }
 
@@ -82,23 +97,25 @@ public abstract class ArrowEffectMixin {
                 EXPLOSION_BEHAVIOR, pos.getX(), pos.getY(), pos.getZ(),
                 2.0F, false, World.ExplosionSourceType.TRIGGER,
                 ParticleTypes.GUST_EMITTER_SMALL, ParticleTypes.GUST_EMITTER_LARGE, SoundEvents.ENTITY_WIND_CHARGE_WIND_BURST);
-        arrowEntity.kill();
+        if (bounceCount > 1) {
+            arrowEntity.kill();
+        }
     }
 
     @Unique
     private void trackEntity(ArrowEntity arrowEntity) {
         Vec3d pos = arrowEntity.getPos();
-        LivingEntity closestEntity = arrowEntity.getWorld().getClosestEntity(LivingEntity.class, TargetPredicate.DEFAULT, (LivingEntity) arrowEntity.getOwner(), pos.x, pos.y, pos.z, Box.of(pos, 16, 16, 16));
+        LivingEntity closestEntity = arrowEntity.getWorld().getClosestEntity(LivingEntity.class, TargetPredicate.DEFAULT, (LivingEntity) arrowEntity.getOwner(), pos.x, pos.y, pos.z, Box.of(pos.add(arrowEntity.getVelocity()), 16, 16, 16));
         if (target == null || target.isDead()) {
         target = closestEntity;
         }
         if (target != null) {
-            Vec3d tarPos = target.getPos();
-            Vec3d distance = new Vec3d(tarPos.x - pos.x, tarPos.y - pos.y, tarPos.z - pos.z);
-            if (distance.length() > 6 && closestEntity != null) {
+            Vec3d tarPos = target.getEyePos();
+            Vec3d distance = tarPos.subtract(pos);
+            if (distance.length() > 8 && closestEntity != null) {
                 target = closestEntity;
             }
-            distance = distance.multiply(1 / distance.length() / 8);
+            distance = distance.multiply(1 / distance.length() / 5 * arrowEntity.getVelocity().length());
             arrowEntity.addVelocity(distance);
         }
     }
@@ -131,8 +148,38 @@ public abstract class ArrowEffectMixin {
         }
     }
 
+    @Unique
+    private void addGlitchEffect(BlockPos pos) {
+        for (int i = 0; i < 125; i++) {
+            arrowEntity.getWorld().addParticle(ParticleInit.GLITCH_EFFECT, true,
+                    pos.getX() + (arrowEntity.getRandom().nextFloat() * 5 - 2),
+                    pos.getY() + (arrowEntity.getRandom().nextFloat() * 5 - 2),
+                    pos.getZ() + (arrowEntity.getRandom().nextFloat() * 5 - 2),
+                    0, 0, 0);
+        }
+        if (arrowEntity.getOwner() instanceof PlayerEntity) {
+            arrowEntity.getWorld().playSound((PlayerEntity) arrowEntity.getOwner(), pos, SoundInit.GLITCH, SoundCategory.PLAYERS);
+        } else {
+            arrowEntity.getWorld().playSound(null, pos, SoundInit.GLITCH, SoundCategory.PLAYERS);
+        }
+    }
+
+    @Unique
+    private void generateExplosion() {
+        Vec3d pos = arrowEntity.getPos();
+
+        arrowEntity.getWorld().createExplosion(arrowEntity, Explosion.createDamageSource(arrowEntity.getWorld(), arrowEntity),
+                EXPLOSION_BEHAVIOR, pos.getX(), pos.getY(), pos.getZ(),
+                3F, false, World.ExplosionSourceType.MOB,
+                ParticleTypes.EXPLOSION, ParticleTypes.EXPLOSION_EMITTER, SoundInit.EXPLODE_ENTRY);
+        arrowEntity.discard();
+    }
+
     @Inject(method = "tick", at = @At("HEAD"))
     private void tick(CallbackInfo ci) {
+        if (glitchCount >= 1) {
+            arrowEntity.discard();
+        }
         if (!arrowEntity.getWorld().isClient()) {
             arrowEntity.getDataTracker().set(ITEM_STACK, arrowEntity.getItemStack());
         }
@@ -142,15 +189,23 @@ public abstract class ArrowEffectMixin {
             NbtCompound nbt = new NbtCompound();
             arrowEntity.writeCustomDataToNbt(nbt);
             if (nbt.getBoolean("inGround")) {
-                if (inGroundTime == 0) {
+                if (bounceCount < 1) {
+                    bounceCount++;
+                    Vec3d newPos = arrowEntity.getPos().add(prevVelocity.multiply(-1));
+                    arrowEntity.setVelocity(prevVelocity.multiply(-1));
+                    generateWindExplosion();
+                    arrowEntity.setPos(newPos.x, newPos.y, newPos.z);
+                } else if (inGroundTime == 0) {
                     arrowEntity.getWorld().playSound(null, arrowEntity.getBlockPos(), SoundInit.WAVE, SoundCategory.PLAYERS);
                 }
                 inGroundTime++;
             } else {
+                prevVelocity = arrowEntity.getVelocity();
                 inGroundTime = 0;
             }
             if (inGroundTime > 50) {
                 generateWindExplosion();
+                arrowEntity.discard();
             }
         } else if (itemStack.isOf(ItemInit.HOMING_ARROW)) {
             trackEntity(arrowEntity);
@@ -160,9 +215,22 @@ public abstract class ArrowEffectMixin {
             if (nbt.getBoolean("inGround")) {
                 glitchCount++;
                 invertBlock(arrowEntity, arrowEntity.getBlockPos());
+                BlockPos pos = arrowEntity.getBlockPos();
+                addGlitchEffect(pos);
             }
-            if (glitchCount >= 1) {
-                arrowEntity.discard();
+        } else if (itemStack.isOf(ItemInit.TAILWIND_ARROW)) {
+            Vec3d velocity = arrowEntity.getVelocity();
+            if (arrowEntity.age > 10) {
+                arrowEntity.addVelocity(velocity.multiply(1 / velocity.length() / 5));
+            }
+        } else if (itemStack.isOf(ItemInit.LINEAR_ARROW)) {
+            arrowEntity.setNoGravity(true);
+        } else if (itemStack.isOf(ItemInit.BURST_ARROW)) {
+            arrowEntity.pickupType = PersistentProjectileEntity.PickupPermission.DISALLOWED;
+            NbtCompound nbt = new NbtCompound();
+            arrowEntity.writeCustomDataToNbt(nbt);
+            if (arrowEntity.age > 5) {
+                generateExplosion();
             }
         }
     }
@@ -198,6 +266,8 @@ public abstract class ArrowEffectMixin {
                 arrowEntity.getWorld().playSound(null, arrowEntity.getBlockPos(), SoundInit.WAVE, SoundCategory.PLAYERS);
             } else if (itemStack.isOf(ItemInit.GLITCH_ARROW)) {
                 invertBlock(arrowEntity, target.getBlockPos());
+                BlockPos pos = arrowEntity.getBlockPos();
+                addGlitchEffect(pos);
             }
             StatusEffectUtil.applyAttributeModifier(livingEntity, ((AttributedProjectile) arrowEntity).getAttributes());
             StatusEffectUtil.applyAttributeRatioModifier(livingEntity, this.itemStack, ((AttributedProjectile) arrowEntity).getRatioAttributes());

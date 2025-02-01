@@ -70,5 +70,11 @@
     "sounds" :  [
       "launchers_and_arrows:reload"
     ]
+  },
+  "glitch" :  {
+    "subtitle" :  "subtitles.launchers_and_arrows.glitch" ,
+    "sounds" :  [
+      "launchers_and_arrows:glitch"
+    ]
   }
 }
