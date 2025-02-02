@@ -12,32 +12,27 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.stln.launchersandarrows.item.FovModifierItem;
+import net.stln.launchersandarrows.item.util.ModifierDictionary;
 import net.stln.launchersandarrows.sound.SoundInit;
+import net.stln.launchersandarrows.util.ModifierEnum;
 
 import java.util.List;
 
-public class LongBowItem extends ModfiableBowItem implements FovModifierItem {
+public class ModularBowItem extends ModfiableBowItem implements FovModifierItem {
 
-    float fov = 1.0F;
+    float fov = 1.0f;
 
-    public LongBowItem(Settings settings) {
+    public ModularBowItem(Settings settings) {
         super(settings);
-        pulltime = 40;
+        pulltime = 30;
+        slotsize = 5;
     }
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         world.playSound((Entity) user, user.getBlockPos(), SoundEvents.ITEM_CROSSBOW_LOADING_END.value(), SoundCategory.PLAYERS, 1f, 1.5f);
-        world.playSound((Entity) user, user.getBlockPos(), SoundEvents.ITEM_CROSSBOW_LOADING_MIDDLE.value(), SoundCategory.PLAYERS, 1f, 0.5f);
+        world.playSound((Entity) user, user.getBlockPos(), SoundEvents.ITEM_CROSSBOW_LOADING_MIDDLE.value(), SoundCategory.PLAYERS, 1f, 2.0f);
         return super.use(world, user, hand);
-    }
-
-    @Override
-    public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
-        this.fov = 1.0f - getModifiedPullProgress(getMaxUseTime(stack, user) - remainingUseTicks, stack) / 4.0f;
-        if (user.isSneaking()) {
-            this.fov *= 0.5f;
-        }
     }
 
     @Override
@@ -47,10 +42,10 @@ public class LongBowItem extends ModfiableBowItem implements FovModifierItem {
             if (!itemStack.isEmpty()) {
                 int i = this.getMaxUseTime(stack, user) - remainingUseTicks;
                 float f = getModifiedPullProgress(i, stack);
-                if (!((double)f < 0.3)) {
+                if (!((double)f < 0.5)) {
                     List<ItemStack> list = load(stack, itemStack, playerEntity);
                     if (world instanceof ServerWorld serverWorld && !list.isEmpty()) {
-                        this.shootAll(serverWorld, playerEntity, playerEntity.getActiveHand(), stack, list, f * 6.0F, 0.5F, f == 1.0F, null);
+                        this.shootAll(serverWorld, playerEntity, playerEntity.getActiveHand(), stack, list, f * 2.0F, 1.0F, f == 1.0F, null);
                     }
 
                     world.playSound(
@@ -61,7 +56,7 @@ public class LongBowItem extends ModfiableBowItem implements FovModifierItem {
                             SoundInit.BOW_RELEASE,
                             SoundCategory.PLAYERS,
                             1.5F,
-                            0.75F / (world.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F
+                            1.0F / (world.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F
                     );
                     playerEntity.incrementStat(Stats.USED.getOrCreateStat(this));
                 }

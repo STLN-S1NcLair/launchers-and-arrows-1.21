@@ -24,7 +24,9 @@ public class CustomModelPredicateProvider {
         LaunchersAndArrows.LOGGER.info("Registering Item Model for " + LaunchersAndArrows.MOD_ID);
         registerModBow(ItemInit.LONG_BOW);
         registerModBow(ItemInit.RAPID_BOW);
+        registerModBow(ItemInit.MODULAR_BOW);
         registerModBow(ItemInit.MULTISHOT_BOW);
+        registerModBow(ItemInit.RAINSHOT_BOW);
         registerBoltThrower(ItemInit.BOLT_THROWER);
         registerCrosslauncher(ItemInit.CROSSLAUNCHER);
         registerCrosslauncher(ItemInit.HOOK_LAUNCHER);

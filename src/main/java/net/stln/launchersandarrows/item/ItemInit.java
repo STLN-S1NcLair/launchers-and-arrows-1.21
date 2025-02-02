@@ -9,9 +9,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.stln.launchersandarrows.LaunchersAndArrows;
 import net.stln.launchersandarrows.LaunchersAndArrowsDataGenerator;
-import net.stln.launchersandarrows.item.bow.LongBowItem;
-import net.stln.launchersandarrows.item.bow.MultiShotBowItem;
-import net.stln.launchersandarrows.item.bow.RapidBowItem;
+import net.stln.launchersandarrows.item.bow.*;
 import net.stln.launchersandarrows.item.component.ModComponentInit;
 import net.stln.launchersandarrows.item.component.ModifierComponent;
 import net.stln.launchersandarrows.item.launcher.BoltThrowerItem;
@@ -32,8 +30,13 @@ public class ItemInit {
             new LongBowItem(new Item.Settings().maxDamage(1024).component(ModComponentInit.MODIFIER_COMPONENT, ModifierComponent.DEFAULT)));
     public static final Item RAPID_BOW = registerItem("rapid_bow",
             new RapidBowItem(new Item.Settings().maxDamage(2048).component(ModComponentInit.MODIFIER_COMPONENT, ModifierComponent.DEFAULT)));
+    public static final Item MODULAR_BOW = registerItem("modular_bow",
+            new ModularBowItem(new Item.Settings().maxDamage(2048).component(ModComponentInit.MODIFIER_COMPONENT, ModifierComponent.DEFAULT)));
     public static final Item MULTISHOT_BOW = registerItem("multishot_bow",
             new MultiShotBowItem(new Item.Settings().maxDamage(2048).component(ModComponentInit.MODIFIER_COMPONENT, ModifierComponent.DEFAULT)));
+    public static final Item RAINSHOT_BOW = registerItem("rainshot_bow",
+            new RainShotBowItem(new Item.Settings().maxDamage(8192).component(ModComponentInit.MODIFIER_COMPONENT, ModifierComponent.DEFAULT)
+                    .component(ModComponentInit.CHARGE_COUNT_COMPONENT, 0)));
     public static final Item BOLT_THROWER = registerItem("bolt_thrower",
             new BoltThrowerItem(new Item.Settings().maxDamage(3072).component(ModComponentInit.MODIFIER_COMPONENT, ModifierComponent.DEFAULT)
                     .component(ModComponentInit.BOLT_COUNT_COMPONENT, 0)

@@ -6,6 +6,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.stln.launchersandarrows.LaunchersAndArrows;
+import net.stln.launchersandarrows.item.bow.RainShotBowItem;
 import net.stln.launchersandarrows.item.launcher.BoltThrowerItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -30,6 +31,10 @@ public class MovementSpeedMixin {
                 || entity.getOffHandStack().getItem() instanceof BoltThrowerItem) {
             entity.input.movementForward *= 0.5F;
             entity.input.movementSideways *= 0.5F;
+        } else if (entity.getMainHandStack().getItem() instanceof RainShotBowItem
+                || entity.getOffHandStack().getItem() instanceof RainShotBowItem) {
+            entity.input.movementForward *= 5F;
+            entity.input.movementSideways *= 5F;
         }
     }
 }

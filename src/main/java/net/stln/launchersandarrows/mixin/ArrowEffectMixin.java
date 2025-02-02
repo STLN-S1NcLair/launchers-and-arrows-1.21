@@ -172,9 +172,7 @@ public abstract class ArrowEffectMixin {
                 EXPLOSION_BEHAVIOR, pos.getX(), pos.getY(), pos.getZ(),
                 3F, false, World.ExplosionSourceType.MOB,
                 ParticleTypes.EXPLOSION, ParticleTypes.EXPLOSION_EMITTER, SoundInit.EXPLODE_ENTRY);
-        if (arrowEntity.isLiving()) {
-            arrowEntity.kill();
-        }
+        arrowEntity.kill();
     }
 
     @Inject(method = "tick", at = @At("HEAD"))

@@ -1,0 +1,6 @@
+{
+  "parent": "launchers_and_arrows:item/rainshot_bow",
+  "textures": {
+    "layer0": "launchers_and_arrows:item/rainshot_bow_pulling_0"
+  }
+}

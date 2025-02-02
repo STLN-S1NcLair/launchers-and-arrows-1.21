@@ -1,0 +1,6 @@
+{
+  "parent": "launchers_and_arrows:item/modular_bow",
+  "textures": {
+    "layer0": "launchers_and_arrows:item/modular_bow_pulling_1"
+  }
+}

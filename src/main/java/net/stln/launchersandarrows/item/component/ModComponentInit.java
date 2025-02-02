@@ -21,6 +21,12 @@ public class ModComponentInit {
             ComponentType.<String>builder().codec(Codec.STRING).build()
     );
 
+    public static final ComponentType<Integer> CHARGE_COUNT_COMPONENT = Registry.register(
+            Registries.DATA_COMPONENT_TYPE,
+            Identifier.of(LaunchersAndArrows.MOD_ID, "charge_count"),
+            ComponentType.<Integer>builder().codec(Codec.INT).build()
+    );
+
     public static final ComponentType<Integer> BOLT_COUNT_COMPONENT = Registry.register(
             Registries.DATA_COMPONENT_TYPE,
             Identifier.of(LaunchersAndArrows.MOD_ID, "bolt_count"),
