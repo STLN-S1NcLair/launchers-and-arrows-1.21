@@ -77,12 +77,12 @@ public class ItemTooltipMixin {
 
 
         Integer[] attributeModifiers = new Integer[13];
-        Integer[] otherModifiers = new Integer[4];
+        Integer[] otherModifiers = new Integer[5];
         Item modifier = stack.getItem();
         for (int i = 0; i < 13; i++) {
             attributeModifiers[i] = AttributeModifierDictionary.getAttributeEffect(modifier, i - 6);
         }
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 5; i++) {
             otherModifiers[i] = ModifierDictionary.getEffect(modifier, i);
         }
         if (AttributeModifierDictionary.getDict().containsKey1(modifier) || ModifierDictionary.getDict().containsKey1(modifier)) {
@@ -111,7 +111,7 @@ public class ItemTooltipMixin {
             if (stack.get(ModComponentInit.MODIFIER_COMPONENT) != null) {
                 List<ItemStack> modifiers = stack.get(ModComponentInit.MODIFIER_COMPONENT).getModifiers();
                 Integer[] attributeModifier = new Integer[13];
-                Integer[] otherModifier = new Integer[4];
+                Integer[] otherModifier = new Integer[5];
                 for (int i = 0; i < ((ModfiableBowItem) stack.getItem()).getSlotsize(); i++) {
                     if (i < modifiers.size() && modifiers.get(i) != null) {
                         tooltip.add(Text.literal("- ").withColor(0x808080)
@@ -126,7 +126,7 @@ public class ItemTooltipMixin {
                                 attributeModifier[j] += AttributeModifierDictionary.getAttributeEffect(mod, j - 6);
                             }
                         }
-                        for (int j = 0; j < 4; j++) {
+                        for (int j = 0; j < 5; j++) {
                             if (otherModifier[j] == null) {
                                 otherModifier[j] = ModifierDictionary.getEffect(mod, j);
                             } else if (ModifierDictionary.getEffect(mod, j) != null) {
@@ -227,6 +227,10 @@ public class ItemTooltipMixin {
         if (modifiers[ModifierEnum.CAPACITY.get()] != null) {
             tooltip.add(Text.literal("\u000c").setStyle(Style.EMPTY.withFont(iconFont))
                     .append(Text.literal(getSign(modifiers[ModifierEnum.CAPACITY.get()]) + "%").withColor(getColorWithSign(modifiers[ModifierEnum.CAPACITY.get()], 0xFFFFFF))));
+        }
+        if (modifiers[ModifierEnum.RICOCHET.get()] != null) {
+            tooltip.add(Text.literal("\u000e").setStyle(Style.EMPTY.withFont(iconFont))
+                    .append(Text.literal(getSign(modifiers[ModifierEnum.RICOCHET.get()])).withColor(getColorWithSign(modifiers[ModifierEnum.RICOCHET.get()], 0xFFFFFF))));
         }
     }
 

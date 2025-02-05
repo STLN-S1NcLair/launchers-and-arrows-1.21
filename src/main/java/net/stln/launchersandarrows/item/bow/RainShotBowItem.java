@@ -50,6 +50,8 @@ public class RainShotBowItem extends ModfiableBowItem implements FovModifierItem
                     && charge > 0) {
                 this.generateArrow(stack, world, (LivingEntity) entity, getMaxUseTime(stack, (LivingEntity) entity) - pulltime, playerEntity);
                 stack.set(ModComponentInit.CHARGE_COUNT_COMPONENT, charge - 1);
+        } else {
+            stack.set(ModComponentInit.CHARGE_COUNT_COMPONENT, 0);
         }
     }
 

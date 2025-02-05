@@ -9,6 +9,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import net.stln.launchersandarrows.entity.AttributedProjectile;
+import net.stln.launchersandarrows.entity.RicochetProjectile;
 import net.stln.launchersandarrows.item.component.ModComponentInit;
 import net.stln.launchersandarrows.item.component.ModifierComponent;
 import net.stln.launchersandarrows.item.util.AttributeModifierDictionary;
@@ -73,6 +74,9 @@ public class ModfiableBowItem extends BowItem {
                                 ((AttributedProjectile) projectile).setAttribute(j - 6,
                                         AttributeModifierDictionary.getAttributeEffect(modifier.getItem(), j - 6) + ((AttributedProjectile) projectile).getAttribute(j - 6));
                             }
+                        }
+                        if (ModifierDictionary.getDict().containsKey2(modifier.getItem(), ModifierEnum.RICOCHET.get())) {
+                            ((RicochetProjectile) projectile).setRicochet(ModifierDictionary.getEffect(modifier.getItem(), ModifierEnum.RICOCHET.get()) + ((RicochetProjectile) projectile).getRicochet());
                         }
                     }
                 }

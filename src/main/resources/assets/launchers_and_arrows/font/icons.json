@@ -68,6 +68,12 @@
         },
         {
             "type": "bitmap",
+            "file": "launchers_and_arrows:icon/ricochet.png",
+            "ascent": 8,
+            "chars": ["\u000e"]
+        },
+        {
+            "type": "bitmap",
             "file": "launchers_and_arrows:item/ignition_string.png",
             "ascent": 7,
             "chars": ["\u1000"]

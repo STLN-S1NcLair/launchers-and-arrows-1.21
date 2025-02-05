@@ -30,7 +30,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.explosion.AdvancedExplosionBehavior;
 import net.minecraft.world.explosion.Explosion;
 import net.minecraft.world.explosion.ExplosionBehavior;
+import net.stln.launchersandarrows.LaunchersAndArrows;
 import net.stln.launchersandarrows.entity.AttributedProjectile;
+import net.stln.launchersandarrows.entity.RicochetProjectile;
+import net.stln.launchersandarrows.entity.renderer.RicochetEffectProjectile;
 import net.stln.launchersandarrows.item.ItemInit;
 import net.stln.launchersandarrows.item.ModItemTags;
 import net.stln.launchersandarrows.particle.ParticleInit;
@@ -49,16 +52,14 @@ import java.util.Optional;
 import static net.minecraft.entity.projectile.AbstractWindChargeEntity.EXPLOSION_BEHAVIOR;
 
 @Mixin(ArrowEntity.class)
-public abstract class ArrowEffectMixin {
+public abstract class ArrowEffectMixin implements RicochetEffectProjectile {
 
     @Unique
     private int inGroundTime = 0;
     @Unique
-    private int bounceCount = 0;
-    @Unique
-    private Vec3d prevVelocity = new Vec3d(0, 0, 0);
-    @Unique
     private int glitchCount = 0;
+    @Unique
+    private boolean setRicochet = false;
 
     @Unique
     private static ExplosionBehavior EXPLOSION_BEHAVIOR = new AdvancedExplosionBehavior(
@@ -74,6 +75,16 @@ public abstract class ArrowEffectMixin {
     ItemStack itemStack = ItemStack.EMPTY;
     @Unique
     LivingEntity target = null;
+
+    @Override
+    public void onRicochet(int count) {
+        itemStack = arrowEntity.getDataTracker().get(ITEM_STACK);
+        if (itemStack.isOf(ItemInit.WAVE_ARROW)) {
+            Vec3d newPos = arrowEntity.getPos().add(arrowEntity.getVelocity());
+            arrowEntity.setPos(newPos.x, newPos.y, newPos.z);
+            generateWindExplosion(false);
+        }
+}
 
     @Unique
     private ParticleEffect getparticleEffect() {
@@ -91,13 +102,13 @@ public abstract class ArrowEffectMixin {
     }
 
     @Unique
-    private void generateWindExplosion() {
+    private void generateWindExplosion(boolean kill) {
         Vec3d pos = arrowEntity.getPos();
         arrowEntity.getWorld().createExplosion(null, null,
                 EXPLOSION_BEHAVIOR, pos.getX(), pos.getY(), pos.getZ(),
                 2.0F, false, World.ExplosionSourceType.TRIGGER,
                 ParticleTypes.GUST_EMITTER_SMALL, ParticleTypes.GUST_EMITTER_LARGE, SoundEvents.ENTITY_WIND_CHARGE_WIND_BURST);
-        if (bounceCount > 1) {
+        if (kill) {
             arrowEntity.kill();
         }
     }
@@ -185,26 +196,23 @@ public abstract class ArrowEffectMixin {
         }
         itemStack = arrowEntity.getDataTracker().get(ITEM_STACK);
         if (itemStack.isOf(ItemInit.WAVE_ARROW)) {
+            if (!setRicochet) {
+                ((RicochetProjectile)arrowEntity).setRicochet(1 + ((RicochetProjectile)arrowEntity).getRicochet());
+                setRicochet = true;
+            }
             arrowEntity.pickupType = PersistentProjectileEntity.PickupPermission.DISALLOWED;
             NbtCompound nbt = new NbtCompound();
             arrowEntity.writeCustomDataToNbt(nbt);
             if (nbt.getBoolean("inGround")) {
-                if (bounceCount < 1) {
-                    bounceCount++;
-                    Vec3d newPos = arrowEntity.getPos().add(prevVelocity.multiply(-1));
-                    arrowEntity.setVelocity(prevVelocity.multiply(-1));
-                    generateWindExplosion();
-                    arrowEntity.setPos(newPos.x, newPos.y, newPos.z);
-                } else if (inGroundTime == 0) {
+                if (inGroundTime == 0) {
                     arrowEntity.getWorld().playSound(null, arrowEntity.getBlockPos(), SoundInit.WAVE, SoundCategory.PLAYERS);
                 }
                 inGroundTime++;
             } else {
-                prevVelocity = arrowEntity.getVelocity();
                 inGroundTime = 0;
             }
             if (inGroundTime > 50) {
-                generateWindExplosion();
+                generateWindExplosion(true);
                 arrowEntity.discard();
             }
         } else if (itemStack.isOf(ItemInit.HOMING_ARROW)) {

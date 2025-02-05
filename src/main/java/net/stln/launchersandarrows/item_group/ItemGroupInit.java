@@ -55,6 +55,7 @@ public final class ItemGroupInit {
                 entries.add(ItemInit.RANGE_STRING);
                 entries.add(ItemInit.STURDY_STRING);
                 entries.add(ItemInit.LIGHTWEIGHT_STRING);
+                entries.add(ItemInit.SLIMY_STRING);
                 entries.add(ItemInit.IGNITION_PULLEY);
                 entries.add(ItemInit.COOLING_PULLEY);
                 entries.add(ItemInit.POWER_GENERATION_PULLEY);

@@ -83,6 +83,7 @@ public class ItemInit {
     public static final Item RANGE_STRING = registerItem("range_string", new BowModifierItem(new Item.Settings()));
     public static final Item STURDY_STRING = registerItem("sturdy_string", new BowModifierItem(new Item.Settings()));
     public static final Item LIGHTWEIGHT_STRING = registerItem("lightweight_string", new BowModifierItem(new Item.Settings()));
+    public static final Item SLIMY_STRING = registerItem("slimy_string", new BowModifierItem(new Item.Settings()));
 
     public static final Item IGNITION_PULLEY = registerItem("ignition_pulley", new BoltThrowerModifierItem(new Item.Settings()));
     public static final Item COOLING_PULLEY = registerItem("cooling_pulley", new BoltThrowerModifierItem(new Item.Settings()));
@@ -155,6 +156,7 @@ public class ItemInit {
         ModifierDictionary.registerToDict(RANGE_STRING, ModifierEnum.RANGE.get(), 25);
         ModifierDictionary.registerToDict(STURDY_STRING, ModifierEnum.STURDY.get(), 25);
         ModifierDictionary.registerToDict(LIGHTWEIGHT_STRING, ModifierEnum.LIGHTWEIGHT.get(), 15);
+        ModifierDictionary.registerToDict(SLIMY_STRING, ModifierEnum.RICOCHET.get(), 10);
 
         AttributeModifierDictionary.registerToDict(IGNITION_PULLEY, AttributeEnum.FLAME_RATIO.get(), 80);
         AttributeModifierDictionary.registerToDict(COOLING_PULLEY, AttributeEnum.FROST_RATIO.get(), 80);

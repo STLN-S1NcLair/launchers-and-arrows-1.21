@@ -76,5 +76,11 @@
     "sounds" :  [
       "launchers_and_arrows:glitch"
     ]
+  },
+  "ricochet" :  {
+    "subtitle" :  "subtitles.launchers_and_arrows.ricochet" ,
+    "sounds" :  [
+      "launchers_and_arrows:ricochet"
+    ]
   }
 }
