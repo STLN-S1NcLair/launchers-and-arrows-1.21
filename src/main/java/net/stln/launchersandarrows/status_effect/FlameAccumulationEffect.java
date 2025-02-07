@@ -19,7 +19,9 @@ public class FlameAccumulationEffect extends AccumulationEffect {
 
     @Override
     public void applyEffect() {
-        entity.addStatusEffect(new StatusEffectInstance(StatusEffectInit.BURNING, 300, 0));
-        entity.removeStatusEffect(StatusEffectInit.FLAME_ACCUMULATION);
+        if (entity != null) {
+            entity.addStatusEffect(new StatusEffectInstance(StatusEffectInit.BURNING, 300, 0));
+            entity.removeStatusEffect(StatusEffectInit.FLAME_ACCUMULATION);
+        }
     }
 }

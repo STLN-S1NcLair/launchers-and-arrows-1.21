@@ -129,7 +129,7 @@ public abstract class ArrowEffectMixin implements RicochetEffectProjectile {
             if (distance.length() > 8 && closestEntity != null) {
                 target = closestEntity;
             }
-            distance = distance.multiply(1 / distance.length() / 5 * arrowEntity.getVelocity().length());
+            distance = distance.multiply(1 / distance.length() / 7 * arrowEntity.getVelocity().length());
             arrowEntity.addVelocity(distance);
             trackingTime++;
         }

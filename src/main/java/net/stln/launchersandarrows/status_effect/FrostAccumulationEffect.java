@@ -18,7 +18,9 @@ public class FrostAccumulationEffect extends AccumulationEffect {
 
     @Override
     public void applyEffect() {
+        if (entity != null) {
         entity.addStatusEffect(new StatusEffectInstance(StatusEffectInit.FREEZE, 300, 0));
         entity.removeStatusEffect(StatusEffectInit.FROST_ACCUMULATION);
+        }
     }
 }

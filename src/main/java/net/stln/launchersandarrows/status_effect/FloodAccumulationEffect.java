@@ -18,7 +18,9 @@ public class FloodAccumulationEffect extends AccumulationEffect {
 
     @Override
     public void applyEffect() {
+        if (entity != null) {
         entity.addStatusEffect(new StatusEffectInstance(StatusEffectInit.SUBMERGED, 300, 0));
         entity.removeStatusEffect(StatusEffectInit.FLOOD_ACCUMULATION);
+        }
     }
 }

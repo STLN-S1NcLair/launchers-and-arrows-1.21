@@ -16,7 +16,9 @@ public class EchoAccumulationEffect extends AccumulationEffect {
 
     @Override
     public void applyEffect() {
+        if (entity != null) {
         entity.addStatusEffect(new StatusEffectInstance(StatusEffectInit.CONFUSION, 300, 0));
         entity.removeStatusEffect(StatusEffectInit.ECHO_ACCUMULATION);
+        }
     }
 }
