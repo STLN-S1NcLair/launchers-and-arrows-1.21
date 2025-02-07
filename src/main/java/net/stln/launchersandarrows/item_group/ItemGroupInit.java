@@ -21,6 +21,7 @@ public final class ItemGroupInit {
                 entries.add(ItemInit.MULTISHOT_BOW);
                 entries.add(ItemInit.RAINSHOT_BOW);
                 entries.add(ItemInit.BOLT_THROWER);
+                entries.add(ItemInit.QUICK_BOLT_THROWER);
                 entries.add(ItemInit.CROSSLAUNCHER);
                 entries.add(ItemInit.HOOK_LAUNCHER);
                 entries.add(ItemInit.SLINGSHOT);
@@ -56,6 +57,8 @@ public final class ItemGroupInit {
                 entries.add(ItemInit.STURDY_STRING);
                 entries.add(ItemInit.LIGHTWEIGHT_STRING);
                 entries.add(ItemInit.SLIMY_STRING);
+                entries.add(ItemInit.PRECISION_STRING);
+                entries.add(ItemInit.OVERLOADED_STRING);
                 entries.add(ItemInit.IGNITION_PULLEY);
                 entries.add(ItemInit.COOLING_PULLEY);
                 entries.add(ItemInit.POWER_GENERATION_PULLEY);

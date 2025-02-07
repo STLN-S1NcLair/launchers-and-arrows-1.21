@@ -47,16 +47,16 @@ import java.util.function.Predicate;
 
 public class BoltThrowerItem extends ModfiableBowItem {
 
-    private int maxCount = 60;
-    private int maxChargeCount = 20;
-    private int chargeDelay = 2;
-    private int shootDelay = 2;
+    protected int maxCount = 60;
+    protected int maxChargeCount = 20;
+    protected int chargeDelay = 2;
+    protected int shootDelay = 2;
 
-    private int shootCooldown = 0;
+    protected int shootCooldown = 0;
 
-    private boolean played0 = false;
-    private boolean played1 = false;
-    private boolean played2 = false;
+    protected boolean played0 = false;
+    protected boolean played1 = false;
+    protected boolean played2 = false;
 
     public static final Predicate<ItemStack> BOLT_THROWER_PROJECTILES = (stack) -> stack.isIn(ModItemTags.BOXED_BOLTS);
     private static final CrossbowItem.LoadingSounds DEFAULT_LOADING_SOUNDS = new CrossbowItem.LoadingSounds(
@@ -387,17 +387,17 @@ public class BoltThrowerItem extends ModfiableBowItem {
         }
     }
 
-    private int getModifiedMaxChargeCount(ItemStack stack) {
+    protected int getModifiedMaxChargeCount(ItemStack stack) {
         float capacityModifier = getCapacityModifier(stack);
         return (int) (capacityModifier * this.maxChargeCount);
     }
 
-    private int getModifiedMaxCount(ItemStack stack) {
+    protected int getModifiedMaxCount(ItemStack stack) {
         float capacityModifier = getCapacityModifier(stack);
         return (int) (capacityModifier * this.maxCount);
     }
 
-    private float getCapacityModifier(ItemStack stack) {
+    protected float getCapacityModifier(ItemStack stack) {
         float capacityModifier = 1F;
         for (int i = 0; i < slotsize; i++) {
             if (i < getModifiers(stack).size()) {
@@ -410,7 +410,7 @@ public class BoltThrowerItem extends ModfiableBowItem {
         return capacityModifier;
     }
 
-    public static record LoadingSounds(Optional<RegistryEntry<SoundEvent>> start, Optional<RegistryEntry<SoundEvent>> mid, Optional<RegistryEntry<SoundEvent>> end) {
+    protected static record LoadingSounds(Optional<RegistryEntry<SoundEvent>> start, Optional<RegistryEntry<SoundEvent>> mid, Optional<RegistryEntry<SoundEvent>> end) {
         public static final Codec<CrossbowItem.LoadingSounds> CODEC = RecordCodecBuilder.create(
                 instance -> instance.group(
                                 SoundEvent.ENTRY_CODEC.optionalFieldOf("start").forGetter(CrossbowItem.LoadingSounds::start),

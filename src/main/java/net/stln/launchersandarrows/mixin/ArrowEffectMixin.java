@@ -59,6 +59,8 @@ public abstract class ArrowEffectMixin implements RicochetEffectProjectile {
     @Unique
     private int glitchCount = 0;
     @Unique
+    private int trackingTime = 0;
+    @Unique
     private boolean setRicochet = false;
 
     @Unique
@@ -119,6 +121,7 @@ public abstract class ArrowEffectMixin implements RicochetEffectProjectile {
         LivingEntity closestEntity = arrowEntity.getWorld().getClosestEntity(LivingEntity.class, TargetPredicate.DEFAULT, (LivingEntity) arrowEntity.getOwner(), pos.x, pos.y, pos.z, Box.of(pos.add(arrowEntity.getVelocity()), 16, 16, 16));
         if (target == null || target.isDead()) {
         target = closestEntity;
+        trackingTime = 0;
         }
         if (target != null) {
             Vec3d tarPos = target.getEyePos();
@@ -128,6 +131,10 @@ public abstract class ArrowEffectMixin implements RicochetEffectProjectile {
             }
             distance = distance.multiply(1 / distance.length() / 5 * arrowEntity.getVelocity().length());
             arrowEntity.addVelocity(distance);
+            trackingTime++;
+        }
+        if (trackingTime > 100) {
+            arrowEntity.discard();
         }
     }
 

@@ -17,16 +17,16 @@ public class VillagerTradeInit {
         TradeOfferHelper.registerVillagerOffers(VillagerProfession.FLETCHER, 1, factories -> {
             factories.add(((entity, random) ->
                 new TradeOffer(new TradedItem(Items.STICK, 30), new ItemStack(ItemInit.METAL_ARROWHEAD, 1),
-                        20, 5, 0.05F)));
+                        20, 7, 0.05F)));
             factories.add(((entity, random) ->
                 new TradeOffer(new TradedItem(Items.FEATHER, 2), new ItemStack(ItemInit.METAL_ARROWHEAD, 1),
-                        30, 5, 0.05F)));
+                        30, 7, 0.05F)));
             factories.add(((entity, random) ->
                 new TradeOffer(new TradedItem(Items.FLINT, 10), new ItemStack(ItemInit.METAL_ARROWHEAD, 1),
-                        10, 5, 0.05F)));
+                        10, 7, 0.05F)));
             factories.add(((entity, random) ->
                 new TradeOffer(new TradedItem(Items.IRON_INGOT, 1), new ItemStack(ItemInit.METAL_ARROWHEAD, 3),
-                        3, 5, 0.05F)));
+                        3, 7, 0.05F)));
             factories.add(((entity, random) ->
                 new TradeOffer(new TradedItem(ItemInit.CUSTOMMADE_TICKET, 1), new ItemStack(ItemInit.IGNITION_STRING, 1),
                         2, 20, 0.05F)));
@@ -53,6 +53,15 @@ public class VillagerTradeInit {
                         2, 20, 0.05F)));
             factories.add(((entity, random) ->
                 new TradeOffer(new TradedItem(ItemInit.CUSTOMMADE_TICKET, 1), new ItemStack(ItemInit.LIGHTWEIGHT_STRING, 1),
+                        2, 20, 0.05F)));
+            factories.add(((entity, random) ->
+                new TradeOffer(new TradedItem(ItemInit.CUSTOMMADE_TICKET, 1), new ItemStack(ItemInit.SLIMY_STRING, 1),
+                        2, 20, 0.05F)));
+            factories.add(((entity, random) ->
+                new TradeOffer(new TradedItem(ItemInit.CUSTOMMADE_TICKET, 1), new ItemStack(ItemInit.PRECISION_STRING, 1),
+                        2, 20, 0.05F)));
+            factories.add(((entity, random) ->
+                new TradeOffer(new TradedItem(ItemInit.CUSTOMMADE_TICKET, 1), new ItemStack(ItemInit.OVERLOADED_STRING, 1),
                         2, 20, 0.05F)));
             factories.add(((entity, random) ->
                 new TradeOffer(new TradedItem(ItemInit.CUSTOMMADE_TICKET, 1), new ItemStack(ItemInit.IGNITION_PULLEY, 1),
@@ -94,6 +103,14 @@ public class VillagerTradeInit {
                         2, 10, 0.05F)));
             factories.add(((entity, random) ->
                 new TradeOffer(new TradedItem(ItemInit.METAL_ARROWHEAD, 20), new ItemStack(ItemInit.MULTISHOT_BOW, 1),
+                        2, 10, 0.05F)));
+            factories.add(((entity, random) ->
+                new TradeOffer(new TradedItem(ItemInit.METAL_ARROWHEAD, 50),
+                        Optional.of(new TradedItem(Items.NETHERITE_INGOT, 1)), new ItemStack(ItemInit.MODULAR_BOW, 1),
+                        2, 10, 0.05F)));
+            factories.add(((entity, random) ->
+                new TradeOffer(new TradedItem(ItemInit.METAL_ARROWHEAD, 50),
+                        Optional.of(new TradedItem(Items.ECHO_SHARD, 1)), new ItemStack(ItemInit.RAINSHOT_BOW, 1),
                         2, 10, 0.05F)));
             factories.add(((entity, random) ->
                 new TradeOffer(new TradedItem(ItemInit.METAL_ARROWHEAD, 30), new ItemStack(ItemInit.SLINGSHOT, 1),

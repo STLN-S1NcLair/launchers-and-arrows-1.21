@@ -153,7 +153,7 @@ public class RenderFirstPersonItemMixin {
             );
             matrices.pop();
             ci.cancel();
-        } else if (item.isOf(ItemInit.BOLT_THROWER)) {
+        } else if (item.isOf(ItemInit.BOLT_THROWER) || item.isOf(ItemInit.QUICK_BOLT_THROWER)) {
 
             boolean bl = hand == Hand.MAIN_HAND;
             Arm arm = bl ? player.getMainArm() : player.getMainArm().getOpposite();

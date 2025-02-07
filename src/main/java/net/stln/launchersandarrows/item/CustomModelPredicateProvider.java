@@ -28,6 +28,7 @@ public class CustomModelPredicateProvider {
         registerModBow(ItemInit.MULTISHOT_BOW);
         registerModBow(ItemInit.RAINSHOT_BOW);
         registerBoltThrower(ItemInit.BOLT_THROWER);
+        registerBoltThrower(ItemInit.QUICK_BOLT_THROWER);
         registerCrosslauncher(ItemInit.CROSSLAUNCHER);
         registerCrosslauncher(ItemInit.HOOK_LAUNCHER);
         registerCrosslauncher(ItemInit.SLINGSHOT);

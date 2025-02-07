@@ -26,7 +26,7 @@ public class PlayerEntityRendererMixin {
     @Inject(method = "getArmPose", at = @At("HEAD"), cancellable = true)
     private static void getArmPose(AbstractClientPlayerEntity player, Hand hand, CallbackInfoReturnable<BipedEntityModel.ArmPose> cir) {
         ItemStack itemStack = player.getStackInHand(hand);
-        if (!player.handSwinging && itemStack.isOf(ItemInit.CROSSLAUNCHER) && CrossLauncherItem.isCharged(itemStack)) {
+        if (!player.handSwinging && (itemStack.isOf(ItemInit.CROSSLAUNCHER) || itemStack.isOf(ItemInit.QUICK_BOLT_THROWER)) && CrossLauncherItem.isCharged(itemStack)) {
             cir.setReturnValue(BipedEntityModel.ArmPose.CROSSBOW_HOLD);
         } else if (!player.handSwinging && itemStack.isOf(ItemInit.HOOK_LAUNCHER) && HookLauncherItem.isCharged(itemStack)) {
             cir.setReturnValue(BipedEntityModel.ArmPose.CROSSBOW_HOLD);

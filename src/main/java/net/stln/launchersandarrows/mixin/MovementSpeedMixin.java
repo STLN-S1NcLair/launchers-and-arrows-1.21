@@ -29,8 +29,15 @@ public class MovementSpeedMixin {
     private void modifyMovementSpeed(CallbackInfo ci) {
         if (entity.getMainHandStack().getItem() instanceof BoltThrowerItem
                 || entity.getOffHandStack().getItem() instanceof BoltThrowerItem) {
-            entity.input.movementForward *= 0.5F;
-            entity.input.movementSideways *= 0.5F;
+
+            if (entity.getMainHandStack().getItem() instanceof BoltThrowerItem
+                    || entity.getOffHandStack().getItem() instanceof BoltThrowerItem) {
+                entity.input.movementForward *= 5F;
+                entity.input.movementSideways *= 5F;
+            } else {
+                entity.input.movementForward *= 0.75F;
+                entity.input.movementSideways *= 0.75F;
+            }
         } else if (entity.getMainHandStack().getItem() instanceof RainShotBowItem
                 || entity.getOffHandStack().getItem() instanceof RainShotBowItem) {
             entity.input.movementForward *= 5F;

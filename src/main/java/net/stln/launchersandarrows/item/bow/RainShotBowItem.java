@@ -13,6 +13,7 @@ import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
+import net.stln.launchersandarrows.LaunchersAndArrows;
 import net.stln.launchersandarrows.entity.BypassDamageCooldownProjectile;
 import net.stln.launchersandarrows.item.FovModifierItem;
 import net.stln.launchersandarrows.item.component.ModComponentInit;
@@ -105,7 +106,7 @@ public class RainShotBowItem extends ModfiableBowItem implements FovModifierItem
             boolean critical,
             @Nullable LivingEntity target
     ) {
-        speed = applyModifier(shooter, stack, speed);
+        speed = applySpeedModifier(shooter, stack, speed);
         float f = EnchantmentHelper.getProjectileSpread(world, stack, shooter, 0.0F);
         float g = projectiles.size() == 1 ? 0.0F : 2.0F * f / (float)(projectiles.size() - 1);
         float h = (float)((projectiles.size() - 1) % 2) * g / 2.0F;
@@ -118,6 +119,8 @@ public class RainShotBowItem extends ModfiableBowItem implements FovModifierItem
                 i = -i;
                 ProjectileEntity projectileEntity = this.createArrowEntity(world, shooter, stack, itemStack, critical);
                 ((BypassDamageCooldownProjectile)projectileEntity).setBypass(true);
+                speed = applySpeedModifier(shooter, stack, speed);
+                divergence = applyPrecisionModifier(shooter, stack, divergence);
                 this.shoot(shooter, projectileEntity, j, speed, divergence, k, target);
                 world.spawnEntity(projectileEntity);
                 stack.damage(this.getWeaponStackDamage(itemStack), shooter, LivingEntity.getSlotForHand(hand));

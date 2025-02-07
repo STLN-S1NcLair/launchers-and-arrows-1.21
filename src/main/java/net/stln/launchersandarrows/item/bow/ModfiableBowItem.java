@@ -8,6 +8,7 @@ import net.minecraft.item.*;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
+import net.stln.launchersandarrows.LaunchersAndArrows;
 import net.stln.launchersandarrows.entity.AttributedProjectile;
 import net.stln.launchersandarrows.entity.RicochetProjectile;
 import net.stln.launchersandarrows.item.component.ModComponentInit;
@@ -110,11 +111,12 @@ public class ModfiableBowItem extends BowItem {
 
     @Override
     protected void shootAll(ServerWorld world, LivingEntity shooter, Hand hand, ItemStack stack, List<ItemStack> projectiles, float speed, float divergence, boolean critical, @Nullable LivingEntity target) {
-        speed = applyModifier(shooter, stack, speed);
+        speed = applySpeedModifier(shooter, stack, speed);
+        divergence = applyPrecisionModifier(shooter, stack, divergence);
         super.shootAll(world, shooter, hand, stack, projectiles, speed, divergence, critical, target);
     }
 
-    protected float applyModifier(LivingEntity shooter, ItemStack stack, float speed) {
+    protected float applySpeedModifier(LivingEntity shooter, ItemStack stack, float speed) {
         float sturdyPercentage = 0F;
         for (int i = 0; i < slotsize; i++) {
             if (i < getModifiers(stack).size()) {
@@ -131,6 +133,18 @@ public class ModfiableBowItem extends BowItem {
             stack.setDamage(stack.getDamage() - 1);
         }
         return speed;
+    }
+
+    protected float applyPrecisionModifier(LivingEntity shooter, ItemStack stack, float divergence) {
+        for (int i = 0; i < slotsize; i++) {
+            if (i < getModifiers(stack).size()) {
+                ItemStack modifier = getModifier(i, stack);
+                if (ModifierDictionary.getEffect(modifier.getItem(), ModifierEnum.PRECISION.get()) != null) {
+                    divergence *= 1 - ((ModifierDictionary.getEffect(modifier.getItem(), ModifierEnum.PRECISION.get())) / 100.0F);
+                }
+            }
+        }
+        return divergence;
     }
 
     public int getSlotsize() {

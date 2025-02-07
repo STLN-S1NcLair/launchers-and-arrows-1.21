@@ -39,6 +39,15 @@ public class TextUtil {
         if (item == ItemInit.LIGHTWEIGHT_STRING) {
             return Text.literal("\u2002").setStyle(Style.EMPTY.withFont(iconFont));
         }
+        if (item == ItemInit.SLIMY_STRING) {
+            return Text.literal("\u2003").setStyle(Style.EMPTY.withFont(iconFont));
+        }
+        if (item == ItemInit.PRECISION_STRING) {
+            return Text.literal("\u2004").setStyle(Style.EMPTY.withFont(iconFont));
+        }
+        if (item == ItemInit.OVERLOADED_STRING) {
+            return Text.literal("\u2005").setStyle(Style.EMPTY.withFont(iconFont));
+        }
         if (item == ItemInit.IGNITION_PULLEY) {
             return Text.literal("\u3000").setStyle(Style.EMPTY.withFont(iconFont));
         }

@@ -12,10 +12,7 @@ import net.stln.launchersandarrows.LaunchersAndArrowsDataGenerator;
 import net.stln.launchersandarrows.item.bow.*;
 import net.stln.launchersandarrows.item.component.ModComponentInit;
 import net.stln.launchersandarrows.item.component.ModifierComponent;
-import net.stln.launchersandarrows.item.launcher.BoltThrowerItem;
-import net.stln.launchersandarrows.item.launcher.CrossLauncherItem;
-import net.stln.launchersandarrows.item.launcher.HookLauncherItem;
-import net.stln.launchersandarrows.item.launcher.SlingShotItem;
+import net.stln.launchersandarrows.item.launcher.*;
 import net.stln.launchersandarrows.item.util.AttributeEffectsDictionary;
 import net.stln.launchersandarrows.item.util.AttributeModifierDictionary;
 import net.stln.launchersandarrows.item.util.ModifierDictionary;
@@ -39,6 +36,12 @@ public class ItemInit {
                     .component(ModComponentInit.CHARGE_COUNT_COMPONENT, 0)));
     public static final Item BOLT_THROWER = registerItem("bolt_thrower",
             new BoltThrowerItem(new Item.Settings().maxDamage(3072).component(ModComponentInit.MODIFIER_COMPONENT, ModifierComponent.DEFAULT)
+                    .component(ModComponentInit.BOLT_COUNT_COMPONENT, 0)
+                    .component(ModComponentInit.CHARGED_BOLT_COUNT_COMPONENT, 0)
+                    .component(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT)
+                    .component(ModComponentInit.CHARGING_COMPONENT, false)));
+    public static final Item QUICK_BOLT_THROWER = registerItem("quick_bolt_thrower",
+            new QuickBoltThrowerItem(new Item.Settings().maxDamage(3072).component(ModComponentInit.MODIFIER_COMPONENT, ModifierComponent.DEFAULT)
                     .component(ModComponentInit.BOLT_COUNT_COMPONENT, 0)
                     .component(ModComponentInit.CHARGED_BOLT_COUNT_COMPONENT, 0)
                     .component(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT)
@@ -84,6 +87,8 @@ public class ItemInit {
     public static final Item STURDY_STRING = registerItem("sturdy_string", new BowModifierItem(new Item.Settings()));
     public static final Item LIGHTWEIGHT_STRING = registerItem("lightweight_string", new BowModifierItem(new Item.Settings()));
     public static final Item SLIMY_STRING = registerItem("slimy_string", new BowModifierItem(new Item.Settings()));
+    public static final Item PRECISION_STRING = registerItem("precision_string", new BowModifierItem(new Item.Settings()));
+    public static final Item OVERLOADED_STRING = registerItem("overloaded_string", new BowModifierItem(new Item.Settings()));
 
     public static final Item IGNITION_PULLEY = registerItem("ignition_pulley", new BoltThrowerModifierItem(new Item.Settings()));
     public static final Item COOLING_PULLEY = registerItem("cooling_pulley", new BoltThrowerModifierItem(new Item.Settings()));
@@ -157,6 +162,10 @@ public class ItemInit {
         ModifierDictionary.registerToDict(STURDY_STRING, ModifierEnum.STURDY.get(), 25);
         ModifierDictionary.registerToDict(LIGHTWEIGHT_STRING, ModifierEnum.LIGHTWEIGHT.get(), 15);
         ModifierDictionary.registerToDict(SLIMY_STRING, ModifierEnum.RICOCHET.get(), 10);
+        ModifierDictionary.registerToDict(PRECISION_STRING, ModifierEnum.PRECISION.get(), 50);
+        ModifierDictionary.registerToDict(OVERLOADED_STRING, ModifierEnum.RANGE.get(), 40);
+        ModifierDictionary.registerToDict(OVERLOADED_STRING, ModifierEnum.LIGHTWEIGHT.get(), 10);
+        ModifierDictionary.registerToDict(OVERLOADED_STRING, ModifierEnum.PRECISION.get(), -100);
 
         AttributeModifierDictionary.registerToDict(IGNITION_PULLEY, AttributeEnum.FLAME_RATIO.get(), 80);
         AttributeModifierDictionary.registerToDict(COOLING_PULLEY, AttributeEnum.FROST_RATIO.get(), 80);

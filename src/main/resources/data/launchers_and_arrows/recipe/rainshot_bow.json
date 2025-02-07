@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "E": {
+      "item": "minecraft:echo_shard"
+    },
+    "I": {
+      "item": "minecraft:iron_block"
+    },
+    "T": {
+      "item": "minecraft:string"
+    }
+  },
+  "pattern": [
+    " EI",
+    "I T",
+    " EI"
+  ],
+  "result": {
+    "count": 1,
+    "id": "launchers_and_arrows:rainshot_bow"
+  }
+}

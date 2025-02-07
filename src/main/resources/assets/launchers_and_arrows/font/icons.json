@@ -74,6 +74,12 @@
         },
         {
             "type": "bitmap",
+            "file": "launchers_and_arrows:icon/precision.png",
+            "ascent": 8,
+            "chars": ["\u000f"]
+        },
+        {
+            "type": "bitmap",
             "file": "launchers_and_arrows:item/ignition_string.png",
             "ascent": 7,
             "chars": ["\u1000"]
@@ -125,6 +131,24 @@
             "file": "launchers_and_arrows:item/lightweight_string.png",
             "ascent": 7,
             "chars": ["\u2002"]
+        },
+        {
+            "type": "bitmap",
+            "file": "launchers_and_arrows:item/slimy_string.png",
+            "ascent": 7,
+            "chars": ["\u2003"]
+        },
+        {
+            "type": "bitmap",
+            "file": "launchers_and_arrows:item/precision_string.png",
+            "ascent": 7,
+            "chars": ["\u2004"]
+        },
+        {
+            "type": "bitmap",
+            "file": "launchers_and_arrows:item/overloaded_string.png",
+            "ascent": 7,
+            "chars": ["\u2005"]
         },
         {
             "type": "bitmap",
