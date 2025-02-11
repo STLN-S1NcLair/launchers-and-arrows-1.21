@@ -15,6 +15,12 @@ public class ModComponentInit {
             ComponentType.<ModifierComponent>builder().codec(ModifierComponent.CODEC).packetCodec(ModifierComponent.PACKET_CODEC).build()
     );
 
+    public static final ComponentType<Boolean> SELF_REPAIR_COMPONENT = Registry.register(
+            Registries.DATA_COMPONENT_TYPE,
+            Identifier.of(LaunchersAndArrows.MOD_ID, "self_repair"),
+            ComponentType.<Boolean>builder().codec(Codec.BOOL).build()
+    );
+
     public static final ComponentType<String> ARROW_SELECTOR_COMPONENT = Registry.register(
             Registries.DATA_COMPONENT_TYPE,
             Identifier.of(LaunchersAndArrows.MOD_ID, "arrow_selecter"),
@@ -25,6 +31,12 @@ public class ModComponentInit {
             Registries.DATA_COMPONENT_TYPE,
             Identifier.of(LaunchersAndArrows.MOD_ID, "charge_count"),
             ComponentType.<Integer>builder().codec(Codec.INT).build()
+    );
+
+    public static final ComponentType<ChargeComponent> CHARGE_COMPONENT = Registry.register(
+            Registries.DATA_COMPONENT_TYPE,
+            Identifier.of(LaunchersAndArrows.MOD_ID, "charge"),
+            ComponentType.<ChargeComponent>builder().codec(ChargeComponent.CODEC).build()
     );
 
     public static final ComponentType<Integer> BOLT_COUNT_COMPONENT = Registry.register(

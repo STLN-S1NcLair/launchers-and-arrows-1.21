@@ -3,6 +3,7 @@
   "item.launchers_and_arrows.rapid_bow": "速射弓",
   "item.launchers_and_arrows.multishot_bow": "拡散弓",
   "item.launchers_and_arrows.modular_bow": "機装の弓",
+  "item.launchers_and_arrows.mechanical_bow": "機械弓",
   "item.launchers_and_arrows.rainshot_bow": "降矢の弓",
   "item.launchers_and_arrows.bolt_thrower": "ボルトスロワー",
   "item.launchers_and_arrows.quick_bolt_thrower": "高機動型ボルトスロワー",
@@ -53,6 +54,7 @@
   "item.launchers_and_arrows.reinforced_pulley": "補強された滑車",
   "item.launchers_and_arrows.lubrication_pulley": "潤滑の滑車",
   "item.launchers_and_arrows.powered_pulley": "動力の滑車",
+  "item.launchers_and_arrows.self_erosion_plate": "自己侵蝕プレート",
   "item.launchers_and_arrows.volatile_fuel": "揮発性燃料",
   "item.launchers_and_arrows.coolant": "冷却液",
   "item.launchers_and_arrows.redstone_capacitor": "レッドストーンキャパシター",
@@ -85,5 +87,8 @@
   "tooltip.launchers_and_arrows.bow_modifier_2": "しゃがみ右クリックで装着",
   "tooltip.launchers_and_arrows.bolt_thrower_modifier": "オフハンドにボルトスロワーを、メインハンドに改造パーツを持って",
   "tooltip.launchers_and_arrows.bolt_thrower_modifier_2": "しゃがみ右クリックで装着",
-  "tooltip.launchers_and_arrows.warning": "警告！ このアイテムはワールドをめちゃくちゃにする可能性があります！"
+  "tooltip.launchers_and_arrows.self_erosion_plate": "オフハンドに弓またはボルトスロワーを、メインハンドに改造パーツを持って",
+  "tooltip.launchers_and_arrows.self_erosion_plate_2": "しゃがみ右クリックで装着",
+  "tooltip.launchers_and_arrows.warning": "警告！ このアイテムはワールドをめちゃくちゃにする可能性があります！",
+  "tooltip.launchers_and_arrows.self_repair": "自己修復"
 }

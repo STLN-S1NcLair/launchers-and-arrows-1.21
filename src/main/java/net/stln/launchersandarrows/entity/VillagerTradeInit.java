@@ -26,7 +26,7 @@ public class VillagerTradeInit {
                         10, 7, 0.05F)));
             factories.add(((entity, random) ->
                 new TradeOffer(new TradedItem(Items.IRON_INGOT, 1), new ItemStack(ItemInit.METAL_ARROWHEAD, 3),
-                        3, 7, 0.05F)));
+                        5, 7, 0.05F)));
             factories.add(((entity, random) ->
                 new TradeOffer(new TradedItem(ItemInit.CUSTOMMADE_TICKET, 1), new ItemStack(ItemInit.IGNITION_STRING, 1),
                         2, 20, 0.05F)));

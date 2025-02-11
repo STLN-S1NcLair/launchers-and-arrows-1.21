@@ -24,7 +24,7 @@ public class ModularBowItem extends ModfiableBowItem implements FovModifierItem 
 
     public ModularBowItem(Settings settings) {
         super(settings);
-        pulltime = 30;
+        pulltime = 25;
         slotsize = 5;
     }
 
@@ -45,7 +45,7 @@ public class ModularBowItem extends ModfiableBowItem implements FovModifierItem 
                 if (!((double)f < 0.5)) {
                     List<ItemStack> list = load(stack, itemStack, playerEntity);
                     if (world instanceof ServerWorld serverWorld && !list.isEmpty()) {
-                        this.shootAll(serverWorld, playerEntity, playerEntity.getActiveHand(), stack, list, f * 2.0F, 1.0F, f == 1.0F, null);
+                        this.shootAll(serverWorld, playerEntity, playerEntity.getActiveHand(), stack, list, f * 4.0F, 1.0F, f == 1.0F, null);
                     }
 
                     world.playSound(

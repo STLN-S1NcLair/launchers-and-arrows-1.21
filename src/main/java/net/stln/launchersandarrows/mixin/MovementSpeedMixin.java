@@ -8,6 +8,7 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.stln.launchersandarrows.LaunchersAndArrows;
 import net.stln.launchersandarrows.item.bow.RainShotBowItem;
 import net.stln.launchersandarrows.item.launcher.BoltThrowerItem;
+import net.stln.launchersandarrows.item.launcher.QuickBoltThrowerItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -30,18 +31,26 @@ public class MovementSpeedMixin {
         if (entity.getMainHandStack().getItem() instanceof BoltThrowerItem
                 || entity.getOffHandStack().getItem() instanceof BoltThrowerItem) {
 
-            if (entity.getMainHandStack().getItem() instanceof BoltThrowerItem
-                    || entity.getOffHandStack().getItem() instanceof BoltThrowerItem) {
-                entity.input.movementForward *= 5F;
-                entity.input.movementSideways *= 5F;
+            if ((entity.getMainHandStack().getItem() instanceof QuickBoltThrowerItem
+                    || entity.getOffHandStack().getItem() instanceof QuickBoltThrowerItem)) {
+                if (entity.isUsingItem()) {
+                    entity.input.movementForward *= 5F;
+                    entity.input.movementSideways *= 5F;
+                }
             } else {
                 entity.input.movementForward *= 0.75F;
                 entity.input.movementSideways *= 0.75F;
             }
         } else if (entity.getMainHandStack().getItem() instanceof RainShotBowItem
                 || entity.getOffHandStack().getItem() instanceof RainShotBowItem) {
-            entity.input.movementForward *= 5F;
-            entity.input.movementSideways *= 5F;
+            if (entity.isUsingItem()) {
+                entity.input.movementForward *= 5F;
+                entity.input.movementSideways *= 5F;
+            }
+            if (entity.isSneaking()) {
+                entity.input.movementForward *= 3F;
+                entity.input.movementSideways *= 3F;
+            }
         }
     }
 }

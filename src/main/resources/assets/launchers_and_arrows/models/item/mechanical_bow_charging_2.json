@@ -1,0 +1,6 @@
+{
+  "parent": "launchers_and_arrows:item/mechanical_bow",
+  "textures": {
+    "layer0": "launchers_and_arrows:item/mechanical_bow_charging_2"
+  }
+}

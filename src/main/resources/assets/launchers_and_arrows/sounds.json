@@ -82,5 +82,23 @@
     "sounds" :  [
       "launchers_and_arrows:ricochet"
     ]
+  },
+  "mechanical_bow_charge" :  {
+    "subtitle" :  "subtitles.launchers_and_arrows.mechanical_bow_charge" ,
+    "sounds" :  [
+      "launchers_and_arrows:mechanical_bow_charge"
+    ]
+  },
+  "mechanical_bow_load" :  {
+    "subtitle" :  "subtitles.launchers_and_arrows.mechanical_bow_load" ,
+    "sounds" :  [
+      "launchers_and_arrows:mechanical_bow_load"
+    ]
+  },
+  "mechanical_bow_release" :  {
+    "subtitle" :  "subtitles.launchers_and_arrows.mechanical_bow_release" ,
+    "sounds" :  [
+      "launchers_and_arrows:mechanical_bow_release"
+    ]
   }
 }

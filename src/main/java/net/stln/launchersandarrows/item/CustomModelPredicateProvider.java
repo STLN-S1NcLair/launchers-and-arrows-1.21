@@ -26,6 +26,8 @@ public class CustomModelPredicateProvider {
         registerModBow(ItemInit.RAPID_BOW);
         registerModBow(ItemInit.MODULAR_BOW);
         registerModBow(ItemInit.MULTISHOT_BOW);
+        registerModBow(ItemInit.MECHANICAL_BOW);
+        registerMechanicalBow(ItemInit.MECHANICAL_BOW);
         registerModBow(ItemInit.RAINSHOT_BOW);
         registerBoltThrower(ItemInit.BOLT_THROWER);
         registerBoltThrower(ItemInit.QUICK_BOLT_THROWER);
@@ -46,6 +48,16 @@ public class CustomModelPredicateProvider {
         ModelPredicateProviderRegistry.register(bow, Identifier.ofVanilla("pulling"), (stack, world, entity, seed) ->
                 entity != null && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0F : 0.0F
         );
+    }
+
+    private static void registerMechanicalBow(Item bow) {
+        ModelPredicateProviderRegistry.register(bow, Identifier.ofVanilla("charging"), (stack, world, entity, seed) -> {
+            if (entity == null) {
+                return 0.0F;
+            } else {
+                return entity.isSneaking() ? 1.0F : 0.0F;
+            }
+        });
     }
 
     private static void registerBoltThrower(Item thrower) {

@@ -1,6 +1,5 @@
 package net.stln.launchersandarrows.item;
 
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ChargedProjectilesComponent;
 import net.minecraft.item.*;
@@ -8,8 +7,8 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.stln.launchersandarrows.LaunchersAndArrows;
-import net.stln.launchersandarrows.LaunchersAndArrowsDataGenerator;
 import net.stln.launchersandarrows.item.bow.*;
+import net.stln.launchersandarrows.item.component.ChargeComponent;
 import net.stln.launchersandarrows.item.component.ModComponentInit;
 import net.stln.launchersandarrows.item.component.ModifierComponent;
 import net.stln.launchersandarrows.item.launcher.*;
@@ -19,29 +18,30 @@ import net.stln.launchersandarrows.item.util.ModifierDictionary;
 import net.stln.launchersandarrows.util.AttributeEnum;
 import net.stln.launchersandarrows.util.ModifierEnum;
 
-import java.util.List;
-
 public class ItemInit {
 
     public static final Item LONG_BOW = registerItem("long_bow",
-            new LongBowItem(new Item.Settings().maxDamage(1024).component(ModComponentInit.MODIFIER_COMPONENT, ModifierComponent.DEFAULT)));
+            new LongBowItem(new Item.Settings().maxDamage(1024).component(ModComponentInit.MODIFIER_COMPONENT, ModifierComponent.DEFAULT).component(ModComponentInit.SELF_REPAIR_COMPONENT, false)));
     public static final Item RAPID_BOW = registerItem("rapid_bow",
-            new RapidBowItem(new Item.Settings().maxDamage(2048).component(ModComponentInit.MODIFIER_COMPONENT, ModifierComponent.DEFAULT)));
+            new RapidBowItem(new Item.Settings().maxDamage(2048).component(ModComponentInit.MODIFIER_COMPONENT, ModifierComponent.DEFAULT).component(ModComponentInit.SELF_REPAIR_COMPONENT, false)));
     public static final Item MODULAR_BOW = registerItem("modular_bow",
-            new ModularBowItem(new Item.Settings().maxDamage(2048).component(ModComponentInit.MODIFIER_COMPONENT, ModifierComponent.DEFAULT)));
+            new ModularBowItem(new Item.Settings().maxDamage(16384).component(ModComponentInit.MODIFIER_COMPONENT, ModifierComponent.DEFAULT).component(ModComponentInit.SELF_REPAIR_COMPONENT, false)));
     public static final Item MULTISHOT_BOW = registerItem("multishot_bow",
-            new MultiShotBowItem(new Item.Settings().maxDamage(2048).component(ModComponentInit.MODIFIER_COMPONENT, ModifierComponent.DEFAULT)));
+            new MultiShotBowItem(new Item.Settings().maxDamage(2048).component(ModComponentInit.MODIFIER_COMPONENT, ModifierComponent.DEFAULT).component(ModComponentInit.SELF_REPAIR_COMPONENT, false)));
+    public static final Item MECHANICAL_BOW = registerItem("mechanical_bow",
+            new MechanicalBowItem(new Item.Settings().maxDamage(4096).component(ModComponentInit.MODIFIER_COMPONENT, ModifierComponent.DEFAULT).component(ModComponentInit.SELF_REPAIR_COMPONENT, false)
+                    .component(ModComponentInit.CHARGE_COMPONENT, ChargeComponent.DEFAULT)));
     public static final Item RAINSHOT_BOW = registerItem("rainshot_bow",
-            new RainShotBowItem(new Item.Settings().maxDamage(8192).component(ModComponentInit.MODIFIER_COMPONENT, ModifierComponent.DEFAULT)
+            new RainShotBowItem(new Item.Settings().maxDamage(16384).component(ModComponentInit.MODIFIER_COMPONENT, ModifierComponent.DEFAULT).component(ModComponentInit.SELF_REPAIR_COMPONENT, false)
                     .component(ModComponentInit.CHARGE_COUNT_COMPONENT, 0)));
     public static final Item BOLT_THROWER = registerItem("bolt_thrower",
-            new BoltThrowerItem(new Item.Settings().maxDamage(3072).component(ModComponentInit.MODIFIER_COMPONENT, ModifierComponent.DEFAULT)
+            new BoltThrowerItem(new Item.Settings().maxDamage(3072).component(ModComponentInit.MODIFIER_COMPONENT, ModifierComponent.DEFAULT).component(ModComponentInit.SELF_REPAIR_COMPONENT, false)
                     .component(ModComponentInit.BOLT_COUNT_COMPONENT, 0)
                     .component(ModComponentInit.CHARGED_BOLT_COUNT_COMPONENT, 0)
-                    .component(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT)
+                    .component(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT).component(ModComponentInit.SELF_REPAIR_COMPONENT, false)
                     .component(ModComponentInit.CHARGING_COMPONENT, false)));
     public static final Item QUICK_BOLT_THROWER = registerItem("quick_bolt_thrower",
-            new QuickBoltThrowerItem(new Item.Settings().maxDamage(3072).component(ModComponentInit.MODIFIER_COMPONENT, ModifierComponent.DEFAULT)
+            new QuickBoltThrowerItem(new Item.Settings().maxDamage(16384).component(ModComponentInit.MODIFIER_COMPONENT, ModifierComponent.DEFAULT).component(ModComponentInit.SELF_REPAIR_COMPONENT, false)
                     .component(ModComponentInit.BOLT_COUNT_COMPONENT, 0)
                     .component(ModComponentInit.CHARGED_BOLT_COUNT_COMPONENT, 0)
                     .component(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT)
@@ -100,6 +100,8 @@ public class ItemInit {
     public static final Item REINFORCED_PULLEY = registerItem("reinforced_pulley", new BoltThrowerModifierItem(new Item.Settings()));
     public static final Item LUBRICATION_PULLEY = registerItem("lubrication_pulley", new BoltThrowerModifierItem(new Item.Settings()));
     public static final Item POWERED_PULLEY = registerItem("powered_pulley", new BoltThrowerModifierItem(new Item.Settings()));
+
+    public static final Item SELF_EROSION_PLATE = registerItem("self_erosion_plate", new SelfErosionPlateItem(new Item.Settings()));
 
     public static final Item VOLATILE_FUEL = registerItem("volatile_fuel", new Item(new Item.Settings()));
     public static final Item COOLANT = registerItem("coolant", new Item(new Item.Settings()));

@@ -2,7 +2,6 @@ package net.stln.launchersandarrows.mixin;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,7 +14,6 @@ import net.stln.launchersandarrows.item.BoltThrowerModifierItem;
 import net.stln.launchersandarrows.item.ItemInit;
 import net.stln.launchersandarrows.item.bow.ModfiableBowItem;
 import net.stln.launchersandarrows.item.component.ModComponentInit;
-import net.stln.launchersandarrows.item.launcher.BoltThrowerItem;
 import net.stln.launchersandarrows.item.util.AttributeEffectsDictionary;
 import net.stln.launchersandarrows.item.util.AttributeModifierDictionary;
 import net.stln.launchersandarrows.item.util.ModifierDictionary;
@@ -139,6 +137,18 @@ public class ItemTooltipMixin {
                 }
                 getAttributeModifierTooltip(tooltip, attributeModifier, iconFont);
                 getOtherModifierTooltip(tooltip, otherModifier, iconFont);
+            }
+        }
+        if (stack.getItem() instanceof ModfiableBowItem && stack.get(ModComponentInit.SELF_REPAIR_COMPONENT)) {
+            tooltip.add(Text.translatable("tooltip.launchers_and_arrows.self_repair").withColor(0x60FFC0));
+        }
+        if (stack.getItem() == ItemInit.SELF_EROSION_PLATE) {
+            if (!Screen.hasShiftDown()) {
+                tooltip.add(Text.empty());
+                tooltip.add(Text.translatable("tooltip.launchers_and_arrows.shift").withColor(0x808080));
+            } else {
+                tooltip.add(Text.translatable("tooltip.launchers_and_arrows.self_erosion_plate").withColor(0x408070));
+                tooltip.add(Text.translatable("tooltip.launchers_and_arrows.self_erosion_plate_2").withColor(0x408070));
             }
         }
 

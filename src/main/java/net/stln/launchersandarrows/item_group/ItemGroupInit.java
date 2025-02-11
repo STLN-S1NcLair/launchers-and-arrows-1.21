@@ -19,6 +19,7 @@ public final class ItemGroupInit {
                 entries.add(ItemInit.RAPID_BOW);
                 entries.add(ItemInit.MODULAR_BOW);
                 entries.add(ItemInit.MULTISHOT_BOW);
+                entries.add(ItemInit.MECHANICAL_BOW);
                 entries.add(ItemInit.RAINSHOT_BOW);
                 entries.add(ItemInit.BOLT_THROWER);
                 entries.add(ItemInit.QUICK_BOLT_THROWER);
@@ -69,6 +70,7 @@ public final class ItemGroupInit {
                 entries.add(ItemInit.REINFORCED_PULLEY);
                 entries.add(ItemInit.LUBRICATION_PULLEY);
                 entries.add(ItemInit.POWERED_PULLEY);
+                entries.add(ItemInit.SELF_EROSION_PLATE);
                 entries.add(ItemInit.VOLATILE_FUEL);
                 entries.add(ItemInit.COOLANT);
                 entries.add(ItemInit.REDSTONE_CAPACITOR);

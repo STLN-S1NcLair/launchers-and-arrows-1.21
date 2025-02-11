@@ -82,6 +82,7 @@ public class BoltEntity extends PersistentProjectileEntity {
 
     public void tick() {
         super.tick();
+        this.pickupType = PersistentProjectileEntity.PickupPermission.DISALLOWED;
         if (this.getWorld().isClient) {
             if (this.inGround) {
                 if (this.inGroundTime % 5 == 0) {
@@ -105,7 +106,6 @@ public class BoltEntity extends PersistentProjectileEntity {
         }
         itemStack = this.getDataTracker().get(ITEM_STACK);
         if (itemStack.isOf(ItemInit.BOXED_EXPLOSIVE_BOLTS)) {
-            this.pickupType = PersistentProjectileEntity.PickupPermission.DISALLOWED;
             NbtCompound nbt = new NbtCompound();
             this.writeCustomDataToNbt(nbt);
             if (nbt.getBoolean("inGround")) {

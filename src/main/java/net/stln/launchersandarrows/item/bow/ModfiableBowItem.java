@@ -1,5 +1,6 @@
 package net.stln.launchersandarrows.item.bow;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -8,7 +9,6 @@ import net.minecraft.item.*;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
-import net.stln.launchersandarrows.LaunchersAndArrows;
 import net.stln.launchersandarrows.entity.AttributedProjectile;
 import net.stln.launchersandarrows.entity.RicochetProjectile;
 import net.stln.launchersandarrows.item.component.ModComponentInit;
@@ -114,6 +114,14 @@ public class ModfiableBowItem extends BowItem {
         speed = applySpeedModifier(shooter, stack, speed);
         divergence = applyPrecisionModifier(shooter, stack, divergence);
         super.shootAll(world, shooter, hand, stack, projectiles, speed, divergence, critical, target);
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+        super.inventoryTick(stack, world, entity, slot, selected);
+        if (stack.getComponents().get(ModComponentInit.SELF_REPAIR_COMPONENT) && entity.getRandom().nextFloat() < 0.005) {
+            stack.setDamage(stack.getDamage() - 1);
+        }
     }
 
     protected float applySpeedModifier(LivingEntity shooter, ItemStack stack, float speed) {

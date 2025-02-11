@@ -38,6 +38,12 @@ public class SoundInit {
     public static SoundEvent GLITCH = SoundEvent.of(GLITCH_ID);
     public static final Identifier RICOCHET_ID = Identifier.of("launchers_and_arrows:ricochet");
     public static SoundEvent RICOCHET = SoundEvent.of(RICOCHET_ID);
+    public static final Identifier MECHANICAL_BOW_CHARGE_ID = Identifier.of("launchers_and_arrows:mechanical_bow_charge");
+    public static SoundEvent MECHANICAL_BOW_CHARGE = SoundEvent.of(MECHANICAL_BOW_CHARGE_ID);
+    public static final Identifier MECHANICAL_BOW_LOAD_ID = Identifier.of("launchers_and_arrows:mechanical_bow_load");
+    public static SoundEvent MECHANICAL_BOW_LOAD = SoundEvent.of(MECHANICAL_BOW_LOAD_ID);
+    public static final Identifier MECHANICAL_BOW_RELEASE_ID = Identifier.of("launchers_and_arrows:mechanical_bow_release");
+    public static SoundEvent MECHANICAL_BOW_RELEASE = SoundEvent.of(MECHANICAL_BOW_RELEASE_ID);
 
     public static void registerSoundEvents() {
         LaunchersAndArrows.LOGGER.info("Registering Sounds for " + LaunchersAndArrows.MOD_ID);
@@ -55,5 +61,8 @@ public class SoundInit {
         Registry.register(Registries.SOUND_EVENT, RELOAD_ID, RELOAD);
         Registry.register(Registries.SOUND_EVENT, GLITCH_ID, GLITCH);
         Registry.register(Registries.SOUND_EVENT, RICOCHET_ID, RICOCHET);
+        Registry.register(Registries.SOUND_EVENT, MECHANICAL_BOW_CHARGE_ID, MECHANICAL_BOW_CHARGE);
+        Registry.register(Registries.SOUND_EVENT, MECHANICAL_BOW_LOAD_ID, MECHANICAL_BOW_LOAD);
+        Registry.register(Registries.SOUND_EVENT, MECHANICAL_BOW_RELEASE_ID, MECHANICAL_BOW_RELEASE);
     }
 }

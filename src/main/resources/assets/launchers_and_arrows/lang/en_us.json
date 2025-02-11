@@ -3,6 +3,7 @@
   "item.launchers_and_arrows.rapid_bow": "Rapid Bow",
   "item.launchers_and_arrows.multishot_bow": "Multishot Bow",
   "item.launchers_and_arrows.modular_bow": "Modular Bow",
+  "item.launchers_and_arrows.mechanical_bow": "Mechanical Bow",
   "item.launchers_and_arrows.rainshot_bow": "Rainshot Bow",
   "item.launchers_and_arrows.bolt_thrower": "Bolt Thrower",
   "item.launchers_and_arrows.quick_bolt_thrower": "Quick Bolt Thrower",
@@ -53,6 +54,7 @@
   "item.launchers_and_arrows.reinforced_pulley": "Reinforced Pulley",
   "item.launchers_and_arrows.lubrication_pulley": "Lubricating Pulley",
   "item.launchers_and_arrows.powered_pulley": "Powered Pulley",
+  "item.launchers_and_arrows.self_erosion_plate": "Self Erosion Plate",
   "item.launchers_and_arrows.volatile_fuel": "Volatile Fuel",
   "item.launchers_and_arrows.coolant": "Coolant",
   "item.launchers_and_arrows.redstone_capacitor": "Redstone Capacitor",
@@ -81,9 +83,12 @@
   "tooltip.launchers_and_arrows.modifier": "Modifier Slots",
   "tooltip.launchers_and_arrows.empty": "Empty",
   "tooltip.launchers_and_arrows.shift": "Hold [Shift] for More Info",
-  "tooltip.launchers_and_arrows.bow_modifier": "Hold the Bow in Your Off-hand and This in Your Main Hand",
+  "tooltip.launchers_and_arrows.bow_modifier": "Hold a Bow in Your Off-hand and This in Your Main Hand",
   "tooltip.launchers_and_arrows.bow_modifier_2": "and Sneak Right Click to Install It",
-  "tooltip.launchers_and_arrows.bolt_thrower_modifier": "Hold the Bolt Thrower in Your Off-hand and This in Your Main Hand",
+  "tooltip.launchers_and_arrows.bolt_thrower_modifier": "Hold a Bolt Thrower in Your Off-hand and This in Your Main Hand",
   "tooltip.launchers_and_arrows.bolt_thrower_modifier_2": "and Sneak Right Click to Install It",
-  "tooltip.launchers_and_arrows.warning": "Warning! This item can completely mess up your world!"
+  "tooltip.launchers_and_arrows.self_erosion_plate": "Hold a Bow or Bolt Thrower in Your Off-hand and This in Your Main Hand",
+  "tooltip.launchers_and_arrows.self_erosion_plate_2": "and Sneak Right Click to Install It",
+  "tooltip.launchers_and_arrows.warning": "Warning! This item can completely mess up your world!",
+  "tooltip.launchers_and_arrows.self_repair": "Self Repair"
 }

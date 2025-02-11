@@ -89,4 +89,13 @@ public class TextUtil {
         String s = String.valueOf(i);
         return s.length() * 6;
     }
+
+    public static int getNumberCenter(double i) {
+        return getNumberLength(i) / 2;
+    }
+
+    public static int getNumberLength(double i) {
+        String s = String.valueOf(i);
+        return s.length() * 6 - 4;
+    }
 }

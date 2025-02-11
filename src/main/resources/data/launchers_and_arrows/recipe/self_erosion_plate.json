@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "minecraft:sculk_catalyst"
+    },
+    "E": {
+      "item": "minecraft:echo_shard"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "pattern": [
+    " CE",
+    "CDC",
+    "EC "
+  ],
+  "result": {
+    "count": 1,
+    "id": "launchers_and_arrows:self_erosion_plate"
+  }
+}
