@@ -139,7 +139,7 @@ public class ItemTooltipMixin {
                 getOtherModifierTooltip(tooltip, otherModifier, iconFont);
             }
         }
-        if (stack.getItem() instanceof ModfiableBowItem && stack.get(ModComponentInit.SELF_REPAIR_COMPONENT)) {
+        if (stack.getItem() instanceof ModfiableBowItem && stack.contains(ModComponentInit.SELF_REPAIR_COMPONENT) && stack.get(ModComponentInit.SELF_REPAIR_COMPONENT)) {
             tooltip.add(Text.translatable("tooltip.launchers_and_arrows.self_repair").withColor(0x60FFC0));
         }
         if (stack.getItem() == ItemInit.SELF_EROSION_PLATE) {
@@ -147,6 +147,7 @@ public class ItemTooltipMixin {
                 tooltip.add(Text.empty());
                 tooltip.add(Text.translatable("tooltip.launchers_and_arrows.shift").withColor(0x808080));
             } else {
+                tooltip.add(Text.empty());
                 tooltip.add(Text.translatable("tooltip.launchers_and_arrows.self_erosion_plate").withColor(0x408070));
                 tooltip.add(Text.translatable("tooltip.launchers_and_arrows.self_erosion_plate_2").withColor(0x408070));
             }

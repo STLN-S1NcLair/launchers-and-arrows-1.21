@@ -188,7 +188,7 @@ public abstract class ArrowEffectMixin implements RicochetEffectProjectile {
 
         arrowEntity.getWorld().createExplosion(arrowEntity, Explosion.createDamageSource(arrowEntity.getWorld(), arrowEntity),
                 EXPLOSION_BEHAVIOR, pos.getX(), pos.getY(), pos.getZ(),
-                3F, false, World.ExplosionSourceType.MOB,
+                2F, false, World.ExplosionSourceType.MOB,
                 ParticleTypes.EXPLOSION, ParticleTypes.EXPLOSION_EMITTER, SoundInit.EXPLODE_ENTRY);
         arrowEntity.kill();
     }

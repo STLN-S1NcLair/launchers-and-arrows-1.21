@@ -119,7 +119,7 @@ public class ModfiableBowItem extends BowItem {
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         super.inventoryTick(stack, world, entity, slot, selected);
-        if (stack.getComponents().get(ModComponentInit.SELF_REPAIR_COMPONENT) && entity.getRandom().nextFloat() < 0.005) {
+        if (stack.getComponents().contains(ModComponentInit.SELF_REPAIR_COMPONENT) && stack.getComponents().get(ModComponentInit.SELF_REPAIR_COMPONENT) && entity.getRandom().nextFloat() < 0.005) {
             stack.setDamage(stack.getDamage() - 1);
         }
     }

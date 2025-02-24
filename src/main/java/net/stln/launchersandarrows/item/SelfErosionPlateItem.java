@@ -19,9 +19,11 @@ public class SelfErosionPlateItem extends Item {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+        ItemStack mainhandStack = user.getMainHandStack();
         ItemStack offhandStack = user.getOffHandStack();
         if (hand == Hand.MAIN_HAND && getCorrectTarget(offhandStack.getItem()) != null && user.isSneaking()) {
             offhandStack.set(ModComponentInit.SELF_REPAIR_COMPONENT, true);
+            mainhandStack.setCount(mainhandStack.getCount() - 1);
 
             float h = 1.0F / (user.getRandom().nextFloat() * 0.5F + 1.8F) + 0.53F;
             user.getWorld().playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.BLOCK_DISPENSER_FAIL, user.getSoundCategory(), 1.0F, h);

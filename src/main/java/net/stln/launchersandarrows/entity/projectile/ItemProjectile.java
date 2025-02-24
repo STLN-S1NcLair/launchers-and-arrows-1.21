@@ -79,13 +79,11 @@ public class ItemProjectile extends ThrownItemEntity {
     }
 
 
-    @Environment(EnvType.CLIENT)
     private ParticleEffect getParticleParameters() {
         ItemStack itemStack = this.getStack();
         return (ParticleEffect)(itemStack.isEmpty() ? ParticleTypes.ITEM_SNOWBALL : new ItemStackParticleEffect(ParticleTypes.ITEM, itemStack));
     }
 
-    @Environment(EnvType.CLIENT)
     public void handleStatus(byte status) {
         if (this.getDataTracker().get(HIT)) {
             status = 0;
@@ -150,13 +148,15 @@ public class ItemProjectile extends ThrownItemEntity {
                     Vec3d subtract = hookPos.subtract(ownerPos);
                     double length = subtract.length();
                     int lefttick = this.getLifeTimeAfterHit() - this.getDataTracker().get(HIT_EFFECT_TICK);
-                    double strength = 0.125 / subtract.length();
+                    length = Math.clamp(length, 0, 50);
+                    double strength = 0.125 / length;
                     double control = 0.075;
                     double vx = subtract.x * strength + owner.getFacing().getOffsetX() * control;
                     double vy = subtract.y * strength + owner.getFacing().getOffsetY() * control + Math.max(owner.getFinalGravity() * lefttick * 1.5 / getLifeTimeAfterHit(), owner.getFinalGravity());
                     double vz = subtract.z * strength + owner.getFacing().getOffsetZ() * control;
                     owner.addVelocity(vx, vy, vz);
                     owner.fallDistance = 0;
+                    LaunchersAndArrows.LOGGER.info(String.valueOf(length));
                     this.getWorld().playSound(null, BlockPos.ofFloored(owner.getPos()), SoundEvents.ENTITY_FISHING_BOBBER_RETRIEVE, SoundCategory.PLAYERS,
                             1.0F, 1.0F / (this.getRandom().nextFloat() * 0.5F + 1.8F) + 0.33F);
                     if (length < 2) {
@@ -258,7 +258,6 @@ public class ItemProjectile extends ThrownItemEntity {
     @Override
     protected void onBlockHit(BlockHitResult blockHitResult) {
         super.onBlockHit(blockHitResult);
-        if (!this.getWorld().isClient) {
             if (this.getStack().isOf(Items.TORCH)) {
                 BlockPos pos = blockHitResult.getBlockPos();
                 Direction direction = blockHitResult.getSide();
@@ -291,6 +290,9 @@ public class ItemProjectile extends ThrownItemEntity {
                         this.getWorld().spawnEntity(new ItemEntity(this.getWorld(), pos.getX(), pos.getY(), pos.getZ(), new ItemStack(Items.TORCH)));
                     }
                 }
+            } else if (this.getStack().isOf(ItemInit.GRAPPLING_HOOK)) {
+                this.getDataTracker().set(HIT, true);
+
             } else if (this.getStack().isOf(Items.HEART_OF_THE_SEA)) {
                 for (int i = -1; i < 2; i++) {
                     for (int j = -1; j < 2; j++) {
@@ -331,7 +333,7 @@ public class ItemProjectile extends ThrownItemEntity {
             }
             this.getWorld().playSound(null, blockHitResult.getBlockPos(), getHitSound(), SoundCategory.PLAYERS,
                     1.0F, 1.0F / (this.getRandom().nextFloat() * 0.5F + 1.8F) + 0.53F);
-        }
+
     }
 
     @Override
