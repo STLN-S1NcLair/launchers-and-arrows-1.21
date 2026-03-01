@@ -1,5 +1,6 @@
 package net.stln.launchersandarrows;
 
+import net.stln.launchersandarrows.creative_tab.CreativeTabInit;
 import net.stln.launchersandarrows.item.ItemInit;
 import org.slf4j.Logger;
 
@@ -42,6 +43,7 @@ public class LaunchersAndArrows {
         NeoForge.EVENT_BUS.register(this);
 
         ItemInit.register(modEventBus);
+        CreativeTabInit.register(modEventBus);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
