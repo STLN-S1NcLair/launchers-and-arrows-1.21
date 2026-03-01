@@ -2,22 +2,11 @@
   "required": true,
   "package": "net.stln.launchersandarrows.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [
-    "AddDataProjectileMixin",
-    "ArrowEffectMixin",
-    "CancelKnockbackMixin",
-    "DeleteBoltKnockbackMixin",
-    "LivingEntityMixin",
-    "SnowballEntityMixin"
-  ],
-  "client": [
-    "FovMixin",
-    "ItemTooltipMixin",
-    "MovementSpeedMixin",
-    "PlayerEntityRendererMixin",
-    "RenderFirstPersonItemMixin"
-  ],
+  "mixins": [],
   "injectors": {
     "defaultRequire": 1
-	}
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
 }
