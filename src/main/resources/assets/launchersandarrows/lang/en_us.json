@@ -1,0 +1,13 @@
+{
+  "itemGroup.launchersandarrows": "Example Mod Tab",
+  "block.launchersandarrows.example_block": "Example Block",
+  "item.launchersandarrows.example_item": "Example Item",
+
+  "launchersandarrows.configuration.title": "Launchers And Arrows Configs",
+  "launchersandarrows.configuration.section.launchersandarrows.common.toml": "Launchers And Arrows Configs",
+  "launchersandarrows.configuration.section.launchersandarrows.common.toml.title": "Launchers And Arrows Configs",
+  "launchersandarrows.configuration.items": "Item List",
+  "launchersandarrows.configuration.logDirtBlock": "Log Dirt Block",
+  "launchersandarrows.configuration.magicNumberIntroduction": "Magic Number Text",
+  "launchersandarrows.configuration.magicNumber": "Magic Number"
+}
