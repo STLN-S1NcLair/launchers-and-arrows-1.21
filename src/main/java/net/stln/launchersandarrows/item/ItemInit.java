@@ -22,6 +22,12 @@ public class ItemInit {
     public static final DeferredItem<Item> ECHO_COIL = ITEMS.registerItem("echo_coil",
             Item::new, new Item.Properties());
 
+    public static final DeferredItem<Item> METAL_ARROWHEAD = ITEMS.registerItem("metal_arrowhead",
+            Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> CUSTOMMADE_TICKET = ITEMS.registerItem("custommade_ticket",
+            Item::new, new Item.Properties());
+
     public static void register(IEventBus eventBus){
         ITEMS.register(eventBus);
     }

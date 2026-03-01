@@ -22,6 +22,9 @@ public class CreativeTabInit {
                 output.accept(ItemInit.ACID);
                 output.accept(ItemInit.VISCOUS_WATER);
                 output.accept(ItemInit.ECHO_COIL);
+
+                output.accept(ItemInit.METAL_ARROWHEAD);
+                output.accept(ItemInit.CUSTOMMADE_TICKET);
             }).build());
 
     public static void register(IEventBus eventBus){
