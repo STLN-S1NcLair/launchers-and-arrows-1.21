@@ -1,5 +1,6 @@
 package net.stln.launchersandarrows;
 
+import net.stln.launchersandarrows.item.ItemInit;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -39,6 +40,8 @@ public class LaunchersAndArrows {
         modEventBus.addListener(this::commonSetup);
 
         NeoForge.EVENT_BUS.register(this);
+
+        ItemInit.register(modEventBus);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
@@ -47,7 +50,6 @@ public class LaunchersAndArrows {
 
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
-        // Do something when the server starts
-        LOGGER.info("HELLO from server starting");
+
     }
 }
