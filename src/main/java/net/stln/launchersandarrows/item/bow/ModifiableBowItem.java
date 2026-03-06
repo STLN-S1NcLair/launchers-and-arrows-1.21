@@ -27,17 +27,18 @@ public class ModifiableBowItem extends BowItem {
     }
 
     public void setModifier(int slot, ItemStack bow, ItemStack modifier){
-        //
+        //後で書く
     }
 
     public ItemStack getModifier(int slot, ItemStack bow){
-        //
+        //後で書く
         return null;
     }
 
     public List<ItemStack> getModifiers(ItemStack bow){
-        //
-        return null;
+        //後で書く
+        return List.of(); //仮
+        //return null;
     }
 
     // f: createArrowEntity
@@ -73,13 +74,13 @@ public class ModifiableBowItem extends BowItem {
         ItemStack mainHandStack = player.getMainHandItem();
         ItemStack offHandStack = player.getOffhandItem();
         Predicate<ItemStack> predicate = ((ProjectileWeaponItem)stack.getItem()).getSupportedHeldProjectiles();
-        String selector;
+        String selector; //Arrow Selector Componentがどうのこうの
         if(!offHandStack.isEmpty() && predicate.test(offHandStack)){
-            //
+            //Arrow Selector Componentに関する処理
             return offHandStack;
         }
         else if(!mainHandStack.isEmpty() && predicate.test(mainHandStack)){
-            //
+            //Arrow Selector Componentに関する処理
             return mainHandStack;
         }
         else if(selector != null && !selector.isEmpty()) {
@@ -97,39 +98,46 @@ public class ModifiableBowItem extends BowItem {
     //f: shootAll
     @Override
     protected void shoot(ServerLevel level, LivingEntity shooter, InteractionHand hand, ItemStack weapon, List<ItemStack> projectileItems, float velocity, float inaccuracy, boolean isCrit, @Nullable LivingEntity target) {
-        // velocity = applySpeedModifier(shooter, weapon, velocity);
-        // inaccuracy = applyPrecisionModifier(shooter, weapon, inaccuracy);
+        velocity = applySpeedModifier(shooter, weapon, velocity);
+        inaccuracy = applyPrecisionModifier(shooter, weapon, inaccuracy);
         super.shoot(level, shooter, hand, weapon, projectileItems, velocity, inaccuracy, isCrit, target);
     }
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         super.inventoryTick(stack, level, entity, slotId, isSelected);
-        // Componentに関する処理
+        // Self Repair Componentに関する処理がここに来る
     }
 
-    protected float applySpeedModifier(Entity shooter, ItemStack stack, float speed){
+    protected float applySpeedModifier(LivingEntity shooter, ItemStack stack, float velocity){
         float sturdyPercentage = 0F;
         for(int i=0; i < slotsize; i++){
             if(i < getModifiers(stack).size()){
                 ItemStack modifier = getModifier(i, stack);
-                //
+                if(ModifierDictionary.getEffect(modifier.getItem(), ModifierEnum.RANGE.get()) != null){
+                    velocity *= (ModifierDictionary.getEffect(modifier.getItem(), ModifierEnum.RANGE.get()) + 100) / 100.0F;
+                }
+                if(ModifierDictionary.getEffect(modifier.getItem(), ModifierEnum.STURDY.get()) != null){
+                    sturdyPercentage += (ModifierDictionary.getEffect(modifier.getItem(), ModifierEnum.STURDY.get())) / 100.0F;
+                }
             }
         }
         if(shooter.getRandom().nextFloat() < sturdyPercentage){
-            stack.setDamageValue(stack.getDamageValue() - 1);
+            stack.setDamageValue(Math.max(0, stack.getDamageValue() - 1)); //AIに文句言われたので負数回避入れてみた
         }
-        return speed;
+        return velocity;
     }
 
-    protected float applyPrecisionModifier(Entity shooter, ItemStack stack, float divergence){
+    protected float applyPrecisionModifier(LivingEntity shooter, ItemStack stack, float inaccuracy){
         for(int i=0; i < slotsize; i++){
             if(i < getModifiers(stack).size()){
                 ItemStack modifier = getModifier(i, stack);
-                //
+                if(ModifierDictionary.getEffect(modifier.getItem(), ModifierEnum.PRECISION.get()) != null){
+                    inaccuracy *= 1 - ((ModifierDictionary.getEffect(modifier.getItem(), ModifierEnum.PRECISION.get())) / 100.0F);
+                }
             }
         }
-        return divergence;
+        return inaccuracy;
     }
 
     public int getSlotsize() {
@@ -142,15 +150,15 @@ public class ModifiableBowItem extends BowItem {
 
     public float getModifiedPullProgress(int useTicks, ItemStack stack){
         float lightweightMod = 1F;
-        /*
         for(int i=0; i < slotsize; i++){
             if(i < getModifiers(stack).size()){
                 ItemStack modifier = getModifier(i, stack);
-                //lightweight modifierの分を引く処理
+                if(ModifierDictionary.getEffect(modifier.getItem(), ModifierEnum.LIGHTWEIGHT.get()) != null){
+                    lightweightMod -= ModifierDictionary.getEffect(modifier.getItem(), ModifierEnum.LIGHTWEIGHT.get()) / 100.0F;
+                }
             }
         }
-        */
-        // lightweightMod = lightweightMod < 0 ? 0 : lightweightMod;
+        lightweightMod = lightweightMod < 0 ? 0 : lightweightMod;
         float f = (float)useTicks / (this.pulltime * lightweightMod);
         f = (f*f + f*2.0F) / 3.0F;
         if(f > 1.0F){

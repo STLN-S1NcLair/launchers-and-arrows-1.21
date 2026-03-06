@@ -9,6 +9,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.stln.launchersandarrows.item.CustomModelPredicateProvider;
 
 @Mod(value = LaunchersAndArrows.MOD_ID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = LaunchersAndArrows.MOD_ID, value = Dist.CLIENT)
@@ -19,6 +20,6 @@ public class LaunchersAndArrowsClient {
 
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
-
+        CustomModelPredicateProvider.registerModModels();
     }
 }
