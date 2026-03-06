@@ -16,6 +16,11 @@ public class CreativeTabInit {
             .title(Component.translatable("itemgroup.launchers_and_arrows.launchers_and_arrows"))
             .icon(() -> ItemInit.VOLATILE_FUEL.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
+                output.accept(ItemInit.LONG_BOW);
+                output.accept(ItemInit.RAPID_BOW);
+                output.accept(ItemInit.MODULAR_BOW);
+                output.accept(ItemInit.MULTISHOT_BOW);
+
                 output.accept(ItemInit.VOLATILE_FUEL);
                 output.accept(ItemInit.COOLANT);
                 output.accept(ItemInit.REDSTONE_CAPACITOR);
