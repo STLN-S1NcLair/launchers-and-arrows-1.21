@@ -67,7 +67,7 @@ public class MultiShotBowItem extends ModifiableBowItem implements FovModifierIt
     //f: shootAll
     @Override
     protected void shoot(ServerLevel level, LivingEntity shooter, InteractionHand hand, ItemStack weapon, List<ItemStack> projectileItems, float velocity, float inaccuracy, boolean isCrit, @Nullable LivingEntity target) {
-        //velocity = applySpeedModifier(shooter, weapon, velocity);
+        velocity = applySpeedModifier(shooter, weapon, velocity);
         float f = EnchantmentHelper.processProjectileSpread(level, weapon, shooter, 0F); //f: getProjectileSpread
         float g = projectileItems.size() == 1 ? 0.0F : 2.0F * f / (float)(projectileItems.size() - 1);
         float h = (float)((projectileItems.size() - 1) % 2) * g / 2.0F;
@@ -79,9 +79,9 @@ public class MultiShotBowItem extends ModifiableBowItem implements FovModifierIt
                 float k = h + i * (float)((j + 1) / 2) * g;
                 i = -i;
                 Projectile projectile = this.createProjectile(level, shooter, weapon, itemStack, isCrit);
-                // ((BypassDamageCooldownProjectile)projectile).setBypass(true);
-                // velocity = applySpeedModifier(shooter, weapon, velocity);
-                // inaccuracy = applyPrecisionModifier(shooter, weapon, inaccuracy);
+                ((BypassDamageCooldownProjectile)projectile).setBypass(true);
+                velocity = applySpeedModifier(shooter, weapon, velocity);
+                inaccuracy = applyPrecisionModifier(shooter, weapon, inaccuracy);
                 this.shootProjectile(shooter, projectile, j, velocity, inaccuracy, k, target);
                 level.addFreshEntity(projectile);
                 weapon.hurtAndBreak(this.getDurabilityUse(itemStack), shooter, LivingEntity.getSlotForHand(hand));
