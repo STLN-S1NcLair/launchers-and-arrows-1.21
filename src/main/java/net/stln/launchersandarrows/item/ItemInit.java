@@ -1,5 +1,6 @@
 package net.stln.launchersandarrows.item;
 
+import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -32,7 +33,8 @@ public class ItemInit {
 
     // Arrows
     // Bolts
-    // Hook
+    public static final DeferredItem<Item> GRAPPLING_HOOK = ITEMS.registerItem("grappling_hook",
+            ArrowItem::new, new Item.Properties());
     // Strings
     // Pulleys
     // Self Erosion Plate
