@@ -1,6 +1,7 @@
 package net.stln.launchersandarrows;
 
 import net.stln.launchersandarrows.creative_tab.CreativeTabInit;
+import net.stln.launchersandarrows.entity.EntityInit;
 import net.stln.launchersandarrows.item.ItemInit;
 import net.stln.launchersandarrows.sound.SoundInit;
 import org.slf4j.Logger;
@@ -45,6 +46,7 @@ public class LaunchersAndArrows {
 
         ItemInit.register(modEventBus);
         CreativeTabInit.register(modEventBus);
+        EntityInit.registerModEntities(modEventBus);
         SoundInit.registerSoundEvents(modEventBus);
     }
 
