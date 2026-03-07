@@ -129,8 +129,8 @@ public class HookLauncherItem extends CrossbowItem {
         projectile.shoot((double)vector3f.x(), (double)vector3f.y(), (double)vector3f.z(), velocity, inaccuracy);
         float f = 1.0F / (shooter.getRandom().nextFloat() * 0.5F + 1.8F) + 0.53F;
         shooter.level().playSound((Player)null, shooter.getX(), shooter.getY(), shooter.getZ(), SoundInit.BOW_RELEASE.get(), shooter.getSoundSource(), 1.0F, f);
-        shooter.level().playSound((Player)null, shooter.getX(), shooter.getY(), shooter.getZ(), SoundEvents.CROSSBOW_SHOOT, shooter.getSoundSource(), 1.0F, f);
-        shooter.level().playSound((Player)null, shooter.getX(), shooter.getY(), shooter.getZ(), SoundEvents.CROSSBOW_SHOOT, shooter.getSoundSource(), 1.0F, f - 0.7F);
+        shooter.level().playSound((Player)null, shooter.getX(), shooter.getY(), shooter.getZ(), SoundEvents.VAULT_INSERT_ITEM, shooter.getSoundSource(), 1.0F, f);
+        shooter.level().playSound((Player)null, shooter.getX(), shooter.getY(), shooter.getZ(), SoundEvents.IRON_TRAPDOOR_OPEN, shooter.getSoundSource(), 1.0F, f - 0.7F);
     }
 
     // f: calcVelocity
