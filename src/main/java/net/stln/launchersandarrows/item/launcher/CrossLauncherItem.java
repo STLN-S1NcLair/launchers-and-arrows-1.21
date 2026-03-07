@@ -81,6 +81,7 @@ public class CrossLauncherItem extends CrossbowItem {
         super(properties);
     }
 
+    // f: getHeldProjectiles
     @Override
     public Predicate<ItemStack> getSupportedHeldProjectiles() {
         return CROSSLAUNCHER_HELD_PROJECTILES;
@@ -186,7 +187,7 @@ public class CrossLauncherItem extends CrossbowItem {
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entityLiving, int timeLeft) {
         int i = this.getUseDuration(stack, entityLiving) - timeLeft;
-        float f = getPullProgress(i, stack, entityLiving);
+        float f = getPowerForTime(i, stack, entityLiving);
         if (f >= 1.0F && !isCharged(stack) && tryLoadProjectiles(entityLiving, stack)) {
             ChargingSounds chargingSounds = this.getChargingSounds(stack);
             chargingSounds.end()
@@ -206,11 +207,6 @@ public class CrossLauncherItem extends CrossbowItem {
         float h = 1.0F / (entityLiving.getRandom().nextFloat() * 0.5F + 1.8F) + 0.53F;
         entityLiving.level().playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.DISPENSER_FAIL, entityLiving.getSoundSource(), 1.0F, h + 1.0F);
         entityLiving.level().playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.IRON_DOOR_OPEN, entityLiving.getSoundSource(), 1.0F, h + 1.0F);
-    }
-
-    ChargingSounds getChargingSounds(ItemStack stack) {
-        return (ChargingSounds)EnchantmentHelper.pickHighestLevel(stack, EnchantmentEffectComponents.CROSSBOW_CHARGING_SOUNDS)
-                .orElse(DEFAULT_SOUNDS);
     }
 
     // f: loadProjectiles
@@ -371,6 +367,7 @@ public class CrossLauncherItem extends CrossbowItem {
         return soundEvent;
     }
 
+    // f: usageTick
     @Override
     public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int count) {
         if (!level.isClientSide) {
@@ -395,22 +392,29 @@ public class CrossLauncherItem extends CrossbowItem {
                 });
             }
         }
-
     }
 
-
+    // f: getMaxUseTime
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
-        return getPullTime(stack, entity) + 3;
+        return getChargeDuration(stack, entity) + 3;
     }
 
-    public static int getPullTime(ItemStack stack, LivingEntity user) {
-        float f = EnchantmentHelper.modifyCrossbowChargingTime(stack, user, 0.5F);
+    // f: getPullTime
+    public static int getChargeDuration(ItemStack stack, LivingEntity shooter) {
+        float f = EnchantmentHelper.modifyCrossbowChargingTime(stack, shooter, 0.5F);
         return Mth.floor(f * 20.0F);
     }
 
-    private static float getPullProgress(int useTicks, ItemStack stack, LivingEntity user) {
-        float f = (float)useTicks / (float)getPullTime(stack, user);
+    // f: getLoadingSounds
+    ChargingSounds getChargingSounds(ItemStack stack) {
+        return (ChargingSounds)EnchantmentHelper.pickHighestLevel(stack, EnchantmentEffectComponents.CROSSBOW_CHARGING_SOUNDS)
+                .orElse(DEFAULT_SOUNDS);
+    }
+
+    // f: getPullProgress
+    private static float getPowerForTime(int useTicks, ItemStack stack, LivingEntity user) {
+        float f = (float)useTicks / (float)getChargeDuration(stack, user);
         if (f > 1.0F) {
             f = 1.0F;
         }
