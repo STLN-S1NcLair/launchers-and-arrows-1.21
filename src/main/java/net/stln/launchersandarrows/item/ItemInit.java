@@ -39,11 +39,28 @@ public class ItemInit {
 
     // Arrows
     // Bolts
+
     public static final DeferredItem<Item> GRAPPLING_HOOK = ITEMS.registerItem("grappling_hook",
             ArrowItem::new, new Item.Properties());
+
     // Strings
+    public static final DeferredItem<Item> RANGE_STRING = ITEMS.registerItem("range_string",
+            BowModifierItem::new, new Item.Properties());
+    public static final DeferredItem<Item> STURDY_STRING = ITEMS.registerItem("sturdy_string",
+            BowModifierItem::new, new Item.Properties());
+    public static final DeferredItem<Item> LIGHTWEIGHT_STRING = ITEMS.registerItem("lightweight_string",
+            BowModifierItem::new, new Item.Properties());
+    public static final DeferredItem<Item> SLIMY_STRING = ITEMS.registerItem("slimy_string",
+            BowModifierItem::new, new Item.Properties());
+    public static final DeferredItem<Item> PRECISION_STRING = ITEMS.registerItem("precision_string",
+            BowModifierItem::new, new Item.Properties());
+    public static final DeferredItem<Item> OVERLOADED_STRING = ITEMS.registerItem("overloaded_string",
+            BowModifierItem::new, new Item.Properties());
+
     // Pulleys
-    // SELF_EROSION_PLATE
+
+    public static final DeferredItem<Item> SELF_EROSION_PLATE = ITEMS.registerItem("self_erosion_plate",
+            SelfErosionPlateItem::new, new Item.Properties());
 
     // Materials
     public static final DeferredItem<Item> VOLATILE_FUEL = ITEMS.registerItem("volatile_fuel",

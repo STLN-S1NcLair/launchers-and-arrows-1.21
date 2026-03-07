@@ -34,8 +34,16 @@ public class CreativeTabInit {
                 output.accept(ItemInit.GRAPPLING_HOOK);
 
                 // Strings
+                output.accept(ItemInit.RANGE_STRING);
+                output.accept(ItemInit.STURDY_STRING);
+                output.accept(ItemInit.LIGHTWEIGHT_STRING);
+                output.accept(ItemInit.SLIMY_STRING);
+                output.accept(ItemInit.PRECISION_STRING);
+                output.accept(ItemInit.OVERLOADED_STRING);
+
                 // Pulleys
-                // SELF_EROSION_PLATE
+
+                output.accept(ItemInit.SELF_EROSION_PLATE);
 
                 // Materials
 
