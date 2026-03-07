@@ -10,7 +10,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.stln.launchersandarrows.item.util.ModifierDictionary;
 import net.stln.launchersandarrows.sound.SoundInit;
+import net.stln.launchersandarrows.util.ModifierEnum;
 
 import java.util.List;
 
@@ -58,15 +60,15 @@ public class RapidBowItem extends ModifiableBowItem{
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
         float lightweightMod = 1F;
-        /*
         for(int i = 0; i< slotsize; i++){
             if(i < getModifiers(stack).size()){
                 ItemStack modifier = getModifier(i, stack);
-                //lightweight modifierの分を引く処理
+                if (ModifierDictionary.getEffect(modifier.getItem(), ModifierEnum.LIGHTWEIGHT.get()) != null) {
+                    lightweightMod -= ModifierDictionary.getEffect(modifier.getItem(), ModifierEnum.LIGHTWEIGHT.get()) / 100.0F;
+                }
             }
         }
-        */
-        // lightweightMod = lightweightMod < 0 ? 0 : lightweightMod;
+        lightweightMod = lightweightMod < 0 ? 0 : lightweightMod;
         return (int) Math.ceil(lightweightMod * this.pulltime);
     }
 }

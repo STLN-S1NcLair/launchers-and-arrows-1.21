@@ -54,7 +54,7 @@ public class LaunchersAndArrows {
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
-
+        ItemInit.registerAttributeEffects();
     }
 
     @SubscribeEvent

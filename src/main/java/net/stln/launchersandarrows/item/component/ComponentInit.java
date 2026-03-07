@@ -16,8 +16,8 @@ public class ComponentInit {
 
     public static final DeferredRegister.DataComponents COMPONENT_TYPES = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, LaunchersAndArrows.MOD_ID);
 
-    // MODIFIER_COMPONENT
-    public static final Supplier<DataComponentType<Boolean>> SELF_REPAIR_COMPONENT = register("self_repair_component", Codec.BOOL, ByteBufCodecs.BOOL);
+    public static final Supplier<DataComponentType<ModifierComponent>> MODIFIER_COMPONENT = register("modifier", ModifierComponent.CODEC, ModifierComponent.STREAM_CODEC);
+    public static final Supplier<DataComponentType<Boolean>> SELF_REPAIR_COMPONENT = register("self_repair", Codec.BOOL, ByteBufCodecs.BOOL);
     // ARROW_SELECTOR_COMPONENT
     // CHARGE_COUNT_COMPONENT
     // CHARGE_COMPONENT

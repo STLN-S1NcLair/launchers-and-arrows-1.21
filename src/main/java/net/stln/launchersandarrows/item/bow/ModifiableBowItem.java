@@ -9,14 +9,17 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.stln.launchersandarrows.LaunchersAndArrows;
 import net.stln.launchersandarrows.entity.AttributedProjectile;
 import net.stln.launchersandarrows.entity.RicochetProjectile;
 import net.stln.launchersandarrows.item.component.ComponentInit;
+import net.stln.launchersandarrows.item.component.ModifierComponent;
 import net.stln.launchersandarrows.item.util.AttributeModifierDictionary;
 import net.stln.launchersandarrows.item.util.ModifierDictionary;
 import net.stln.launchersandarrows.util.ModifierEnum;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ModifiableBowItem extends BowItem {
@@ -28,18 +31,36 @@ public class ModifiableBowItem extends BowItem {
     }
 
     public void setModifier(int slot, ItemStack bow, ItemStack modifier){
-        //後で書く
+        if(slot < slotsize){
+            ModifierComponent modifierComponent = bow.get(ComponentInit.MODIFIER_COMPONENT);
+            if(modifierComponent != null){
+                List<ItemStack> modifiers = new ArrayList<>(List.copyOf(modifierComponent.getModifiers()));
+                modifiers.add(modifier);
+                bow.set(ComponentInit.MODIFIER_COMPONENT, ModifierComponent.of(modifiers));
+            }
+            else {
+                bow.set(ComponentInit.MODIFIER_COMPONENT, ModifierComponent.of(List.of(modifier)));
+            }
+        }
     }
 
     public ItemStack getModifier(int slot, ItemStack bow){
-        //後で書く
+        ModifierComponent modifierComponent = bow.get(ComponentInit.MODIFIER_COMPONENT);
+        if(modifierComponent != null){
+            List<ItemStack> modifiers = modifierComponent.getModifiers();
+            if(slot < modifiers.size()){
+                return modifiers.get(slot);
+            }
+        }
         return null;
     }
 
     public List<ItemStack> getModifiers(ItemStack bow){
-        //後で書く
-        return List.of(); //仮
-        //return null;
+        ModifierComponent modifierComponent = bow.get(ComponentInit.MODIFIER_COMPONENT);
+        if(modifierComponent != null){
+            return modifierComponent.getModifiers();
+        }
+        return null;
     }
 
     // f: createArrowEntity
