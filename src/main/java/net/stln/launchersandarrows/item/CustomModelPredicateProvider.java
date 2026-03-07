@@ -1,10 +1,14 @@
 package net.stln.launchersandarrows.item;
 
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ChargedProjectiles;
 import net.stln.launchersandarrows.LaunchersAndArrows;
 import net.stln.launchersandarrows.item.bow.ModifiableBowItem;
+import net.stln.launchersandarrows.item.launcher.CrossLauncherItem;
 
 public class CustomModelPredicateProvider {
     public static void registerModModels() {
@@ -18,7 +22,7 @@ public class CustomModelPredicateProvider {
         //registerModBow(ItemInit.RAINSHOT_BOW.get());
         //registerBoltThrower(ItemInit.BOLT_THROWER.get());
         //registerBoltThrower(ItemInit.QUICK_BOLT_THROWER.get());
-        //registerCrossLauncher(ItemInit.CROSSLAUNCHER.get());
+        registerCrossLauncher(ItemInit.CROSSLAUNCHER.get());
         //registerCrossLauncher(ItemInit.HOOK_LAUNCHER.get());
         //registerCrossLauncher(ItemInit.SLINGSHOT.get());
     }
@@ -33,5 +37,30 @@ public class CustomModelPredicateProvider {
         ItemProperties.register(bow, ResourceLocation.withDefaultNamespace("pulling"), (stack, level, entity, seed) ->
                 entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F
         );
+    }
+
+    //registerMechanicalBow
+    //registerBoltThrower
+
+    private static void registerCrossLauncher(Item crossLauncher){
+        ItemProperties.register(crossLauncher, ResourceLocation.withDefaultNamespace("pull"), (stack, level, entity, seed) -> {
+            if (entity == null) {
+                return 0.0F;
+            }
+            return CrossLauncherItem.isCharged(stack) ? 0.0F: (float)(stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / (float)CrossLauncherItem.getPullTime(stack, entity);
+        });
+
+        ItemProperties.register(crossLauncher, ResourceLocation.withDefaultNamespace("pulling"), (stack, level, entity, seed) ->
+                entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F
+        );
+
+        ItemProperties.register(crossLauncher, ResourceLocation.withDefaultNamespace("charged"), (stack, level, entity, seed) ->
+                entity != null && entity.isUsingItem() && CrossLauncherItem.isCharged(stack) ? 1.0F : 0.0F
+        );
+
+        ItemProperties.register(crossLauncher, ResourceLocation.withDefaultNamespace("firework"), (stack, level, entity, seed) -> {
+            ChargedProjectiles chargedProjectiles = stack.get(DataComponents.CHARGED_PROJECTILES);
+            return chargedProjectiles != null && chargedProjectiles.contains(Items.FIREWORK_ROCKET) ? 1.0F : 0.0F;
+        });
     }
 }

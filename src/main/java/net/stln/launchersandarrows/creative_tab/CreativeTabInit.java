@@ -20,6 +20,13 @@ public class CreativeTabInit {
                 output.accept(ItemInit.RAPID_BOW);
                 output.accept(ItemInit.MODULAR_BOW);
                 output.accept(ItemInit.MULTISHOT_BOW);
+                // MECHANICAL_BOW
+                // RAINSHOT_BOW
+                // BOLT_THROWER
+                // QUICK_BOLT_THROWER
+                output.accept(ItemInit.CROSSLAUNCHER);
+                // HOOK_LAUNCHER
+                // SLINGSHOT
 
                 output.accept(ItemInit.VOLATILE_FUEL);
                 output.accept(ItemInit.COOLANT);
