@@ -26,7 +26,7 @@ public class CreativeTabInit {
                 // QUICK_BOLT_THROWER
                 output.accept(ItemInit.CROSSLAUNCHER);
                 output.accept(ItemInit.HOOK_LAUNCHER);
-                // SLINGSHOT
+                output.accept(ItemInit.SLINGSHOT);
 
                 // Arrows
                 // Bolts

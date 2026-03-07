@@ -12,6 +12,7 @@ import net.stln.launchersandarrows.item.bow.MultiShotBowItem;
 import net.stln.launchersandarrows.item.bow.RapidBowItem;
 import net.stln.launchersandarrows.item.launcher.CrossLauncherItem;
 import net.stln.launchersandarrows.item.launcher.HookLauncherItem;
+import net.stln.launchersandarrows.item.launcher.SlingShotItem;
 
 public class ItemInit {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(LaunchersAndArrows.MOD_ID);
@@ -33,7 +34,8 @@ public class ItemInit {
             CrossLauncherItem::new, new Item.Properties().durability(1024));
     public static final DeferredItem<Item> HOOK_LAUNCHER = ITEMS.registerItem("hook_launcher",
             HookLauncherItem::new, new Item.Properties().durability(1024));
-    // SLINGSHOT
+    public static final DeferredItem<Item> SLINGSHOT = ITEMS.registerItem("slingshot",
+            SlingShotItem::new, new Item.Properties().durability(1024));
 
     // Arrows
     // Bolts

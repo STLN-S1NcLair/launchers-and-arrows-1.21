@@ -24,7 +24,7 @@ public class CustomModelPredicateProvider {
         //registerBoltThrower(ItemInit.QUICK_BOLT_THROWER.get());
         registerCrossLauncher(ItemInit.CROSSLAUNCHER.get());
         registerCrossLauncher(ItemInit.HOOK_LAUNCHER.get());
-        //registerCrossLauncher(ItemInit.SLINGSHOT.get());
+        registerCrossLauncher(ItemInit.SLINGSHOT.get());
     }
 
     private static void registerModBow(Item bow){
