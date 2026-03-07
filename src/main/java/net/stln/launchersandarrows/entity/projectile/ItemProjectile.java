@@ -144,7 +144,7 @@ public class ItemProjectile extends ThrowableItemProjectile {
                     double vz = subtract.z * strength + owner.getDirection().getStepZ() * control;
                     owner.push(vx, vy, vz);
                     owner.fallDistance = 0;
-                    LaunchersAndArrows.LOGGER.info(String.valueOf(length));
+                    // LaunchersAndArrows.LOGGER.info(String.valueOf(length));
                     this.level().playSound(null, BlockPos.containing(owner.position()), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.PLAYERS,
                             1.0F, 1.0F / (this.getRandom().nextFloat() * 0.5F + 1.8F) + 0.33F);
                     if (length < 2) {

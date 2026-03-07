@@ -23,7 +23,7 @@ public class CustomModelPredicateProvider {
         //registerBoltThrower(ItemInit.BOLT_THROWER.get());
         //registerBoltThrower(ItemInit.QUICK_BOLT_THROWER.get());
         registerCrossLauncher(ItemInit.CROSSLAUNCHER.get());
-        //registerCrossLauncher(ItemInit.HOOK_LAUNCHER.get());
+        registerCrossLauncher(ItemInit.HOOK_LAUNCHER.get());
         //registerCrossLauncher(ItemInit.SLINGSHOT.get());
     }
 
@@ -47,7 +47,7 @@ public class CustomModelPredicateProvider {
             if (entity == null) {
                 return 0.0F;
             }
-            return CrossLauncherItem.isCharged(stack) ? 0.0F: (float)(stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / (float)CrossLauncherItem.getPullTime(stack, entity);
+            return CrossLauncherItem.isCharged(stack) ? 0.0F: (float)(stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / (float)CrossLauncherItem.getChargeDuration(stack, entity);
         });
 
         ItemProperties.register(crossLauncher, ResourceLocation.withDefaultNamespace("pulling"), (stack, level, entity, seed) ->

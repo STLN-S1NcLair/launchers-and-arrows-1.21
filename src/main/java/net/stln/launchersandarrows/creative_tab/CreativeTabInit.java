@@ -25,8 +25,19 @@ public class CreativeTabInit {
                 // BOLT_THROWER
                 // QUICK_BOLT_THROWER
                 output.accept(ItemInit.CROSSLAUNCHER);
-                // HOOK_LAUNCHER
+                output.accept(ItemInit.HOOK_LAUNCHER);
                 // SLINGSHOT
+
+                // Arrows
+                // Bolts
+
+                output.accept(ItemInit.GRAPPLING_HOOK);
+
+                // Strings
+                // Pulleys
+                // SELF_EROSION_PLATE
+
+                // Materials
 
                 output.accept(ItemInit.VOLATILE_FUEL);
                 output.accept(ItemInit.COOLANT);

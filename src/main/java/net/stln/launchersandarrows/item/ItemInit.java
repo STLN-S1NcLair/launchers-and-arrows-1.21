@@ -11,6 +11,7 @@ import net.stln.launchersandarrows.item.bow.ModularBowItem;
 import net.stln.launchersandarrows.item.bow.MultiShotBowItem;
 import net.stln.launchersandarrows.item.bow.RapidBowItem;
 import net.stln.launchersandarrows.item.launcher.CrossLauncherItem;
+import net.stln.launchersandarrows.item.launcher.HookLauncherItem;
 
 public class ItemInit {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(LaunchersAndArrows.MOD_ID);
@@ -30,7 +31,8 @@ public class ItemInit {
     // QUICK_BOLT_THROWER
     public static final DeferredItem<Item> CROSSLAUNCHER = ITEMS.registerItem("crosslauncher",
             CrossLauncherItem::new, new Item.Properties().durability(1024));
-    // HOOK_LAUNCHER
+    public static final DeferredItem<Item> HOOK_LAUNCHER = ITEMS.registerItem("hook_launcher",
+            HookLauncherItem::new, new Item.Properties().durability(1024));
     // SLINGSHOT
 
     // Arrows
@@ -39,7 +41,7 @@ public class ItemInit {
             ArrowItem::new, new Item.Properties());
     // Strings
     // Pulleys
-    // Self Erosion Plate
+    // SELF_EROSION_PLATE
 
     // Materials
     public static final DeferredItem<Item> VOLATILE_FUEL = ITEMS.registerItem("volatile_fuel",
