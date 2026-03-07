@@ -277,10 +277,12 @@ public class ItemProjectile extends ThrowableItemProjectile {
                 }
                 pos = new BlockPos(pos.getX() + x, pos.getY() + y, pos.getZ() + z);
                 if (this.level().getBlockState(pos).is(Blocks.AIR)) {
-                    if (direction == Direction.UP) {
-                        this.level().setBlock(pos.above(), Blocks.TORCH.defaultBlockState(), 3);
-                    } else {
-                        this.level().setBlock(pos.relative(direction), Blocks.WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, direction.getOpposite()), 3);
+                    switch(direction) {
+                        case UP -> this.level().setBlock(pos, Blocks.TORCH.defaultBlockState(), 3);
+                        case NORTH -> this.level().setBlock(pos, Blocks.WALL_TORCH.defaultBlockState(), 3);
+                        case SOUTH -> this.level().setBlock(pos, Blocks.WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, direction), 3);
+                        case EAST -> this.level().setBlock(pos, Blocks.WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, direction), 3);
+                        case WEST -> this.level().setBlock(pos, Blocks.WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, direction), 3);
                     }
                 }
                 else {
