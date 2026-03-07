@@ -19,7 +19,7 @@ public class ComponentInit {
     public static final Supplier<DataComponentType<ModifierComponent>> MODIFIER_COMPONENT = register("modifier", ModifierComponent.CODEC, ModifierComponent.STREAM_CODEC);
     public static final Supplier<DataComponentType<Boolean>> SELF_REPAIR_COMPONENT = register("self_repair", Codec.BOOL, ByteBufCodecs.BOOL);
     // ARROW_SELECTOR_COMPONENT
-    // CHARGE_COUNT_COMPONENT
+    public static final Supplier<DataComponentType<Integer>> CHARGE_COUNT_COMPONENT = register("charge_count", Codec.INT, ByteBufCodecs.INT);
     // CHARGE_COMPONENT
     // BOLT_COUNT_COMPONENT
     // CHARGED_BOLT_COUNT_COMPONENT

@@ -16,6 +16,12 @@ public class DefaultComponentInit {
         setComponentsForModifiableBow(event, ItemInit.MODULAR_BOW);
         setComponentsForModifiableBow(event, ItemInit.MULTISHOT_BOW);
 
+        event.modify(ItemInit.RAINSHOT_BOW, builder -> builder
+                .set(ComponentInit.MODIFIER_COMPONENT.get(), ModifierComponent.DEFAULT)
+                .set(ComponentInit.SELF_REPAIR_COMPONENT.get(), false)
+                .set(ComponentInit.CHARGE_COUNT_COMPONENT.get(), 0)
+                .build());
+
         event.modify(ItemInit.SLINGSHOT, builder -> builder.set(ComponentInit.MODIFIER_COMPONENT.get(), ModifierComponent.DEFAULT).build());
     }
 

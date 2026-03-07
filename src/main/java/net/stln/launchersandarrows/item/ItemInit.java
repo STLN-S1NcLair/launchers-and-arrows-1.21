@@ -7,10 +7,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.stln.launchersandarrows.LaunchersAndArrows;
-import net.stln.launchersandarrows.item.bow.LongBowItem;
-import net.stln.launchersandarrows.item.bow.ModularBowItem;
-import net.stln.launchersandarrows.item.bow.MultiShotBowItem;
-import net.stln.launchersandarrows.item.bow.RapidBowItem;
+import net.stln.launchersandarrows.item.bow.*;
 import net.stln.launchersandarrows.item.component.ComponentInit;
 import net.stln.launchersandarrows.item.component.ModifierComponent;
 import net.stln.launchersandarrows.item.launcher.CrossLauncherItem;
@@ -37,7 +34,8 @@ public class ItemInit {
     public static final DeferredItem<Item> MULTISHOT_BOW = ITEMS.registerItem("multishot_bow",
             MultiShotBowItem::new, new Item.Properties().durability(2048));
     // MECHANICAL_BOW
-    // RAINSHOT_BOW
+    public static final DeferredItem<Item> RAINSHOT_BOW = ITEMS.registerItem("rainshot_bow",
+            RainShotBowItem::new, new Item.Properties().durability(16384));
     // BOLT_THROWER
     // QUICK_BOLT_THROWER
     public static final DeferredItem<Item> CROSSLAUNCHER = ITEMS.registerItem("crosslauncher",

@@ -19,7 +19,7 @@ public class CustomModelPredicateProvider {
         registerModBow(ItemInit.MULTISHOT_BOW.get());
         //registerModBow(ItemInit.MECHANICAL_BOW.get());
         //registerMechanicalBow(ItemInit.MECHANICAL_BOW.get());
-        //registerModBow(ItemInit.RAINSHOT_BOW.get());
+        registerModBow(ItemInit.RAINSHOT_BOW.get());
         //registerBoltThrower(ItemInit.BOLT_THROWER.get());
         //registerBoltThrower(ItemInit.QUICK_BOLT_THROWER.get());
         registerCrossLauncher(ItemInit.CROSSLAUNCHER.get());
