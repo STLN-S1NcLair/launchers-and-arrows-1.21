@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.stln.launchersandarrows.entity.AttributedProjectile;
 import net.stln.launchersandarrows.entity.RicochetProjectile;
+import net.stln.launchersandarrows.item.component.ComponentInit;
 import net.stln.launchersandarrows.item.util.AttributeModifierDictionary;
 import net.stln.launchersandarrows.item.util.ModifierDictionary;
 import net.stln.launchersandarrows.util.ModifierEnum;
@@ -106,7 +107,9 @@ public class ModifiableBowItem extends BowItem {
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         super.inventoryTick(stack, level, entity, slotId, isSelected);
-        // Self Repair Componentに関する処理がここに来る
+        if (Boolean.TRUE.equals(stack.get(ComponentInit.SELF_REPAIR_COMPONENT)) && entity.getRandom().nextFloat() < 0.005) {
+            stack.setDamageValue(stack.getDamageValue() - 1);
+        }
     }
 
     protected float applySpeedModifier(LivingEntity shooter, ItemStack stack, float velocity){
