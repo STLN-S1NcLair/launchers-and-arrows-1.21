@@ -19,7 +19,7 @@ public class DefaultComponentInit {
         setComponentsForModifiableBow(event, ItemInit.MULTISHOT_BOW);
 
         event.modify(ItemInit.RAINSHOT_BOW, builder -> builder
-                .set(ComponentInit.MODIFIER_COMPONENT.get(), ModifierComponent.DEFAULT)
+                .set(ComponentInit.MODIFIER_COMPONENT.get(), ModifierComponent.EMPTY)
                 .set(ComponentInit.SELF_REPAIR_COMPONENT.get(), false)
                 .set(ComponentInit.CHARGE_COUNT_COMPONENT.get(), 0)
                 .build());
@@ -27,19 +27,19 @@ public class DefaultComponentInit {
         setComponentsForBoltThrower(event, ItemInit.BOLT_THROWER);
         setComponentsForBoltThrower(event, ItemInit.QUICK_BOLT_THROWER);
 
-        event.modify(ItemInit.SLINGSHOT, builder -> builder.set(ComponentInit.MODIFIER_COMPONENT.get(), ModifierComponent.DEFAULT).build());
+        event.modify(ItemInit.SLINGSHOT, builder -> builder.set(ComponentInit.MODIFIER_COMPONENT.get(), ModifierComponent.EMPTY).build());
     }
 
     private static void setComponentsForModifiableBow(net.neoforged.neoforge.event.ModifyDefaultComponentsEvent event, DeferredItem<?> item) {
         event.modify(item, builder -> builder
-                .set(ComponentInit.MODIFIER_COMPONENT.get(), ModifierComponent.DEFAULT)
+                .set(ComponentInit.MODIFIER_COMPONENT.get(), ModifierComponent.EMPTY)
                 .set(ComponentInit.SELF_REPAIR_COMPONENT.get(), false)
                 .build());
     }
 
     private static void setComponentsForBoltThrower(net.neoforged.neoforge.event.ModifyDefaultComponentsEvent event, DeferredItem<?> item) {
         event.modify(item, builder -> builder
-                .set(ComponentInit.MODIFIER_COMPONENT.get(), ModifierComponent.DEFAULT)
+                .set(ComponentInit.MODIFIER_COMPONENT.get(), ModifierComponent.EMPTY)
                 .set(ComponentInit.SELF_REPAIR_COMPONENT.get(), false)
                 .set(ComponentInit.BOLT_COUNT_COMPONENT.get(), 0)
                 .set(ComponentInit.CHARGED_BOLT_COUNT_COMPONENT.get(), 0)
