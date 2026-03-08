@@ -11,7 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.Iterator;
 import java.util.List;
 
-public class ModifierComponent {
+public final class ModifierComponent {
     public static final ModifierComponent EMPTY = new ModifierComponent(List.of());
     public static final Codec<ModifierComponent> CODEC;
     public static final StreamCodec<RegistryFriendlyByteBuf, ModifierComponent> STREAM_CODEC;

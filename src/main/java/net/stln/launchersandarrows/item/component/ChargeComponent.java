@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ChargeComponent {
+public final class ChargeComponent {
     public static final ChargeComponent EMPTY = new ChargeComponent(List.of(0.0, 0.0, 0.0));
     public static final Codec<ChargeComponent> CODEC;
     public static final StreamCodec<RegistryFriendlyByteBuf, ChargeComponent> STREAM_CODEC;
