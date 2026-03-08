@@ -60,6 +60,9 @@ public class ItemInit {
             ArrowItem::new, new Item.Properties());
 
     // Strings
+    // ├ Attribute Modifiers
+
+    // └ Modifiers
     public static final DeferredItem<Item> RANGE_STRING = ITEMS.registerItem("range_string",
             BowModifierItem::new, new Item.Properties());
     public static final DeferredItem<Item> STURDY_STRING = ITEMS.registerItem("sturdy_string",
@@ -74,7 +77,19 @@ public class ItemInit {
             BowModifierItem::new, new Item.Properties());
 
     // Pulleys
+    // ├ Attribute Modifiers
 
+    // └ Modifiers
+    public static final DeferredItem<Item> COMPOUND_PULLEY = ITEMS.registerItem("compound_pulley",
+            BoltThrowerModifierItem::new, new Item.Properties());
+    public static final DeferredItem<Item> REINFORCED_PULLEY = ITEMS.registerItem("reinforced_pulley",
+            BoltThrowerModifierItem::new, new Item.Properties());
+    public static final DeferredItem<Item> LUBRICATION_PULLEY = ITEMS.registerItem("lubrication_pulley",
+            BoltThrowerModifierItem::new, new Item.Properties());
+    public static final DeferredItem<Item> POWERED_PULLEY = ITEMS.registerItem("powered_pulley",
+            BoltThrowerModifierItem::new, new Item.Properties());
+
+    // Self Erosion Plate
     public static final DeferredItem<Item> SELF_EROSION_PLATE = ITEMS.registerItem("self_erosion_plate",
             SelfErosionPlateItem::new, new Item.Properties());
 
@@ -134,5 +149,10 @@ public class ItemInit {
         // ├ Attribute Modifiers
 
         // └ Modifiers
+        ModifierDictionary.registerToDict(COMPOUND_PULLEY.get(), ModifierEnum.RANGE.get(), 15);
+        ModifierDictionary.registerToDict(REINFORCED_PULLEY.get(), ModifierEnum.STURDY.get(), 30);
+        ModifierDictionary.registerToDict(LUBRICATION_PULLEY.get(), ModifierEnum.LIGHTWEIGHT.get(), 25);
+        ModifierDictionary.registerToDict(POWERED_PULLEY.get(), ModifierEnum.CAPACITY.get(), 50);
+        ModifierDictionary.registerToDict(POWERED_PULLEY.get(), ModifierEnum.LIGHTWEIGHT.get(), -15);
     }
 }

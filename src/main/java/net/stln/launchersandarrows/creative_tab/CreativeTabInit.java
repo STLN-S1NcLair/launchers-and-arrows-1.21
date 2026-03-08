@@ -44,6 +44,10 @@ public class CreativeTabInit {
                 output.accept(ItemInit.OVERLOADED_STRING);
 
                 // Pulleys
+                output.accept(ItemInit.COMPOUND_PULLEY);
+                output.accept(ItemInit.REINFORCED_PULLEY);
+                output.accept(ItemInit.LUBRICATION_PULLEY);
+                output.accept(ItemInit.POWERED_PULLEY);
 
                 output.accept(ItemInit.SELF_EROSION_PLATE);
 
