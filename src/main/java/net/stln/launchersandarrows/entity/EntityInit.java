@@ -9,7 +9,9 @@ import net.minecraft.world.entity.MobCategory;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.stln.launchersandarrows.LaunchersAndArrows;
+import net.stln.launchersandarrows.entity.projectile.Bolt;
 import net.stln.launchersandarrows.entity.projectile.ItemProjectile;
+import net.stln.launchersandarrows.entity.renderer.BoltRenderer;
 
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -20,6 +22,9 @@ public class EntityInit {
 
     public static final Supplier<EntityType<ItemProjectile>> ITEM_PROJECTILE = registerMobEntity("item_projectile",
             ItemProjectile::new, MobCategory.MISC, builder -> builder.sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
+
+    public static final Supplier<EntityType<Bolt>> BOLT = registerMobEntity("bolt",
+            Bolt::new, MobCategory.MISC, builder -> builder.sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
 
     private static <T extends Entity> Supplier<EntityType<T>> registerMobEntity(String path, EntityType.EntityFactory<T> factory, MobCategory category, UnaryOperator<EntityType.Builder<T>> operator) {
         return ENTITY_TYPES.register(path, id -> operator.apply(EntityType.Builder.of(factory, category)).build(id.getPath()));
@@ -33,5 +38,6 @@ public class EntityInit {
     public static void registerModEntitiesRenderer() {
         LaunchersAndArrows.LOGGER.info("Registering Entity Renderer for " + LaunchersAndArrows.MOD_ID);
         EntityRenderers.register(EntityInit.ITEM_PROJECTILE.get(), ThrownItemRenderer::new);
+        EntityRenderers.register(EntityInit.BOLT.get(), BoltRenderer::new);
     }
 }

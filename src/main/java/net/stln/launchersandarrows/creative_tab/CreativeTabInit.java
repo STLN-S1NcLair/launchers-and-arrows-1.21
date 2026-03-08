@@ -13,7 +13,7 @@ public class CreativeTabInit {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MOD_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, LaunchersAndArrows.MOD_ID);
 
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> LAUNCHERS_AND_ARROWS_TAB = CREATIVE_MOD_TABS.register("launchers_and_arrows_tab", () -> CreativeModeTab.builder()
-            .title(Component.translatable("itemgroup.launchers_and_arrows.launchers_and_arrows"))
+            .title(Component.translatable("itemGroup.launchers_and_arrows.launchers_and_arrows"))
             .icon(() -> ItemInit.VOLATILE_FUEL.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
                 output.accept(ItemInit.LONG_BOW);
@@ -22,7 +22,7 @@ public class CreativeTabInit {
                 output.accept(ItemInit.MULTISHOT_BOW);
                 // MECHANICAL_BOW
                 output.accept(ItemInit.RAINSHOT_BOW);
-                // BOLT_THROWER
+                output.accept(ItemInit.BOLT_THROWER);
                 // QUICK_BOLT_THROWER
                 output.accept(ItemInit.CROSSLAUNCHER);
                 output.accept(ItemInit.HOOK_LAUNCHER);
@@ -30,6 +30,8 @@ public class CreativeTabInit {
 
                 // Arrows
                 // Bolts
+                output.accept(ItemInit.BOXED_BOLTS);
+                output.accept(ItemInit.BOXED_EXPLOSIVE_BOLTS);
 
                 output.accept(ItemInit.GRAPPLING_HOOK);
 

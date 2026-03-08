@@ -1,5 +1,7 @@
 package net.stln.launchersandarrows.item.component;
 
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.ChargedProjectiles;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.ModifyDefaultComponentsEvent;
@@ -22,6 +24,8 @@ public class DefaultComponentInit {
                 .set(ComponentInit.CHARGE_COUNT_COMPONENT.get(), 0)
                 .build());
 
+        setComponentsForBoltThrower(event, ItemInit.BOLT_THROWER);
+
         event.modify(ItemInit.SLINGSHOT, builder -> builder.set(ComponentInit.MODIFIER_COMPONENT.get(), ModifierComponent.DEFAULT).build());
     }
 
@@ -29,6 +33,17 @@ public class DefaultComponentInit {
         event.modify(item, builder -> builder
                 .set(ComponentInit.MODIFIER_COMPONENT.get(), ModifierComponent.DEFAULT)
                 .set(ComponentInit.SELF_REPAIR_COMPONENT.get(), false)
+                .build());
+    }
+
+    private static void setComponentsForBoltThrower(net.neoforged.neoforge.event.ModifyDefaultComponentsEvent event, DeferredItem<?> item) {
+        event.modify(item, builder -> builder
+                .set(ComponentInit.MODIFIER_COMPONENT.get(), ModifierComponent.DEFAULT)
+                .set(ComponentInit.SELF_REPAIR_COMPONENT.get(), false)
+                .set(ComponentInit.BOLT_COUNT_COMPONENT.get(), 0)
+                .set(ComponentInit.CHARGED_BOLT_COUNT_COMPONENT.get(), 0)
+                .set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.EMPTY)
+                .set(ComponentInit.CHARGING_COMPONENT.get(), false)
                 .build());
     }
 }

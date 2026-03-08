@@ -15,6 +15,9 @@ public class SoundInit {
     public static final Supplier<SoundEvent> BOLT_THROWER = registerSoundEvent("bolt_thrower");
     public static final Supplier<SoundEvent> CROSSLAUNCHER = registerSoundEvent("crosslauncher");
 
+    public static final Supplier<SoundEvent> EXPLODE = registerSoundEvent("explode");
+    public static final Supplier<SoundEvent> RELOAD = registerSoundEvent("reload");
+
     private static Supplier<SoundEvent> registerSoundEvent(String name) {
         return SOUND_EVENTS.register(name, SoundEvent::createVariableRangeEvent);
     }

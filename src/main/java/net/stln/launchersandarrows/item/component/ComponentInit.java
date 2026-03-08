@@ -21,9 +21,9 @@ public class ComponentInit {
     // ARROW_SELECTOR_COMPONENT
     public static final Supplier<DataComponentType<Integer>> CHARGE_COUNT_COMPONENT = register("charge_count", Codec.INT, ByteBufCodecs.INT);
     // CHARGE_COMPONENT
-    // BOLT_COUNT_COMPONENT
-    // CHARGED_BOLT_COUNT_COMPONENT
-    // CHARGING_COMPONENT
+    public static final Supplier<DataComponentType<Integer>> BOLT_COUNT_COMPONENT = register("bolt_count", Codec.INT, ByteBufCodecs.INT);
+    public static final Supplier<DataComponentType<Integer>> CHARGED_BOLT_COUNT_COMPONENT = register("charged_bolt_count", Codec.INT, ByteBufCodecs.INT);
+    public static final Supplier<DataComponentType<Boolean>> CHARGING_COMPONENT = register("charging_component", Codec.BOOL, ByteBufCodecs.BOOL);
 
     public static void registerComponents(IEventBus eventBus) {
         LaunchersAndArrows.LOGGER.info("Registering Data Components for" + LaunchersAndArrows.MOD_ID);

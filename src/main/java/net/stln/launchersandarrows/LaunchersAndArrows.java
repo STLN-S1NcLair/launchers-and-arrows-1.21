@@ -1,5 +1,6 @@
 package net.stln.launchersandarrows;
 
+import net.minecraft.resources.ResourceLocation;
 import net.stln.launchersandarrows.creative_tab.CreativeTabInit;
 import net.stln.launchersandarrows.entity.EntityInit;
 import net.stln.launchersandarrows.item.ItemInit;
@@ -51,6 +52,10 @@ public class LaunchersAndArrows {
         CreativeTabInit.register(modEventBus);
         EntityInit.registerModEntities(modEventBus);
         SoundInit.registerSoundEvents(modEventBus);
+    }
+
+    public static ResourceLocation id(String path) {
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {

@@ -8,6 +8,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ChargedProjectiles;
 import net.stln.launchersandarrows.LaunchersAndArrows;
 import net.stln.launchersandarrows.item.bow.ModifiableBowItem;
+import net.stln.launchersandarrows.item.component.ComponentInit;
+import net.stln.launchersandarrows.item.launcher.BoltThrowerItem;
 import net.stln.launchersandarrows.item.launcher.CrossLauncherItem;
 
 public class CustomModelPredicateProvider {
@@ -20,7 +22,7 @@ public class CustomModelPredicateProvider {
         //registerModBow(ItemInit.MECHANICAL_BOW.get());
         //registerMechanicalBow(ItemInit.MECHANICAL_BOW.get());
         registerModBow(ItemInit.RAINSHOT_BOW.get());
-        //registerBoltThrower(ItemInit.BOLT_THROWER.get());
+        registerBoltThrower(ItemInit.BOLT_THROWER.get());
         //registerBoltThrower(ItemInit.QUICK_BOLT_THROWER.get());
         registerCrossLauncher(ItemInit.CROSSLAUNCHER.get());
         registerCrossLauncher(ItemInit.HOOK_LAUNCHER.get());
@@ -40,7 +42,19 @@ public class CustomModelPredicateProvider {
     }
 
     //registerMechanicalBow
-    //registerBoltThrower
+    private static void registerBoltThrower(Item boltThrower){
+        ItemProperties.register(boltThrower, ResourceLocation.withDefaultNamespace("pull"), (stack, level, entity, seed) -> {
+            if (entity == null) {
+                return 0.0F;
+            }
+            return entity.getUseItem() != stack
+                    ? (float) stack.get(ComponentInit.CHARGED_BOLT_COUNT_COMPONENT) / ((BoltThrowerItem) boltThrower).getMaxChargeCount()
+                    : ((BoltThrowerItem) boltThrower).getModifiedPullProgress(stack.getUseDuration(entity) - entity.getUseItemRemainingTicks(), stack);
+        });
+        ItemProperties.register(boltThrower, ResourceLocation.withDefaultNamespace("pulling"), (stack, level, entity, seed) ->
+                entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F
+        );
+    }
 
     private static void registerCrossLauncher(Item crossLauncher){
         ItemProperties.register(crossLauncher, ResourceLocation.withDefaultNamespace("pull"), (stack, level, entity, seed) -> {

@@ -2,12 +2,6 @@
   "replace" :  false,
   "values" :  [
     "launchers_and_arrows:boxed_bolts",
-    "launchers_and_arrows:boxed_flame_bolts",
-    "launchers_and_arrows:boxed_freezing_bolts",
-    "launchers_and_arrows:boxed_lightning_bolts",
-    "launchers_and_arrows:boxed_corrosive_bolts",
-    "launchers_and_arrows:boxed_flood_bolts",
-    "launchers_and_arrows:boxed_reverberating_bolts",
     "launchers_and_arrows:boxed_explosive_bolts"
   ]
 }

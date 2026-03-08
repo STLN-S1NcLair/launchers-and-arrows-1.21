@@ -156,6 +156,7 @@ public class Bolt extends AbstractArrow {
         super.doPostHurtEffects(living);
     }
 
+    // f: getDefaultItemStack
     @Override
     protected ItemStack getDefaultPickupItem() {
         return new ItemStack(ItemInit.BOXED_BOLTS.get());
