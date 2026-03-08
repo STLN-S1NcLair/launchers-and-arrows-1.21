@@ -77,7 +77,7 @@
   "effect.launchers_and_arrows.confusion": "Confusion",
   "effect.launchers_and_arrows.serious_injury": "Serious Injury",
   "effect.launchers_and_arrows.shock_explosion": "Shock Explosion",
-  "itemgroup.launchers_and_arrows.launchers_and_arrows": "Launchers And Arrows",
+  "itemGroup.launchers_and_arrows.launchers_and_arrows": "Launchers And Arrows",
   "tooltip.launchers_and_arrows.attribute_effects": "Attribute Effects",
   "tooltip.launchers_and_arrows.attribute_modifiers": "When Installed",
   "tooltip.launchers_and_arrows.modifier": "Modifier Slots",
@@ -90,5 +90,8 @@
   "tooltip.launchers_and_arrows.self_erosion_plate": "Hold a Bow or Bolt Thrower in Your Off-hand and This in Your Main Hand",
   "tooltip.launchers_and_arrows.self_erosion_plate_2": "and Sneak Right Click to Install It",
   "tooltip.launchers_and_arrows.warning": "Warning! This item can completely mess up your world!",
-  "tooltip.launchers_and_arrows.self_repair": "Self Repair"
+  "tooltip.launchers_and_arrows.self_repair": "Self Repair",
+
+  "entity.launchers_and_arrows.item_projectile": "Item Projectile",
+  "entity.launchers_and_arrows.bolt": "Bolt"
 }
