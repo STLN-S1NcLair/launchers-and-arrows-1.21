@@ -87,6 +87,12 @@ public class CrossLauncherItem extends CrossbowItem {
         return CROSSLAUNCHER_HELD_PROJECTILES;
     }
 
+    // f: getProjectiles
+    @Override
+    public Predicate<ItemStack> getAllSupportedProjectiles() {
+        return CROSSLAUNCHER_HELD_PROJECTILES;
+    }
+
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
