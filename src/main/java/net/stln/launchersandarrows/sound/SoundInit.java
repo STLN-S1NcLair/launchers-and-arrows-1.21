@@ -18,6 +18,10 @@ public class SoundInit {
     public static final Supplier<SoundEvent> EXPLODE = registerSoundEvent("explode");
     public static final Supplier<SoundEvent> RELOAD = registerSoundEvent("reload");
 
+    public static final Supplier<SoundEvent> MECHANICAL_BOW_CHARGE = registerSoundEvent("mechanical_bow_charge");
+    public static final Supplier<SoundEvent> MECHANICAL_BOW_LOAD = registerSoundEvent("mechanical_bow_load");
+    public static final Supplier<SoundEvent> MECHANICAL_BOW_RELEASE = registerSoundEvent("mechanical_bow_release");
+
     private static Supplier<SoundEvent> registerSoundEvent(String name) {
         return SOUND_EVENTS.register(name, SoundEvent::createVariableRangeEvent);
     }

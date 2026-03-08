@@ -13,5 +13,6 @@ public class HudInit {
     @OnlyIn(Dist.CLIENT)
     public static void onRegisterOverlays(RegisterGuiLayersEvent event) {
         event.registerAboveAll(LaunchersAndArrows.id("bolt_thrower_info"), new BoltThrowerInfoOverlay());
+        event.registerAboveAll(LaunchersAndArrows.id("mechanical_bow_info"), new MechanicalBowInfoOverlay());
     }
 }

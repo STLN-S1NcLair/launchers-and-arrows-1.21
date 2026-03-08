@@ -29,7 +29,10 @@ public class ItemInit {
 
     public static final DeferredItem<Item> MULTISHOT_BOW = ITEMS.registerItem("multishot_bow",
             MultiShotBowItem::new, new Item.Properties().durability(2048));
-    // MECHANICAL_BOW
+
+    public static final DeferredItem<Item> MECHANICAL_BOW = ITEMS.registerItem("mechanical_bow",
+            MechanicalBowItem::new, new Item.Properties().durability(4096));
+
     public static final DeferredItem<Item> RAINSHOT_BOW = ITEMS.registerItem("rainshot_bow",
             RainShotBowItem::new, new Item.Properties().durability(16384));
 
