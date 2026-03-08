@@ -40,6 +40,7 @@ public class RainShotBowItem extends ModifiableBowItem implements FovModifierIte
     //f: usageTick
     @Override
     public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
+        super.onUseTick(level, livingEntity, stack, remainingUseDuration);
         this.fov = 1.0F - getModifiedPullProgress(getUseDuration(stack, livingEntity) - remainingUseDuration, stack) / 9.0F;
     }
 
