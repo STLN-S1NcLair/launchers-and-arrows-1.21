@@ -8,10 +8,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.stln.launchersandarrows.LaunchersAndArrows;
 import net.stln.launchersandarrows.item.bow.*;
-import net.stln.launchersandarrows.item.launcher.BoltThrowerItem;
-import net.stln.launchersandarrows.item.launcher.CrossLauncherItem;
-import net.stln.launchersandarrows.item.launcher.HookLauncherItem;
-import net.stln.launchersandarrows.item.launcher.SlingShotItem;
+import net.stln.launchersandarrows.item.launcher.*;
 import net.stln.launchersandarrows.item.util.AttributeEffectsDictionary;
 import net.stln.launchersandarrows.item.util.ModifierDictionary;
 import net.stln.launchersandarrows.util.AttributeEnum;
@@ -35,9 +32,13 @@ public class ItemInit {
     // MECHANICAL_BOW
     public static final DeferredItem<Item> RAINSHOT_BOW = ITEMS.registerItem("rainshot_bow",
             RainShotBowItem::new, new Item.Properties().durability(16384));
+
     public static final DeferredItem<Item> BOLT_THROWER = ITEMS.registerItem("bolt_thrower",
             BoltThrowerItem::new, new Item.Properties().durability(3072));
-    // QUICK_BOLT_THROWER
+
+    public static final DeferredItem<Item> QUICK_BOLT_THROWER = ITEMS.registerItem("quick_bolt_thrower",
+            QuickBoltThrowerItem::new, new Item.Properties().durability(16384));
+
     public static final DeferredItem<Item> CROSSLAUNCHER = ITEMS.registerItem("crosslauncher",
             CrossLauncherItem::new, new Item.Properties().durability(1024));
 
@@ -54,6 +55,7 @@ public class ItemInit {
     public static final DeferredItem<Item> BOXED_EXPLOSIVE_BOLTS = ITEMS.registerItem("boxed_explosive_bolts",
             BoltItem::new, new Item.Properties());
 
+    // Grappling Hook
     public static final DeferredItem<Item> GRAPPLING_HOOK = ITEMS.registerItem("grappling_hook",
             ArrowItem::new, new Item.Properties());
 

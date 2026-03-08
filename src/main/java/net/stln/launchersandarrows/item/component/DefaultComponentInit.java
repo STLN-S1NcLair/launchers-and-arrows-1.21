@@ -25,6 +25,7 @@ public class DefaultComponentInit {
                 .build());
 
         setComponentsForBoltThrower(event, ItemInit.BOLT_THROWER);
+        setComponentsForBoltThrower(event, ItemInit.QUICK_BOLT_THROWER);
 
         event.modify(ItemInit.SLINGSHOT, builder -> builder.set(ComponentInit.MODIFIER_COMPONENT.get(), ModifierComponent.DEFAULT).build());
     }
