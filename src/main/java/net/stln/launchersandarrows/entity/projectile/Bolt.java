@@ -19,9 +19,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.SimpleExplosionDamageCalculator;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.stln.launchersandarrows.entity.AttributedProjectile;
 import net.stln.launchersandarrows.entity.BypassDamageCooldownProjectile;
 import net.stln.launchersandarrows.entity.EntityInit;
 import net.stln.launchersandarrows.item.ItemInit;
+import net.stln.launchersandarrows.mob_effect.util.MobEffectUtil;
 import net.stln.launchersandarrows.particle.ParticleInit;
 import net.stln.launchersandarrows.sound.SoundInit;
 import org.jetbrains.annotations.Nullable;
@@ -160,7 +162,9 @@ public class Bolt extends AbstractArrow {
 
     // f: onHit
     protected void doPostHurtEffects(LivingEntity living){
-        // StatusEffectUtilに関する処理
+        MobEffectUtil.applyAttributeEffect(living, this.itemStack);
+        MobEffectUtil.applyAttributeModifier(living, ((AttributedProjectile) this).getAttributes());
+        MobEffectUtil.applyAttributeRatioModifier(living, this.itemStack, ((AttributedProjectile) this).getRatioAttributes());
         super.doPostHurtEffects(living);
     }
 

@@ -152,9 +152,11 @@ public abstract class AddDataProjectileMixin extends Entity implements BypassDam
             Vec3 vec3 = blockHitResult.getLocation().subtract(abstractArrow.getX(), abstractArrow.getY(), abstractArrow.getZ());
             vec3.scale(1.05);
             abstractArrow.setPos(abstractArrow.getX() - vec3.x, abstractArrow.getY() - vec3.y, abstractArrow.getZ() - vec3.z);
+
             if(abstractArrow instanceof Arrow arrow){
-                // ((RicochetEffectProjectile)arrow).onRicochet(getRicochet());
+                ((RicochetEffectProjectile)arrow).onRicochet(getRicochet());
             }
+
             Level level = abstractArrow.level();
             level.playSound(null,
                     abstractArrow.blockPosition(),

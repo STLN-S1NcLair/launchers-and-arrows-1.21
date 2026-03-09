@@ -4,7 +4,9 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "projectile.AddDataProjectileMixin",
-    "projectile.CancelKnockbackMixin"
+    "projectile.ArrowEffectMixin",
+    "projectile.CancelKnockbackMixin",
+    "LivingEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

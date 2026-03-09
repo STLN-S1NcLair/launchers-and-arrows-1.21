@@ -24,10 +24,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.*;
 import net.minecraft.core.particles.*;
-import net.stln.launchersandarrows.LaunchersAndArrows;
 import net.stln.launchersandarrows.entity.EntityInit;
 import net.stln.launchersandarrows.item.ItemInit;
-import net.stln.launchersandarrows.status_effect.util.StatusEffectUtil;
+import net.stln.launchersandarrows.mob_effect.util.MobEffectUtil;
 
 import java.util.List;
 
@@ -250,7 +249,7 @@ public class ItemProjectile extends ThrowableItemProjectile {
         level().playSound(null,entity.blockPosition(), getHitSound(), SoundSource.PLAYERS, 1F, 1F/(entity.getRandom().nextFloat()*0.5F+1.8F)+0.53F);
         entity.hurt(source,damage);
         if (entity instanceof LivingEntity living){
-            // StatusEffectUtil.applyAttributeEffect(living,this.getItem());
+            MobEffectUtil.applyAttributeEffect(living,this.getItem());
         }
     }
 
