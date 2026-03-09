@@ -22,6 +22,7 @@ import net.minecraft.world.phys.Vec3;
 import net.stln.launchersandarrows.entity.BypassDamageCooldownProjectile;
 import net.stln.launchersandarrows.entity.EntityInit;
 import net.stln.launchersandarrows.item.ItemInit;
+import net.stln.launchersandarrows.particle.ParticleInit;
 import net.stln.launchersandarrows.sound.SoundInit;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,7 +56,13 @@ public class Bolt extends AbstractArrow {
 
     // f: getParticleEffect
     private ParticleOptions getParticleOptions(){
-        // 属性Boltの処理
+        if (itemStack.is(ItemInit.BOXED_FLAME_BOLTS)) return ParticleInit.FLAME_EFFECT.get();
+        else if (itemStack.is(ItemInit.BOXED_FREEZING_BOLTS)) return ParticleInit.FROST_EFFECT.get();
+        else if (itemStack.is(ItemInit.BOXED_LIGHTNING_BOLTS)) return ParticleInit.LIGHTNING_EFFECT.get();
+        else if (itemStack.is(ItemInit.BOXED_CORROSIVE_BOLTS)) return ParticleInit.ACID_EFFECT.get();
+        else if (itemStack.is(ItemInit.BOXED_FLOOD_BOLTS)) return ParticleInit.FLOOD_EFFECT.get();
+        else if (itemStack.is(ItemInit.BOXED_REVERBERATING_BOLTS)) return ParticleInit.ECHO_EFFECT.get();
+        else if (itemStack.is(ItemInit.BOXED_EXPLOSIVE_BOLTS)) return ParticleTypes.SMOKE;
         return null;
     }
 
