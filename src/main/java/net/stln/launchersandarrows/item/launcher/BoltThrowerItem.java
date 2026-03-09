@@ -304,7 +304,6 @@ public class BoltThrowerItem extends ModifiableBowItem {
         }
         arrow.setBaseDamage(0.5F);
         arrow.setPos(shooter.getX(), shooter.getEyeY() - 0.2, shooter.getZ());
-        /*
         for(int i = 0; i < slotsize; i++){
             if(i < getModifiers(weapon).size()){
                 ItemStack modifier = getModifier(i, weapon);
@@ -318,7 +317,6 @@ public class BoltThrowerItem extends ModifiableBowItem {
                 }
             }
         }
-        */
         return arrow;
     }
 

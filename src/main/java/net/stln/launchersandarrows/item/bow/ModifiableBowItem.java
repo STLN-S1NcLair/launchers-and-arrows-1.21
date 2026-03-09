@@ -70,7 +70,6 @@ public class ModifiableBowItem extends BowItem {
     @Override
     protected Projectile createProjectile(Level level, LivingEntity shooter, ItemStack weapon, ItemStack ammo, boolean isCrit) {
         Projectile entity = super.createProjectile(level, shooter, weapon, ammo, isCrit);
-        /*
         if(entity instanceof AbstractArrow arrow){
             for (int i = 0; i < slotsize; i++){
                 if (i < getModifiers(weapon).size()){
@@ -90,33 +89,30 @@ public class ModifiableBowItem extends BowItem {
             }
             return arrow;
         }
-        */
         return entity;
     }
 
     protected ItemStack getProjectileTypeWithSelector(Player player, ItemStack stack){
-        /*
         ItemStack mainHandStack = player.getMainHandItem();
         ItemStack offHandStack = player.getOffhandItem();
         Predicate<ItemStack> predicate = ((ProjectileWeaponItem)stack.getItem()).getSupportedHeldProjectiles();
-        String selector; //Arrow Selector Componentがどうのこうの
+        String selector = stack.get(ComponentInit.ARROW_SELECTOR_COMPONENT);
         if(!offHandStack.isEmpty() && predicate.test(offHandStack)){
-            //Arrow Selector Componentに関する処理
+            stack.set(ComponentInit.ARROW_SELECTOR_COMPONENT, offHandStack.getItem().getDescription().getString());
             return offHandStack;
         }
         else if(!mainHandStack.isEmpty() && predicate.test(mainHandStack)){
-            //Arrow Selector Componentに関する処理
+            stack.set(ComponentInit.ARROW_SELECTOR_COMPONENT, mainHandStack.getItem().getDescription().getString());
             return mainHandStack;
         }
         else if(selector != null && !selector.isEmpty()) {
             for(int i=0; i < player.getInventory().getContainerSize(); i++) {
                 ItemStack invStack = player.getInventory().getItem(i);
-                if(selector.equals(invStack.getItem().getName().getString())) {
+                if(selector.equals(invStack.getItem().getDescription().getString())) {
                     return invStack;
                 }
             }
         }
-        */
         return player.getProjectile(stack);
     }
 
