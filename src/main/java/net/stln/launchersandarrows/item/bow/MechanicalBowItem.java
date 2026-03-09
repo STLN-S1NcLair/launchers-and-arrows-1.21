@@ -91,7 +91,7 @@ public class MechanicalBowItem extends ModifiableBowItem {
                         generateArrow(stack, level, player, itemStack, (float) charge);
                         level.playSound(null,
                                 player.getX(), player.getY(), player.getZ(),
-                                SoundInit.BOW_RELEASE.get(),
+                                SoundInit.MECHANICAL_BOW_RELEASE.get(),
                                 SoundSource.PLAYERS,
                                 1.5F,
                                 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F
