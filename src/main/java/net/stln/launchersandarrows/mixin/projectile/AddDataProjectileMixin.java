@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AbstractArrow.class)
-public abstract class BypassDamageCooldownProjectileMixin implements BypassDamageCooldownProjectile{
+public abstract class AddDataProjectileMixin implements BypassDamageCooldownProjectile{
     @Unique
     private boolean launchersandarrows$bypassDamageCooldown = false;
 

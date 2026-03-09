@@ -3,7 +3,8 @@
   "package": "net.stln.launchersandarrows.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "projectile.BypassDamageCooldownProjectileMixin"
+    "projectile.AddDataProjectileMixin",
+    "projectile.CancelKnockbackMixin"
   ],
   "injectors": {
     "defaultRequire": 1
