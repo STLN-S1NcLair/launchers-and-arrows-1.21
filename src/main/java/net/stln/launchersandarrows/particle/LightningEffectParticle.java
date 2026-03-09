@@ -1,0 +1,69 @@
+package net.stln.launchersandarrows.particle;
+
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.*;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
+public class LightningEffectParticle extends TextureSheetParticle {
+
+    private final SpriteSet spriteSet;
+
+    public LightningEffectParticle(ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, SpriteSet spriteSet){
+        super(level, x, y, z, xSpeed, ySpeed, zSpeed);
+        this.xd = (this.random.nextDouble() - 0.5) / 100;
+        this.yd = (this.random.nextDouble() - 0.5) / 100;
+        this.zd = (this.random.nextDouble() - 0.5) / 100;
+        this.lifetime = 4 + this.random.nextInt(6);
+        this.quadSize = 0.15F;
+        this.gravity = 0F;
+        this.spriteSet = spriteSet;
+        this.setSpriteFromAge(spriteSet);
+    }
+
+    @Override
+    protected int getLightColor(float partialTick) {
+        return 15728880;
+    }
+
+    @Override
+    public void tick() {
+        this.xo = this.x;
+        this.yo = this.y;
+        this.zo = this.z;
+        this.move(this.xd, this.yd, this.zd);
+        if(this.age++ >= this.lifetime){
+            this.remove();
+        }
+        else {
+            this.yd -= 0.04 * (double)this.gravity;
+        }
+        this.xd *= this.friction;
+        this.yd *= this.friction;
+        this.zd *= this.friction;
+
+        if(this.age >= this.lifetime * 0.6F){
+            this.alpha = (this.lifetime - this.age) / (this.lifetime * 0.4F);
+        }
+        this.setSpriteFromAge(this.spriteSet); //これいる？
+    }
+
+    @Override
+    public ParticleRenderType getRenderType() {
+        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static class Provider implements ParticleProvider<SimpleParticleType> {
+        private final SpriteSet spriteSet;
+
+        public Provider(SpriteSet spriteSet) {
+            this.spriteSet = spriteSet;
+        }
+
+        public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+            return new LightningEffectParticle(level, x, y, z, xSpeed, ySpeed, zSpeed, this.spriteSet);
+        }
+    }
+}
