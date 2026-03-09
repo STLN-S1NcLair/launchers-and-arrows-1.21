@@ -16,6 +16,7 @@ public class CreativeTabInit {
             .title(Component.translatable("itemGroup.launchers_and_arrows.launchers_and_arrows"))
             .icon(() -> ItemInit.VOLATILE_FUEL.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
+                // Weapons
                 output.accept(ItemInit.LONG_BOW);
                 output.accept(ItemInit.RAPID_BOW);
                 output.accept(ItemInit.MODULAR_BOW);
@@ -29,13 +30,43 @@ public class CreativeTabInit {
                 output.accept(ItemInit.SLINGSHOT);
 
                 // Arrows
+                output.accept(ItemInit.FLAME_ARROW);
+                output.accept(ItemInit.FREEZING_ARROW);
+                output.accept(ItemInit.LIGHTNING_ARROW);
+                output.accept(ItemInit.CORROSIVE_ARROW);
+                output.accept(ItemInit.FLOOD_ARROW);
+                output.accept(ItemInit.REVERBERATING_ARROW);
+                output.accept(ItemInit.WAVE_ARROW);
+                output.accept(ItemInit.PIERCING_ARROW);
+                output.accept(ItemInit.HOMING_ARROW);
+                output.accept(ItemInit.GLITCH_ARROW);
+                output.accept(ItemInit.TAILWIND_ARROW);
+                output.accept(ItemInit.LINEAR_ARROW);
+                output.accept(ItemInit.BURST_ARROW);
+
                 // Bolts
                 output.accept(ItemInit.BOXED_BOLTS);
+                output.accept(ItemInit.BOXED_FLAME_BOLTS);
+                output.accept(ItemInit.BOXED_FREEZING_BOLTS);
+                output.accept(ItemInit.BOXED_LIGHTNING_BOLTS);
+                output.accept(ItemInit.BOXED_CORROSIVE_BOLTS);
+                output.accept(ItemInit.BOXED_FLOOD_BOLTS);
+                output.accept(ItemInit.BOXED_REVERBERATING_BOLTS);
                 output.accept(ItemInit.BOXED_EXPLOSIVE_BOLTS);
 
+                // Grappling Hook
                 output.accept(ItemInit.GRAPPLING_HOOK);
 
                 // Strings
+                // ├ Attribute Modifiers
+                output.accept(ItemInit.IGNITION_STRING);
+                output.accept(ItemInit.FROSTBITE_STRING);
+                output.accept(ItemInit.CHARGING_STRING);
+                output.accept(ItemInit.DETERIORATION_STRING);
+                output.accept(ItemInit.PERMEATION_STRING);
+                output.accept(ItemInit.VIBRATING_STRING);
+
+                // ├ Modifiers
                 output.accept(ItemInit.RANGE_STRING);
                 output.accept(ItemInit.STURDY_STRING);
                 output.accept(ItemInit.LIGHTWEIGHT_STRING);
@@ -44,15 +75,24 @@ public class CreativeTabInit {
                 output.accept(ItemInit.OVERLOADED_STRING);
 
                 // Pulleys
+                // ├ Attribute Modifiers
+                output.accept(ItemInit.IGNITION_STRING);
+                output.accept(ItemInit.FROSTBITE_STRING);
+                output.accept(ItemInit.CHARGING_STRING);
+                output.accept(ItemInit.DETERIORATION_STRING);
+                output.accept(ItemInit.PERMEATION_STRING);
+                output.accept(ItemInit.VIBRATING_STRING);
+
+                // ├ Modifiers
                 output.accept(ItemInit.COMPOUND_PULLEY);
                 output.accept(ItemInit.REINFORCED_PULLEY);
                 output.accept(ItemInit.LUBRICATION_PULLEY);
                 output.accept(ItemInit.POWERED_PULLEY);
 
+                // Self Erosion Plate
                 output.accept(ItemInit.SELF_EROSION_PLATE);
 
                 // Materials
-
                 output.accept(ItemInit.VOLATILE_FUEL);
                 output.accept(ItemInit.COOLANT);
                 output.accept(ItemInit.REDSTONE_CAPACITOR);

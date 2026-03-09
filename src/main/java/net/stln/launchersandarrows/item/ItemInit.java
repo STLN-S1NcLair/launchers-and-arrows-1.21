@@ -10,6 +10,7 @@ import net.stln.launchersandarrows.LaunchersAndArrows;
 import net.stln.launchersandarrows.item.bow.*;
 import net.stln.launchersandarrows.item.launcher.*;
 import net.stln.launchersandarrows.item.util.AttributeEffectsDictionary;
+import net.stln.launchersandarrows.item.util.AttributeModifierDictionary;
 import net.stln.launchersandarrows.item.util.ModifierDictionary;
 import net.stln.launchersandarrows.util.AttributeEnum;
 import net.stln.launchersandarrows.util.ModifierEnum;
@@ -52,9 +53,67 @@ public class ItemInit {
             SlingShotItem::new, new Item.Properties().durability(1024));
 
     // Arrows
+    public static final DeferredItem<Item> FLAME_ARROW = ITEMS.registerItem("flame_arrow",
+            ArrowItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> FREEZING_ARROW = ITEMS.registerItem("freezing_arrow",
+            ArrowItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> LIGHTNING_ARROW = ITEMS.registerItem("lightning_arrow",
+            ArrowItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> CORROSIVE_ARROW = ITEMS.registerItem("corrosive_arrow",
+            ArrowItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> FLOOD_ARROW = ITEMS.registerItem("flood_arrow",
+            ArrowItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> REVERBERATING_ARROW = ITEMS.registerItem("reverberating_arrow",
+            ArrowItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> WAVE_ARROW = ITEMS.registerItem("wave_arrow",
+            ArrowItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> PIERCING_ARROW = ITEMS.registerItem("piercing_arrow",
+            ArrowItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> HOMING_ARROW = ITEMS.registerItem("homing_arrow",
+            ArrowItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> GLITCH_ARROW = ITEMS.registerItem("glitch_arrow",
+            ArrowItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> TAILWIND_ARROW = ITEMS.registerItem("tailwind_arrow",
+            ArrowItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> LINEAR_ARROW = ITEMS.registerItem("linear_arrow",
+            ArrowItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> BURST_ARROW = ITEMS.registerItem("burst_arrow",
+            ArrowItem::new, new Item.Properties());
+
     // Boxed Bolts
     public static final DeferredItem<Item> BOXED_BOLTS = ITEMS.registerItem("boxed_bolts",
             BoltItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> BOXED_FLAME_BOLTS = ITEMS.registerItem("boxed_flame_bolts",
+            BoltItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> BOXED_FREEZING_BOLTS = ITEMS.registerItem("boxed_freezing_bolts",
+            BoltItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> BOXED_LIGHTNING_BOLTS = ITEMS.registerItem("boxed_lightning_bolts",
+            BoltItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> BOXED_CORROSIVE_BOLTS = ITEMS.registerItem("boxed_corrosive_bolts",
+            BoltItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> BOXED_FLOOD_BOLTS = ITEMS.registerItem("boxed_flood_bolts",
+            BoltItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> BOXED_REVERBERATING_BOLTS = ITEMS.registerItem("boxed_reverberating_bolts",
+            BoltItem::new, new Item.Properties());
+
     public static final DeferredItem<Item> BOXED_EXPLOSIVE_BOLTS = ITEMS.registerItem("boxed_explosive_bolts",
             BoltItem::new, new Item.Properties());
 
@@ -64,6 +123,23 @@ public class ItemInit {
 
     // Strings
     // ├ Attribute Modifiers
+    public static final DeferredItem<Item> IGNITION_STRING = ITEMS.registerItem("ignition_string",
+            BowModifierItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> FROSTBITE_STRING = ITEMS.registerItem("frostbite_string",
+            BowModifierItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> CHARGING_STRING = ITEMS.registerItem("charging_string",
+            BowModifierItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> DETERIORATION_STRING = ITEMS.registerItem("deterioration_string",
+            BowModifierItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> PERMEATION_STRING = ITEMS.registerItem("permeation_string",
+            BowModifierItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> VIBRATING_STRING = ITEMS.registerItem("vibrating_string",
+            BowModifierItem::new, new Item.Properties());
 
     // └ Modifiers
     public static final DeferredItem<Item> RANGE_STRING = ITEMS.registerItem("range_string",
@@ -81,6 +157,23 @@ public class ItemInit {
 
     // Pulleys
     // ├ Attribute Modifiers
+    public static final DeferredItem<Item> IGNITION_PULLEY = ITEMS.registerItem("ignition_pulley",
+            BoltThrowerModifierItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> COOLING_PULLEY = ITEMS.registerItem("cooling_pulley",
+            BoltThrowerModifierItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> POWER_GENERATION_PULLEY = ITEMS.registerItem("power_generation_pulley",
+            BoltThrowerModifierItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> CORROSION_RESISTANT_PULLEY = ITEMS.registerItem("corrosion_resistant_pulley",
+            BoltThrowerModifierItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> HYDROPHILIC_PULLEY = ITEMS.registerItem("hydrophilic_pulley",
+            BoltThrowerModifierItem::new, new Item.Properties());
+
+    public static final DeferredItem<Item> CONDUCTION_PULLEY = ITEMS.registerItem("conduction_pulley",
+            BoltThrowerModifierItem::new, new Item.Properties());
 
     // └ Modifiers
     public static final DeferredItem<Item> COMPOUND_PULLEY = ITEMS.registerItem("compound_pulley",
@@ -122,8 +215,21 @@ public class ItemInit {
 
     public static void registerAttributeEffects() {
         // Arrows
+        AttributeEffectsDictionary.registerToDict(FLAME_ARROW.get(), AttributeEnum.FLAME.get(), 15);
+        AttributeEffectsDictionary.registerToDict(FREEZING_ARROW.get(), AttributeEnum.FROST.get(), 15);
+        AttributeEffectsDictionary.registerToDict(LIGHTNING_ARROW.get(), AttributeEnum.LIGHTNING.get(), 15);
+        AttributeEffectsDictionary.registerToDict(CORROSIVE_ARROW.get(), AttributeEnum.ACID.get(), 15);
+        AttributeEffectsDictionary.registerToDict(FLOOD_ARROW.get(), AttributeEnum.FLOOD.get(), 15);
+        AttributeEffectsDictionary.registerToDict(REVERBERATING_ARROW.get(), AttributeEnum.ECHO.get(), 15);
+        AttributeEffectsDictionary.registerToDict(PIERCING_ARROW.get(), AttributeEnum.INJURY.get(), 5);
 
         // Bolts
+        AttributeEffectsDictionary.registerToDict(BOXED_FLAME_BOLTS.get(), AttributeEnum.FLAME.get(), 3);
+        AttributeEffectsDictionary.registerToDict(BOXED_FREEZING_BOLTS.get(), AttributeEnum.FROST.get(), 3);
+        AttributeEffectsDictionary.registerToDict(BOXED_LIGHTNING_BOLTS.get(), AttributeEnum.LIGHTNING.get(), 3);
+        AttributeEffectsDictionary.registerToDict(BOXED_CORROSIVE_BOLTS.get(), AttributeEnum.ACID.get(), 3);
+        AttributeEffectsDictionary.registerToDict(BOXED_FLOOD_BOLTS.get(), AttributeEnum.FLOOD.get(), 3);
+        AttributeEffectsDictionary.registerToDict(BOXED_REVERBERATING_BOLTS.get(), AttributeEnum.ECHO.get(), 3);
 
         // Vanilla Items
         AttributeEffectsDictionary.registerToDict(Items.MAGMA_CREAM, AttributeEnum.FLAME.get(), 5);
@@ -137,6 +243,18 @@ public class ItemInit {
 
         // Strings
         // ├ Attribute Modifiers
+        AttributeModifierDictionary.registerToDict(IGNITION_STRING.get(), AttributeEnum.FLAME.get(), 3);
+        AttributeModifierDictionary.registerToDict(IGNITION_STRING.get(), AttributeEnum.FLAME_RATIO.get(), 75);
+        AttributeModifierDictionary.registerToDict(FROSTBITE_STRING.get(), AttributeEnum.FROST.get(), 3);
+        AttributeModifierDictionary.registerToDict(FROSTBITE_STRING.get(), AttributeEnum.FROST_RATIO.get(), 75);
+        AttributeModifierDictionary.registerToDict(CHARGING_STRING.get(), AttributeEnum.LIGHTNING.get(), 3);
+        AttributeModifierDictionary.registerToDict(CHARGING_STRING.get(), AttributeEnum.LIGHTNING_RATIO.get(), 75);
+        AttributeModifierDictionary.registerToDict(DETERIORATION_STRING.get(), AttributeEnum.ACID.get(), 3);
+        AttributeModifierDictionary.registerToDict(DETERIORATION_STRING.get(), AttributeEnum.ACID_RATIO.get(), 75);
+        AttributeModifierDictionary.registerToDict(PERMEATION_STRING.get(), AttributeEnum.FLOOD.get(), 3);
+        AttributeModifierDictionary.registerToDict(PERMEATION_STRING.get(), AttributeEnum.FLOOD_RATIO.get(), 75);
+        AttributeModifierDictionary.registerToDict(VIBRATING_STRING.get(), AttributeEnum.ECHO.get(), 3);
+        AttributeModifierDictionary.registerToDict(VIBRATING_STRING.get(), AttributeEnum.ECHO_RATIO.get(), 75);
 
         // └ Modifiers
         ModifierDictionary.registerToDict(RANGE_STRING.get(), ModifierEnum.RANGE.get(), 25);
@@ -150,6 +268,12 @@ public class ItemInit {
 
         // Pulleys
         // ├ Attribute Modifiers
+        AttributeModifierDictionary.registerToDict(IGNITION_PULLEY.get(), AttributeEnum.FLAME_RATIO.get(), 80);
+        AttributeModifierDictionary.registerToDict(COOLING_PULLEY.get(), AttributeEnum.FROST_RATIO.get(), 80);
+        AttributeModifierDictionary.registerToDict(POWER_GENERATION_PULLEY.get(), AttributeEnum.LIGHTNING_RATIO.get(), 80);
+        AttributeModifierDictionary.registerToDict(CORROSION_RESISTANT_PULLEY.get(), AttributeEnum.ACID_RATIO.get(), 80);
+        AttributeModifierDictionary.registerToDict(HYDROPHILIC_PULLEY.get(), AttributeEnum.FLOOD_RATIO.get(), 80);
+        AttributeModifierDictionary.registerToDict(CONDUCTION_PULLEY.get(), AttributeEnum.ECHO_RATIO.get(), 80);
 
         // └ Modifiers
         ModifierDictionary.registerToDict(COMPOUND_PULLEY.get(), ModifierEnum.RANGE.get(), 15);
