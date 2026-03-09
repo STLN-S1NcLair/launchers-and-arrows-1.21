@@ -15,8 +15,18 @@ public class SoundInit {
     public static final Supplier<SoundEvent> BOLT_THROWER = registerSoundEvent("bolt_thrower");
     public static final Supplier<SoundEvent> CROSSLAUNCHER = registerSoundEvent("crosslauncher");
 
+    public static final Supplier<SoundEvent> FLAME_EFFECT = registerSoundEvent("flame_effect");
+    public static final Supplier<SoundEvent> FROST_EFFECT = registerSoundEvent("frost_effect");
+    public static final Supplier<SoundEvent> LIGHTNING_EFFECT = registerSoundEvent("lightning_effect");
+    public static final Supplier<SoundEvent> ACID_EFFECT = registerSoundEvent("acid_effect");
+    public static final Supplier<SoundEvent> FLOOD_EFFECT = registerSoundEvent("flood_effect");
+    public static final Supplier<SoundEvent> ECHO_EFFECT = registerSoundEvent("echo_effect");
+
     public static final Supplier<SoundEvent> EXPLODE = registerSoundEvent("explode");
+    public static final Supplier<SoundEvent> WAVE = registerSoundEvent("wave");
     public static final Supplier<SoundEvent> RELOAD = registerSoundEvent("reload");
+    public static final Supplier<SoundEvent> GLITCH = registerSoundEvent("glitch");
+    public static final Supplier<SoundEvent> RICOCHET = registerSoundEvent("ricochet");
 
     public static final Supplier<SoundEvent> MECHANICAL_BOW_CHARGE = registerSoundEvent("mechanical_bow_charge");
     public static final Supplier<SoundEvent> MECHANICAL_BOW_LOAD = registerSoundEvent("mechanical_bow_load");
