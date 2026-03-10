@@ -219,12 +219,12 @@ public abstract class LivingEntityMixin implements AttributeSynchedEntityData {
 
     @Inject(method = "tickEffects", at = @At("TAIL"))
     private void tickEffects(CallbackInfo ci) {
-        addStatusEffectParticle(MobEffectInit.BURNING.get(), BURNING_FLAG, ParticleInit.FLAME_EFFECT.get(), BURNING_DURATION);
-        addStatusEffectParticle(MobEffectInit.FREEZE.get(), FREEZE_FLAG, ParticleInit.FROST_EFFECT.get(), FREEZE_DURATION);
-        addStatusEffectParticle(MobEffectInit.ELECTRIC_SHOCK.get(), ELECTRIC_SHOCK_FLAG, ParticleInit.LIGHTNING_EFFECT.get(), ELECTRIC_SHOCK_DURATION);
-        addStatusEffectParticle(MobEffectInit.CORROSION.get(), CORROSION_FLAG, ParticleInit.ACID_EFFECT.get(), CORROSION_DURATION);
-        addStatusEffectParticle(MobEffectInit.SUBMERGED.get(), SUBMERGED_FLAG, ParticleInit.FLOOD_EFFECT.get(), SUBMERGED_DURATION);
-        addStatusEffectParticle(MobEffectInit.CONFUSION.get(), CONFUSION_FLAG, ParticleInit.ECHO_EFFECT.get(), CONFUSION_DURATION);
+        addStatusEffectParticle(MobEffectInit.BURNING, BURNING_FLAG, ParticleInit.FLAME_EFFECT.get(), BURNING_DURATION);
+        addStatusEffectParticle(MobEffectInit.FREEZE, FREEZE_FLAG, ParticleInit.FROST_EFFECT.get(), FREEZE_DURATION);
+        addStatusEffectParticle(MobEffectInit.ELECTRIC_SHOCK, ELECTRIC_SHOCK_FLAG, ParticleInit.LIGHTNING_EFFECT.get(), ELECTRIC_SHOCK_DURATION);
+        addStatusEffectParticle(MobEffectInit.CORROSION, CORROSION_FLAG, ParticleInit.ACID_EFFECT.get(), CORROSION_DURATION);
+        addStatusEffectParticle(MobEffectInit.SUBMERGED, SUBMERGED_FLAG, ParticleInit.FLOOD_EFFECT.get(), SUBMERGED_DURATION);
+        addStatusEffectParticle(MobEffectInit.CONFUSION, CONFUSION_FLAG, ParticleInit.ECHO_EFFECT.get(), CONFUSION_DURATION);
         if (!entity.level().isClientSide()) {
             if (entity.hasEffect(MobEffectInit.FLAME_ACCUMULATION)) {
                 entity.getEntityData().set(FLAME_ACCUMULATION,
@@ -272,7 +272,7 @@ public abstract class LivingEntityMixin implements AttributeSynchedEntityData {
     }
 
     @Unique
-    private void addStatusEffectParticle(MobEffect mobEffect, EntityDataAccessor<Boolean> data, ParticleOptions particleOptions, EntityDataAccessor<Integer> durationData) {
+    private void addStatusEffectParticle(Holder<MobEffect> mobEffect, EntityDataAccessor<Boolean> data, ParticleOptions particleOptions, EntityDataAccessor<Integer> durationData) {
         if (entity.level().isClientSide() && entity.getEntityData().get(data)) {
             float w = entity.getBbWidth();
             float h = entity.getBbHeight();
@@ -286,9 +286,9 @@ public abstract class LivingEntityMixin implements AttributeSynchedEntityData {
                         0.0, 0.0, 0.0
                 );
             }
-        } else if (entity.hasEffect(Holder.direct(mobEffect))) {
+        } else if (entity.hasEffect(mobEffect)) {
             entity.getEntityData().set(data, true);
-            entity.getEntityData().set(durationData, entity.getEffect(Holder.direct(mobEffect)).getDuration());
+            entity.getEntityData().set(durationData, entity.getEffect(mobEffect).getDuration());
         } else {
             entity.getEntityData().set(data, false);
             entity.getEntityData().set(durationData, 0);
