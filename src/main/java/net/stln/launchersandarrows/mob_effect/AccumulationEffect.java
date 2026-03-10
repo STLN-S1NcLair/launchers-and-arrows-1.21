@@ -12,17 +12,13 @@ public abstract class AccumulationEffect extends MobEffect {
         super(category, color);
     }
 
-    @Override
-    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
-        return true;
-    }
-
+    // f: applyUpdateEffect
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
 
         MobEffectInstance instance = entity.getEffect(getHolder());
         if (instance == null) {
-            return false;
+            return super.applyEffectTick(entity, amplifier);
         }
 
         int duration = instance.getDuration();
@@ -39,10 +35,19 @@ public abstract class AccumulationEffect extends MobEffect {
             entity.addEffect(new MobEffectInstance(getHolder(), 20, amplifier - 1));
         }
 
+        return super.applyEffectTick(entity, amplifier);
+    }
+
+    // f: canApplyUpdateEffect
+    @Override
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 
-    protected abstract void triggerEffect(LivingEntity entity);
+    protected void triggerEffect(LivingEntity entity) {
+        entity.addEffect(new MobEffectInstance(getChangeHolder(), 300, 0));
+    }
 
     protected abstract Holder<MobEffect> getHolder();
+    protected abstract Holder<MobEffect> getChangeHolder();
 }

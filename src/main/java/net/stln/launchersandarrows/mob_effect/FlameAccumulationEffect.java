@@ -15,13 +15,13 @@ public class FlameAccumulationEffect extends AccumulationEffect {
     }
 
     @Override
-    protected void triggerEffect(LivingEntity entity) {
-        entity.addEffect(new MobEffectInstance(MobEffectInit.BURNING, 300, 0));
+    protected Holder<MobEffect> getHolder() {
+        return MobEffectInit.FLAME_ACCUMULATION;
     }
 
     @Override
-    protected Holder<MobEffect> getHolder() {
-        return MobEffectInit.FLAME_ACCUMULATION;
+    protected Holder<MobEffect> getChangeHolder() {
+        return MobEffectInit.BURNING;
     }
 
     @Override
