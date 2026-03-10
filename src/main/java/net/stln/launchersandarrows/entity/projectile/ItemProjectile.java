@@ -6,9 +6,12 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -18,12 +21,16 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.*;
 import net.minecraft.core.particles.*;
+import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.common.util.FakePlayerFactory;
+import net.stln.launchersandarrows.LaunchersAndArrows;
 import net.stln.launchersandarrows.entity.EntityInit;
 import net.stln.launchersandarrows.item.ItemInit;
 import net.stln.launchersandarrows.mob_effect.util.MobEffectUtil;
@@ -257,39 +264,7 @@ public class ItemProjectile extends ThrowableItemProjectile {
     @Override
     protected void onHitBlock(BlockHitResult blockHitResult) {
         super.onHitBlock(blockHitResult);
-        if (this.getItem().is(Items.TORCH)) {
-            BlockPos pos = blockHitResult.getBlockPos();
-            Direction direction = blockHitResult.getDirection();
-            if (this.level().getBlockState(pos).is(Blocks.AIR)) {
-                this.level().setBlock(pos, Blocks.TORCH.defaultBlockState(), 3);
-            }
-            else {
-                int x = 0;
-                int y = 0;
-                int z = 0;
-                switch (direction) {
-                    case UP -> y = 1;
-                    case NORTH -> z = -1;
-                    case SOUTH -> z = 1;
-                    case EAST -> x = 1;
-                    case WEST -> x = -1;
-                }
-                pos = new BlockPos(pos.getX() + x, pos.getY() + y, pos.getZ() + z);
-                if (this.level().getBlockState(pos).is(Blocks.AIR)) {
-                    switch(direction) {
-                        case UP -> this.level().setBlock(pos, Blocks.TORCH.defaultBlockState(), 3);
-                        case NORTH -> this.level().setBlock(pos, Blocks.WALL_TORCH.defaultBlockState(), 3);
-                        case SOUTH -> this.level().setBlock(pos, Blocks.WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, direction), 3);
-                        case EAST -> this.level().setBlock(pos, Blocks.WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, direction), 3);
-                        case WEST -> this.level().setBlock(pos, Blocks.WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, direction), 3);
-                    }
-                }
-                else {
-                    this.level().addFreshEntity(new ItemEntity(this.level(), pos.getX(), pos.getY(), pos.getZ(), new ItemStack(Items.TORCH)));
-                }
-            }
-        }
-        else if (getItem().is(ItemInit.GRAPPLING_HOOK.get())){
+        if (getItem().is(ItemInit.GRAPPLING_HOOK.get())){
             entityData.set(HIT, true);
         }
         else if(getItem().is(Items.HEART_OF_THE_SEA)){
@@ -307,30 +282,39 @@ public class ItemProjectile extends ThrowableItemProjectile {
             }
         }
         else if(this.getItem().getItem() instanceof BlockItem blockItem){
-            Block block = blockItem.getBlock();
+            if (!(this.level() instanceof ServerLevel serverLevel)) return;
+
             BlockPos pos = blockHitResult.getBlockPos();
-            Direction direction = blockHitResult.getDirection();
-            if (this.level().getBlockState(pos).is(Blocks.AIR)) {
-                this.level().setBlock(pos, Blocks.HEAVY_CORE.defaultBlockState(), 3);
+            Direction face = blockHitResult.getDirection();
+
+            LaunchersAndArrows.LOGGER.info("face: {}", face);
+            LaunchersAndArrows.LOGGER.info("pos: {}", pos);
+
+            if (!this.level().getBlockState(pos).canBeReplaced()) {
+                pos = pos.relative(face);
+                LaunchersAndArrows.LOGGER.info("new Pos: {}", pos);
             }
-            else {
-                int x = 0;
-                int y = 0;
-                int z = 0;
-                switch (direction) {
-                    case UP -> y = 1;
-                    case DOWN -> y = -1;
-                    case NORTH -> z = -1;
-                    case SOUTH -> z = 1;
-                    case EAST -> x = 1;
-                    case WEST -> x = -1;
-                }
-                pos = new BlockPos(pos.getX() + x, pos.getY() + y, pos.getZ() + z);
-                if (this.level().getBlockState(pos).is(Blocks.AIR)) {
-                    this.level().setBlock(pos, block.defaultBlockState(), 3);
-                } else {
-                    this.level().addFreshEntity(new ItemEntity(this.level(), pos.getX(), pos.getY(), pos.getZ(), new ItemStack(blockItem)));
-                }
+
+            FakePlayer fakePlayer = FakePlayerFactory.getMinecraft(serverLevel);
+            fakePlayer.setYRot(- this.getYRot());
+            fakePlayer.setXRot(- this.getXRot());
+            fakePlayer.setPos(pos.getX(), pos.getY(), pos.getZ());
+
+            UseOnContext context = new UseOnContext(fakePlayer, InteractionHand.MAIN_HAND,
+                    new BlockHitResult(blockHitResult.getLocation(), face, pos, false)
+            );
+
+            InteractionResult result = blockItem.useOn(context);
+
+            if (!result.consumesAction()) {
+                this.level().addFreshEntity(
+                        new ItemEntity(this.level(),
+                                pos.getX(),
+                                pos.getY(),
+                                pos.getZ(),
+                                this.getItem()
+                        )
+                );
             }
         }
 
