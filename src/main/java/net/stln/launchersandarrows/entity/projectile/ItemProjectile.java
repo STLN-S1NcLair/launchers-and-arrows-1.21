@@ -21,6 +21,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
@@ -287,24 +288,19 @@ public class ItemProjectile extends ThrowableItemProjectile {
             BlockPos pos = blockHitResult.getBlockPos();
             Direction face = blockHitResult.getDirection();
 
-            LaunchersAndArrows.LOGGER.info("face: {}", face);
-            LaunchersAndArrows.LOGGER.info("pos: {}", pos);
-
-            if (!this.level().getBlockState(pos).canBeReplaced()) {
-                pos = pos.relative(face);
-                LaunchersAndArrows.LOGGER.info("new Pos: {}", pos);
-            }
+            // LaunchersAndArrows.LOGGER.info("result face: {}", face);
+            // LaunchersAndArrows.LOGGER.info("result pos: {}", pos);
 
             FakePlayer fakePlayer = FakePlayerFactory.getMinecraft(serverLevel);
             fakePlayer.setYRot(- this.getYRot());
             fakePlayer.setXRot(- this.getXRot());
             fakePlayer.setPos(pos.getX(), pos.getY(), pos.getZ());
 
-            UseOnContext context = new UseOnContext(fakePlayer, InteractionHand.MAIN_HAND,
+            BlockPlaceContext context = new BlockPlaceContext(fakePlayer, InteractionHand.MAIN_HAND, this.getItem(),
                     new BlockHitResult(blockHitResult.getLocation(), face, pos, false)
             );
 
-            InteractionResult result = blockItem.useOn(context);
+            InteractionResult result = blockItem.place(context);
 
             if (!result.consumesAction()) {
                 this.level().addFreshEntity(
