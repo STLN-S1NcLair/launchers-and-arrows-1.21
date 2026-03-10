@@ -206,4 +206,9 @@ public class HookLauncherItem extends CrossbowItem {
 
         return f;
     }
+
+    @Override
+    public ItemStack getDefaultCreativeAmmo(@Nullable Player player, ItemStack projectileWeaponItem) {
+        return ItemInit.GRAPPLING_HOOK.get().getDefaultInstance();
+    }
 }
