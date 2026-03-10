@@ -5,6 +5,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,6 +17,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -172,7 +175,6 @@ public abstract class LivingEntityMixin implements AttributeSynchedEntityData {
         damageSource = source;
     }
 
-    /*
     @ModifyVariable(method = "hurt", at = @At("HEAD"), ordinal = 0)
     private float modifyDamage(float damage) {
         if (entity.hasEffect(MobEffectInit.CORROSION) && !damageSource.is(DamageTypeTags.BYPASSES_ARMOR)) {
@@ -189,9 +191,7 @@ public abstract class LivingEntityMixin implements AttributeSynchedEntityData {
         }
         return damage;
     }
-    */
 
-    /*
     @ModifyVariable(method = "heal", at = @At("HEAD"), ordinal = 0)
     private float modifyHeal(float amount) {
         if (entity.hasEffect(MobEffectInit.SERIOUS_INJURY)) {
@@ -199,18 +199,14 @@ public abstract class LivingEntityMixin implements AttributeSynchedEntityData {
         }
         return amount;
     }
-    */
 
-    /*
     @Inject(method = "decreaseAirSupply", at = @At("HEAD"), cancellable = true)
     private void checkHasSubmergedEffect(int air, CallbackInfoReturnable<Integer> cir) {
         if (entity.hasEffect(MobEffectInit.SUBMERGED)) {
             cir.setReturnValue(air);
         }
     }
-    */
 
-    /*
     @ModifyArg(method = "getDamageAfterArmorAbsorb", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/damagesource/CombatRules;getDamageAfterAbsorb(Lnet/minecraft/world/entity/LivingEntity;FLnet/minecraft/world/damagesource/DamageSource;FF)F"),
             index = 3)
@@ -220,18 +216,15 @@ public abstract class LivingEntityMixin implements AttributeSynchedEntityData {
         }
         return armor;
     }
-    */
 
     @Inject(method = "tickEffects", at = @At("TAIL"))
     private void tickEffects(CallbackInfo ci) {
         addStatusEffectParticle(MobEffectInit.BURNING.get(), BURNING_FLAG, ParticleInit.FLAME_EFFECT.get(), BURNING_DURATION);
-        /*
-        addStatusEffectParticle(MobEffectInit.FREEZE, FREEZE_FLAG, ParticleInit.FROST_EFFECT, FREEZE_DURATION);
-        addStatusEffectParticle(MobEffectInit.ELECTRIC_SHOCK, ELECTRIC_SHOCK_FLAG, ParticleInit.LIGHTNING_EFFECT, ELECTRIC_SHOCK_DURATION);
-        addStatusEffectParticle(MobEffectInit.CORROSION, CORROSION_FLAG, ParticleInit.ACID_EFFECT, CORROSION_DURATION);
-        addStatusEffectParticle(MobEffectInit.SUBMERGED, SUBMERGED_FLAG, ParticleInit.FLOOD_EFFECT, SUBMERGED_DURATION);
-        addStatusEffectParticle(MobEffectInit.CONFUSION, CONFUSION_FLAG, ParticleInit.ECHO_EFFECT, CONFUSION_DURATION);
-        */
+        addStatusEffectParticle(MobEffectInit.FREEZE.get(), FREEZE_FLAG, ParticleInit.FROST_EFFECT.get(), FREEZE_DURATION);
+        addStatusEffectParticle(MobEffectInit.ELECTRIC_SHOCK.get(), ELECTRIC_SHOCK_FLAG, ParticleInit.LIGHTNING_EFFECT.get(), ELECTRIC_SHOCK_DURATION);
+        addStatusEffectParticle(MobEffectInit.CORROSION.get(), CORROSION_FLAG, ParticleInit.ACID_EFFECT.get(), CORROSION_DURATION);
+        addStatusEffectParticle(MobEffectInit.SUBMERGED.get(), SUBMERGED_FLAG, ParticleInit.FLOOD_EFFECT.get(), SUBMERGED_DURATION);
+        addStatusEffectParticle(MobEffectInit.CONFUSION.get(), CONFUSION_FLAG, ParticleInit.ECHO_EFFECT.get(), CONFUSION_DURATION);
         if (!entity.level().isClientSide()) {
             if (entity.hasEffect(MobEffectInit.FLAME_ACCUMULATION)) {
                 entity.getEntityData().set(FLAME_ACCUMULATION,
@@ -239,7 +232,6 @@ public abstract class LivingEntityMixin implements AttributeSynchedEntityData {
             } else {
                 entity.getEntityData().set(FLAME_ACCUMULATION, 0);
             }
-            /*
             if (entity.hasEffect(MobEffectInit.FROST_ACCUMULATION)) {
                 entity.getEntityData().set(FROST_ACCUMULATION,
                         entity.getEffect(MobEffectInit.FROST_ACCUMULATION).getAmplifier() + 1);
@@ -276,7 +268,6 @@ public abstract class LivingEntityMixin implements AttributeSynchedEntityData {
             } else {
                 entity.getEntityData().set(SERIOUS_INJURY, 0);
             }
-            */
         }
     }
 

@@ -14,6 +14,16 @@ public class MobEffectInit {
 
     public static final DeferredHolder<MobEffect, MobEffect> FLAME_ACCUMULATION = STATUS_EFFECTS.register("flame_accumulation",
             id -> new FlameAccumulationEffect(MobEffectCategory.HARMFUL, 0xFFAB32));
+    public static final DeferredHolder<MobEffect, MobEffect> FROST_ACCUMULATION = STATUS_EFFECTS.register("frost_accumulation",
+            id -> new FrostAccumulationEffect(MobEffectCategory.HARMFUL, 0x89FEFF));
+    public static final DeferredHolder<MobEffect, MobEffect> LIGHTNING_ACCUMULATION = STATUS_EFFECTS.register("lightning_accumulation",
+            id -> new LightningAccumulationEffect(MobEffectCategory.HARMFUL, 0x4C5CFF));
+    public static final DeferredHolder<MobEffect, MobEffect> ACID_ACCUMULATION = STATUS_EFFECTS.register("acid_accumulation",
+            id -> new AcidAccumulationEffect(MobEffectCategory.HARMFUL, 0xA3FF4C));
+    public static final DeferredHolder<MobEffect, MobEffect> FLOOD_ACCUMULATION = STATUS_EFFECTS.register("flood_accumulation",
+            id -> new FloodAccumulationEffect(MobEffectCategory.HARMFUL, 0x74C6FF));
+    public static final DeferredHolder<MobEffect, MobEffect> ECHO_ACCUMULATION = STATUS_EFFECTS.register("echo_accumulation",
+            id -> new EchoAccumulationEffect(MobEffectCategory.HARMFUL, 0x00A6B0));
 
     public static final DeferredHolder<MobEffect, MobEffect> SHOCK_EXPLOSION = STATUS_EFFECTS.register("shock_explosion",
             id -> new ShockExplosionEffect(MobEffectCategory.HARMFUL, 0xCDC7FF));

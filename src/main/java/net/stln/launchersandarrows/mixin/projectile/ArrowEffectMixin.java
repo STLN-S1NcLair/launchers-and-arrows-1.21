@@ -275,7 +275,7 @@ public class ArrowEffectMixin implements RicochetEffectProjectile {
         if (target instanceof LivingEntity livingEntity) {
             MobEffectUtil.applyAttributeEffect(livingEntity, this.itemStack);
             if (itemStack.is(ItemInit.WAVE_ARROW)) {
-                // MobEffectUtil.stackStatusEffect(livingEntity, new MobEffectInstance(MobEffectInit.SHOCK_EXPLOSION, 50, 0));
+                MobEffectUtil.stackStatusEffect(livingEntity, new MobEffectInstance(MobEffectInit.SHOCK_EXPLOSION, 50, 0));
                 arrow.level().playSound(null, arrow.blockPosition(), SoundInit.WAVE.get(), SoundSource.PLAYERS);
             } else if (itemStack.is(ItemInit.GLITCH_ARROW)) {
                 invertBlock(arrow, target.blockPosition());

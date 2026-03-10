@@ -25,7 +25,6 @@ public class MobEffectUtil {
         if (id != AttributeEnum.FLAME.get()) {
             entity.removeEffect(MobEffectInit.BURNING);
         }
-        /*
         if (id != AttributeEnum.FROST.get()) {
             entity.removeEffect(MobEffectInit.FREEZE);
         }
@@ -41,7 +40,6 @@ public class MobEffectUtil {
         if (id != AttributeEnum.ECHO.get()) {
             entity.removeEffect(MobEffectInit.CONFUSION);
         }
-        */
     }
 
     public static void applyAttributeEffect(LivingEntity entity, ItemStack stack) {
@@ -53,7 +51,6 @@ public class MobEffectUtil {
         if (attributes[AttributeEnum.FLAME.get()] != null) {
             MobEffectUtil.stackStatusEffect(entity, new MobEffectInstance(MobEffectInit.FLAME_ACCUMULATION, 20, attributes[AttributeEnum.FLAME.get()] - 1));
         }
-        /*
         if (attributes[AttributeEnum.FROST.get()] != null) {
             MobEffectUtil.stackStatusEffect(entity, new MobEffectInstance(MobEffectInit.FROST_ACCUMULATION, 20, attributes[AttributeEnum.FROST.get()] - 1));
         }
@@ -72,14 +69,12 @@ public class MobEffectUtil {
         if (attributes[AttributeEnum.INJURY.get()] != null) {
             MobEffectUtil.stackStatusEffect(entity, new MobEffectInstance(MobEffectInit.SERIOUS_INJURY, 100, attributes[AttributeEnum.INJURY.get()] - 1));
         }
-        */
     }
 
     public static void applyAttributeModifier(LivingEntity entity, Integer[] data) {
         if (data[AttributeEnum.FLAME.get()] > 0) {
             MobEffectUtil.stackStatusEffect(entity, new MobEffectInstance(MobEffectInit.FLAME_ACCUMULATION, 20, data[AttributeEnum.FLAME.get()] - 1));
         }
-        /*
         if (data[AttributeEnum.FROST.get()] > 0) {
             MobEffectUtil.stackStatusEffect(entity, new MobEffectInstance(MobEffectInit.FROST_ACCUMULATION, 20, data[AttributeEnum.FROST.get()] - 1));
         }
@@ -98,7 +93,6 @@ public class MobEffectUtil {
         if (data[AttributeEnum.INJURY.get()] > 0) {
             MobEffectUtil.stackStatusEffect(entity, new MobEffectInstance(MobEffectInit.SERIOUS_INJURY, 100, data[AttributeEnum.INJURY.get()] - 1));
         }
-        */
     }
 
     public static void applyAttributeRatioModifier(LivingEntity entity, ItemStack stack, Integer[] data) {
@@ -110,7 +104,6 @@ public class MobEffectUtil {
         if (attributes[AttributeEnum.FLAME.get()] != null && data[AttributeEnum.FLAME.get()] > 0) {
             MobEffectUtil.stackStatusEffect(entity, new MobEffectInstance(MobEffectInit.FLAME_ACCUMULATION, 20, Math.round(attributes[AttributeEnum.FLAME.get()] * (data[AttributeEnum.FLAME.get()] / 100.0F) - 1)));
         }
-        /*
         if (attributes[AttributeEnum.FROST.get()] != null && data[AttributeEnum.FROST.get()] > 0) {
             MobEffectUtil.stackStatusEffect(entity, new MobEffectInstance(MobEffectInit.FROST_ACCUMULATION, 20, Math.round(attributes[AttributeEnum.FROST.get()] * (data[AttributeEnum.FROST.get()] / 100.0F) - 1)));
         }
@@ -126,6 +119,5 @@ public class MobEffectUtil {
         if (attributes[AttributeEnum.ECHO.get()] != null && data[AttributeEnum.ECHO.get()] > 0) {
             MobEffectUtil.stackStatusEffect(entity, new MobEffectInstance(MobEffectInit.ECHO_ACCUMULATION, 20, Math.round(attributes[AttributeEnum.ECHO.get()] * (data[AttributeEnum.ECHO.get()] / 100.0F) - 1)));
         }
-        */
     }
 }
