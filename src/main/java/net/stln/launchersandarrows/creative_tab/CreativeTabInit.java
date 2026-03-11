@@ -76,12 +76,12 @@ public class CreativeTabInit {
 
                 // Pulleys
                 // ├ Attribute Modifiers
-                output.accept(ItemInit.IGNITION_STRING);
-                output.accept(ItemInit.FROSTBITE_STRING);
-                output.accept(ItemInit.CHARGING_STRING);
-                output.accept(ItemInit.DETERIORATION_STRING);
-                output.accept(ItemInit.PERMEATION_STRING);
-                output.accept(ItemInit.VIBRATING_STRING);
+                output.accept(ItemInit.IGNITION_PULLEY);
+                output.accept(ItemInit.COOLING_PULLEY);
+                output.accept(ItemInit.POWER_GENERATION_PULLEY);
+                output.accept(ItemInit.CORROSION_RESISTANT_PULLEY);
+                output.accept(ItemInit.HYDROPHILIC_PULLEY);
+                output.accept(ItemInit.CONDUCTION_PULLEY);
 
                 // ├ Modifiers
                 output.accept(ItemInit.COMPOUND_PULLEY);
