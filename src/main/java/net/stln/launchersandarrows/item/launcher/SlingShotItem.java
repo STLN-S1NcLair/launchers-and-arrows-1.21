@@ -1,5 +1,6 @@
 package net.stln.launchersandarrows.item.launcher;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -12,6 +13,7 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ChargedProjectiles;
 import net.minecraft.world.level.Level;
 import net.stln.launchersandarrows.entity.projectile.ItemProjectile;
 import net.stln.launchersandarrows.item.FovModifierItem;
@@ -87,6 +89,11 @@ public class SlingShotItem extends ModifiableBowItem implements FovModifierItem 
     @Override
     protected Projectile createProjectile(Level level, LivingEntity shooter, ItemStack weapon, ItemStack ammo, boolean isCrit) {
         return new ItemProjectile(level, shooter, shooter.getX(), shooter.getEyeY() - 0.1F, shooter.getZ(), ammo);
+    }
+
+    public static boolean isCharged(ItemStack slingshotStack) {
+        ChargedProjectiles chargedprojectiles = (ChargedProjectiles) slingshotStack.getOrDefault(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.EMPTY);
+        return !chargedprojectiles.isEmpty();
     }
 
     @Override
