@@ -320,8 +320,6 @@ public class BoltThrowerItem extends ModifiableBowItem {
         return arrow;
     }
 
-    // f: getUseAction
-    @Override
     public UseAnim getUseAnimation(ItemStack stack) {
         return UseAnim.CROSSBOW;
     }
@@ -412,6 +410,11 @@ public class BoltThrowerItem extends ModifiableBowItem {
     @Override
     public ItemStack getDefaultCreativeAmmo(@Nullable Player player, ItemStack projectileWeaponItem) {
         return ItemInit.BOXED_BOLTS.get().getDefaultInstance();
+    }
+
+    public static boolean isCharged(ItemStack boltThrowerStack) {
+        ChargedProjectiles chargedprojectiles = (ChargedProjectiles) boltThrowerStack.getOrDefault(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.EMPTY);
+        return !chargedprojectiles.isEmpty();
     }
 
     public static record ChargingSounds(Optional<Holder<SoundEvent>> start, Optional<Holder<SoundEvent>> mid, Optional<Holder<SoundEvent>> end) {
