@@ -77,7 +77,7 @@ public class CustomModelPredicateProvider {
         );
 
         ItemProperties.register(crossLauncher, ResourceLocation.withDefaultNamespace("charged"), (stack, level, entity, seed) ->
-                entity != null && entity.isUsingItem() && CrossLauncherItem.isCharged(stack) ? 1.0F : 0.0F
+                CrossLauncherItem.isCharged(stack) ? 1.0F : 0.0F
         );
 
         ItemProperties.register(crossLauncher, ResourceLocation.withDefaultNamespace("firework"), (stack, level, entity, seed) -> {
