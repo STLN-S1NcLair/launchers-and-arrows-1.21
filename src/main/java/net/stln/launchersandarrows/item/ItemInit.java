@@ -81,7 +81,7 @@ public class ItemInit {
             ArrowItem::new, new Item.Properties());
 
     public static final DeferredItem<Item> GLITCH_ARROW = ITEMS.registerItem("glitch_arrow",
-            ArrowItem::new, new Item.Properties());
+            GlitchArrowItem::new, new Item.Properties());
 
     public static final DeferredItem<Item> TAILWIND_ARROW = ITEMS.registerItem("tailwind_arrow",
             ArrowItem::new, new Item.Properties());
