@@ -8,6 +8,9 @@
     "projectile.CancelKnockbackMixin",
     "LivingEntityMixin"
   ],
+  "client": [
+    "ItemTooltipMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   },
