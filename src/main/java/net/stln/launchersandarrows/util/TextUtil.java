@@ -10,8 +10,7 @@ import net.stln.launchersandarrows.item.ItemInit;
 public class TextUtil {
     static ResourceLocation iconFont = ResourceLocation.fromNamespaceAndPath(LaunchersAndArrows.MOD_ID, "icons");
 
-    static Component getIconComponent(Item item){
-        /*
+    public static Component getIconComponent(Item item){
         if (item == ItemInit.IGNITION_STRING.get()) {
             return Component.literal("\u1000").setStyle(Style.EMPTY.withFont(iconFont));
         }
@@ -30,7 +29,6 @@ public class TextUtil {
         if (item == ItemInit.VIBRATING_STRING.get()) {
             return Component.literal("\u1005").setStyle(Style.EMPTY.withFont(iconFont));
         }
-        */
         if (item == ItemInit.RANGE_STRING.get()) {
             return Component.literal("\u2000").setStyle(Style.EMPTY.withFont(iconFont));
         }
@@ -49,7 +47,6 @@ public class TextUtil {
         if (item == ItemInit.OVERLOADED_STRING.get()) {
             return Component.literal("\u2005").setStyle(Style.EMPTY.withFont(iconFont));
         }
-        /*
         if (item == ItemInit.IGNITION_PULLEY.get()) {
             return Component.literal("\u3000").setStyle(Style.EMPTY.withFont(iconFont));
         }
@@ -68,7 +65,6 @@ public class TextUtil {
         if (item == ItemInit.CONDUCTION_PULLEY.get()) {
             return Component.literal("\u3005").setStyle(Style.EMPTY.withFont(iconFont));
         }
-        */
         if (item == ItemInit.COMPOUND_PULLEY.get()) {
             return Component.literal("\u4000").setStyle(Style.EMPTY.withFont(iconFont));
         }
