@@ -55,6 +55,8 @@ public class CrossLauncherItem extends CrossbowItem {
             .or(stack -> stack.is(Items.SPLASH_POTION))
             .or(stack -> stack.is(Items.LINGERING_POTION))
             .or(stack -> stack.is(Items.TORCH))
+            .or(stack -> stack.is(Items.SOUL_TORCH))
+            .or(stack -> stack.is(Items.REDSTONE_TORCH))
             .or(stack -> stack.is(Items.BLAZE_ROD))
             .or(stack -> stack.is(Items.WIND_CHARGE))
             .or(stack -> stack.is(Items.FIRE_CHARGE))
@@ -314,7 +316,8 @@ public class CrossLauncherItem extends CrossbowItem {
         } else if (stack.contains(Items.FIRE_CHARGE) || stack.contains(Items.DRAGON_BREATH) || stack.contains(Items.END_ROD)) {
             v = 2.5F;
         } else if (stack.contains(Items.SPLASH_POTION) || stack.contains(Items.LINGERING_POTION)
-                || stack.contains(Items.SLIME_BALL) || stack.contains(Items.TORCH)
+                || stack.contains(Items.SLIME_BALL)
+                || stack.contains(Items.TORCH) || stack.contains(Items.SOUL_TORCH) || stack.contains(Items.REDSTONE_TORCH)
                 || stack.contains(Items.GLOW_INK_SAC) || stack.contains(Items.INK_SAC)
                 || stack.contains(Items.ENDER_EYE) || stack.contains(Items.MAGMA_CREAM)
                 || stack.contains(Items.ECHO_SHARD) || stack.contains(Items.HEART_OF_THE_SEA)
