@@ -7,10 +7,11 @@
     "projectile.ArrowEffectMixin",
     "projectile.CancelKnockbackMixin",
     "LivingEntityMixin",
-    "SnowBallMixin"
+    "projectile.SnowBallMixin"
   ],
   "client": [
     "ItemTooltipMixin",
+    "PlayerRendererMixin",
     "RenderFirstPersonItemMixin"
   ],
   "injectors": {

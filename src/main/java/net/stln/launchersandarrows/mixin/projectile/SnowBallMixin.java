@@ -1,4 +1,4 @@
-package net.stln.launchersandarrows.mixin;
+package net.stln.launchersandarrows.mixin.projectile;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Snowball;
