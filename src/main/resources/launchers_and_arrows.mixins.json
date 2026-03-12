@@ -6,7 +6,8 @@
     "projectile.AddDataProjectileMixin",
     "projectile.ArrowEffectMixin",
     "projectile.CancelKnockbackMixin",
-    "LivingEntityMixin"
+    "LivingEntityMixin",
+    "SnowBallMixin"
   ],
   "client": [
     "ItemTooltipMixin",
