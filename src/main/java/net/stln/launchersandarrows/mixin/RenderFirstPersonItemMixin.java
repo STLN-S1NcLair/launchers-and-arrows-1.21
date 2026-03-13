@@ -14,6 +14,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.*;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.stln.launchersandarrows.item.component.ComponentInit;
 import net.stln.launchersandarrows.item.launcher.BoltThrowerItem;
 import net.stln.launchersandarrows.item.launcher.SlingShotItem;
 import org.spongepowered.asm.mixin.Mixin;
@@ -76,7 +77,7 @@ public class RenderFirstPersonItemMixin {
                 HumanoidArm humanoidarm = flag ? player.getMainArm() : player.getMainArm().getOpposite();
                 poseStack.pushPose();
 
-                boolean flag3 = BoltThrowerItem.isCharged(stack);
+                boolean flag3 = stack.get(ComponentInit.BOLT_COUNT_COMPONENT) != 0;
                 boolean flag2 = humanoidarm == HumanoidArm.RIGHT;
                 int i = flag2 ? 1 : -1;
                 if (player.isUsingItem() && player.getUseItemRemainingTicks() > 0 && player.getUsedItemHand() == hand) {
