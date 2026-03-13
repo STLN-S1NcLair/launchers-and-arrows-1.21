@@ -8,6 +8,7 @@ import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.stln.launchersandarrows.item.component.ComponentInit;
 import net.stln.launchersandarrows.item.launcher.BoltThrowerItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,16 +21,8 @@ public class PlayerRendererMixin {
     @Inject(method = "getArmPose", at = @At("HEAD"), cancellable = true)
     private static void getArmPose(AbstractClientPlayer player, InteractionHand hand, CallbackInfoReturnable<HumanoidModel.ArmPose> info) {
         ItemStack itemStack = player.getItemInHand(hand);
-        if (itemStack.isEmpty()) {
-
-        }
-        else {
-            if (player.getUsedItemHand() == hand && player.getUseItemRemainingTicks() > 0) {
-
-            }
-            else if (!player.swinging && itemStack.getItem() instanceof BoltThrowerItem && BoltThrowerItem.isCharged(itemStack)){
-                info.setReturnValue(HumanoidModel.ArmPose.CROSSBOW_HOLD);
-            }
+        if (!player.swinging && itemStack.getItem() instanceof BoltThrowerItem && itemStack.get(ComponentInit.BOLT_COUNT_COMPONENT) > 0){
+            info.setReturnValue(HumanoidModel.ArmPose.CROSSBOW_HOLD);
         }
     }
 }

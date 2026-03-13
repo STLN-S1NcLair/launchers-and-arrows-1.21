@@ -14,7 +14,7 @@ public class CreativeTabInit {
 
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> LAUNCHERS_AND_ARROWS_TAB = CREATIVE_MOD_TABS.register("launchers_and_arrows_tab", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.launchers_and_arrows.launchers_and_arrows"))
-            .icon(() -> ItemInit.VOLATILE_FUEL.get().getDefaultInstance())
+            .icon(() -> ItemInit.LONG_BOW.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
                 // Weapons
                 output.accept(ItemInit.LONG_BOW);
