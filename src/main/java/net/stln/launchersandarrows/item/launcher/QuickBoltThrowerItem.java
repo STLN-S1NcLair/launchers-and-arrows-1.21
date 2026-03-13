@@ -29,7 +29,7 @@ public class QuickBoltThrowerItem extends BoltThrowerItem{
     }
 
     @Override
-    protected float getBoltVelocity(){
+    protected float getBoltInaccuracy(){
         return 7.5F;
     }
 

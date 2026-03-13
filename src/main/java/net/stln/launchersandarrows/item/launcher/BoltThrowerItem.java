@@ -245,7 +245,7 @@ public class BoltThrowerItem extends ModifiableBowItem {
                                         boolean isCrit = player.getRandom().nextFloat() > 0.6;
                                         this.shoot(serverLevel, player,
                                                 b ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND,
-                                                stack, list, getBoltVelocity(), 3.0F, isCrit, null);
+                                                stack, list, 2.0F, getBoltInaccuracy(), isCrit, null);
                                     }
                                     level.playSound(null,
                                             player.getX(), player.getY(), player.getZ(),
@@ -399,8 +399,8 @@ public class BoltThrowerItem extends ModifiableBowItem {
     }
 
     // Overrideは効率悪いので変わる定数だけメソッドから取ってくるようにした
-    protected float getBoltVelocity(){
-        return 2.0F;
+    protected float getBoltInaccuracy(){
+        return 3.0F;
     }
 
     protected float getFirePitch(){
