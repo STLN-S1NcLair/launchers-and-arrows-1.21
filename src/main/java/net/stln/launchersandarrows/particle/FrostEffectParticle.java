@@ -1,71 +1,71 @@
 package net.stln.launchersandarrows.particle;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particle.SimpleParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
-public class FrostEffectParticle extends SpriteBillboardParticle {
+public class FrostEffectParticle extends TextureSheetParticle {
 
-    private final SpriteProvider spriteProvider;
+    private final SpriteSet spriteSet;
 
-    public FrostEffectParticle(ClientWorld clientWorld, double x, double y, double z, double vx, double vy, double vz, SpriteProvider spriteProvider) {
-        super(clientWorld, x, y, z, vx, vy, vz);
-        this.velocityX = (Math.random() - 0.5) / 100;
-        this.velocityY = (Math.random() - 0.5) / 100;
-        this.velocityZ = (Math.random() - 0.5) / 100;
-        this.maxAge = 6 + this.random.nextInt(9);
+    public FrostEffectParticle(ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, SpriteSet spriteSet){
+        super(level, x, y, z, xSpeed, ySpeed, zSpeed);
+        this.xd = (this.random.nextDouble() - 0.5) / 100;
+        this.yd = (this.random.nextDouble() - 0.5) / 100;
+        this.zd = (this.random.nextDouble() - 0.5) / 100;
+        this.lifetime = 6 + this.random.nextInt(9);
         this.alpha = 0.8F;
-        this.scale = 0.15F;
-        this.gravityStrength = 0.2F;
-        this.spriteProvider = spriteProvider;
-        this.setSpriteForAge(spriteProvider);
+        this.quadSize = 0.15F;
+        this.gravity = 0.2F;
+        this.spriteSet = spriteSet;
+        this.setSpriteFromAge(spriteSet);
     }
+
     @Override
-    public int getBrightness(float tint) {
-        int i = this.maxAge / 2;
-        return (int) Math.max(15728880 - (this.age >= i ? ((float) (this.age - i) / i * 7864440) : 0), tint);
+    protected int getLightColor(float partialTick) {
+        int i = this.lifetime / 2;
+        return (int) Math.max(15728880 - (this.age >= i ? ((float) (this.age - i) / i * 7864440) : 0), partialTick);
     }
 
     @Override
     public void tick() {
-        this.prevPosX = this.x;
-        this.prevPosY = this.y;
-        this.prevPosZ = this.z;
-        this.move(this.velocityX, this.velocityY, this.velocityZ);
-        if (this.age++ >= this.maxAge) {
-            this.markDead();
-        } else {
-            this.velocityY = this.velocityY - 0.04 * (double)this.gravityStrength;
+        this.xo = this.x;
+        this.yo = this.y;
+        this.zo = this.z;
+        this.move(this.xd, this.yd, this.zd);
+        if(this.age++ >= this.lifetime){
+            this.remove();
         }
-
-        this.velocityX = this.velocityX * (double)this.velocityMultiplier;
-        this.velocityY = this.velocityY * (double)this.velocityMultiplier;
-        this.velocityZ = this.velocityZ * (double)this.velocityMultiplier;
-
-        if (this.age >= this.maxAge * 0.4F) {
-            this.alpha = (this.maxAge - this.age) / (this.maxAge * 0.6F) * 0.8F;
+        else {
+            this.yd -= 0.04 * (double)this.gravity;
         }
-        this.setSpriteForAge(this.spriteProvider);
+        this.xd *= this.friction;
+        this.yd *= this.friction;
+        this.zd *= this.friction;
+
+        if(this.age >= this.lifetime * 0.4F){
+            this.alpha = (this.lifetime - this.age) / (this.lifetime * 0.6F) * 0.8F;
+        }
+        this.setSpriteFromAge(this.spriteSet); //これいる？
     }
 
     @Override
-    public ParticleTextureSheet getType() {
-        return ParticleTextureSheet.PARTICLE_SHEET_TRANSLUCENT;
+    public ParticleRenderType getRenderType() {
+        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 
+    @OnlyIn(Dist.CLIENT)
+    public static class Provider implements ParticleProvider<SimpleParticleType> {
+        private final SpriteSet spriteSet;
 
-    @Environment(EnvType.CLIENT)
-    public static class Factory implements ParticleFactory<SimpleParticleType> {
-        private final SpriteProvider spriteProvider;
-
-        public Factory(SpriteProvider spriteProvider) {
-            this.spriteProvider = spriteProvider;
+        public Provider(SpriteSet spriteSet) {
+            this.spriteSet = spriteSet;
         }
 
-        public Particle createParticle(SimpleParticleType simpleParticleType, ClientWorld clientWorld, double d, double e, double f, double g, double h, double i) {
-            return new FrostEffectParticle(clientWorld, d, e, f, g, h, i, this.spriteProvider);
+        public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+            return new FrostEffectParticle(level, x, y, z, xSpeed, ySpeed, zSpeed, this.spriteSet);
         }
     }
 }

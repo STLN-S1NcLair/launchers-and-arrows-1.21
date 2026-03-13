@@ -1,101 +1,88 @@
 package net.stln.launchersandarrows.item;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.item.CompassAnglePredicateProvider;
-import net.minecraft.client.item.ModelPredicateProviderRegistry;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ChargedProjectilesComponent;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.CrossbowItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.GlobalPos;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ChargedProjectiles;
 import net.stln.launchersandarrows.LaunchersAndArrows;
-import net.stln.launchersandarrows.item.bow.ModfiableBowItem;
-import net.stln.launchersandarrows.item.component.ModComponentInit;
+import net.stln.launchersandarrows.item.bow.ModifiableBowItem;
+import net.stln.launchersandarrows.item.component.ComponentInit;
 import net.stln.launchersandarrows.item.launcher.BoltThrowerItem;
 import net.stln.launchersandarrows.item.launcher.CrossLauncherItem;
 
-@Environment(EnvType.CLIENT)
 public class CustomModelPredicateProvider {
     public static void registerModModels() {
         LaunchersAndArrows.LOGGER.info("Registering Item Model for " + LaunchersAndArrows.MOD_ID);
-        registerModBow(ItemInit.LONG_BOW);
-        registerModBow(ItemInit.RAPID_BOW);
-        registerModBow(ItemInit.MODULAR_BOW);
-        registerModBow(ItemInit.MULTISHOT_BOW);
-        registerModBow(ItemInit.MECHANICAL_BOW);
-        registerMechanicalBow(ItemInit.MECHANICAL_BOW);
-        registerModBow(ItemInit.RAINSHOT_BOW);
-        registerBoltThrower(ItemInit.BOLT_THROWER);
-        registerBoltThrower(ItemInit.QUICK_BOLT_THROWER);
-        registerCrosslauncher(ItemInit.CROSSLAUNCHER);
-        registerCrosslauncher(ItemInit.HOOK_LAUNCHER);
-        registerCrosslauncher(ItemInit.SLINGSHOT);
-
+        registerModBow(ItemInit.LONG_BOW.get());
+        registerModBow(ItemInit.RAPID_BOW.get());
+        registerModBow(ItemInit.MODULAR_BOW.get());
+        registerModBow(ItemInit.MULTISHOT_BOW.get());
+        registerModBow(ItemInit.MECHANICAL_BOW.get());
+        registerMechanicalBow(ItemInit.MECHANICAL_BOW.get());
+        registerModBow(ItemInit.RAINSHOT_BOW.get());
+        registerBoltThrower(ItemInit.BOLT_THROWER.get());
+        registerBoltThrower(ItemInit.QUICK_BOLT_THROWER.get());
+        registerCrossLauncher(ItemInit.CROSSLAUNCHER.get());
+        registerCrossLauncher(ItemInit.HOOK_LAUNCHER.get());
+        registerCrossLauncher(ItemInit.SLINGSHOT.get());
     }
 
-    private static void registerModBow(Item bow) {
-        ModelPredicateProviderRegistry.register(bow, Identifier.ofVanilla("pull"), (stack, world, entity, seed) -> {
+    private static void registerModBow(Item bow){
+        ItemProperties.register(bow, ResourceLocation.withDefaultNamespace("pull"), (stack, level, entity, seed) -> {
             if (entity == null) {
                 return 0.0F;
-            } else {
-                return entity.getActiveItem() != stack ? 0.0F : ((ModfiableBowItem) bow).getModifiedPullProgress(stack.getMaxUseTime(entity) - entity.getItemUseTimeLeft(), stack);
             }
+            return entity.getUseItem() != stack ? 0.0F : ((ModifiableBowItem) bow).getModifiedPullProgress(stack.getUseDuration(entity) - entity.getUseItemRemainingTicks(), stack);
         });
-        ModelPredicateProviderRegistry.register(bow, Identifier.ofVanilla("pulling"), (stack, world, entity, seed) ->
-                entity != null && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0F : 0.0F
+        ItemProperties.register(bow, ResourceLocation.withDefaultNamespace("pulling"), (stack, level, entity, seed) ->
+                entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F
         );
     }
 
-    private static void registerMechanicalBow(Item bow) {
-        ModelPredicateProviderRegistry.register(bow, Identifier.ofVanilla("charging"), (stack, world, entity, seed) -> {
+    private static void registerMechanicalBow(Item bow){
+        ItemProperties.register(bow, ResourceLocation.withDefaultNamespace("charging"), (stack, level, entity, seed) -> {
             if (entity == null) {
                 return 0.0F;
-            } else {
-                return entity.isSneaking() ? 1.0F : 0.0F;
             }
+            return entity.isShiftKeyDown() ? 1.0F : 0.0F;
         });
     }
 
-    private static void registerBoltThrower(Item thrower) {
-        ModelPredicateProviderRegistry.register(thrower, Identifier.ofVanilla("pull"), (stack, world, entity, seed) -> {
+    private static void registerBoltThrower(Item boltThrower){
+        ItemProperties.register(boltThrower, ResourceLocation.withDefaultNamespace("pull"), (stack, level, entity, seed) -> {
             if (entity == null) {
                 return 0.0F;
-            } else {
-                return entity.getActiveItem() != stack ? (float) stack.get(ModComponentInit.CHARGED_BOLT_COUNT_COMPONENT) / ((BoltThrowerItem) thrower).getMaxChargeCount() : ((BoltThrowerItem) thrower).getModifiedPullProgress(stack.getMaxUseTime(entity) - entity.getItemUseTimeLeft(), stack);
             }
+            return entity.getUseItem() != stack
+                    ? (float) stack.get(ComponentInit.CHARGED_BOLT_COUNT_COMPONENT) / ((BoltThrowerItem) boltThrower).getMaxChargeCount()
+                    : ((BoltThrowerItem) boltThrower).getModifiedPullProgress(stack.getUseDuration(entity) - entity.getUseItemRemainingTicks(), stack);
         });
-        ModelPredicateProviderRegistry.register(thrower, Identifier.ofVanilla("pulling"), (stack, world, entity, seed) ->
-                entity != null && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0F : 0.0F
+        ItemProperties.register(boltThrower, ResourceLocation.withDefaultNamespace("pulling"), (stack, level, entity, seed) ->
+                entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F
         );
     }
 
-    public static void registerCrosslauncher(Item crosslauncher) {
-        ModelPredicateProviderRegistry.register(
-                crosslauncher,
-                Identifier.ofVanilla("pull"),
-                (stack, world, entity, seed) -> {
-                    if (entity == null) {
-                        return 0.0F;
-                    } else {
-                        return CrossLauncherItem.isCharged(stack)
-                                ? 0.0F
-                                : (float)(stack.getMaxUseTime(entity) - entity.getItemUseTimeLeft()) / (float)CrossLauncherItem.getPullTime(stack, entity);
-                    }
-                }
+    private static void registerCrossLauncher(Item crossLauncher){
+        ItemProperties.register(crossLauncher, ResourceLocation.withDefaultNamespace("pull"), (stack, level, entity, seed) -> {
+            if (entity == null) {
+                return 0.0F;
+            }
+            return CrossLauncherItem.isCharged(stack) ? 0.0F: (float)(stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / (float)CrossLauncherItem.getChargeDuration(stack, entity);
+        });
+
+        ItemProperties.register(crossLauncher, ResourceLocation.withDefaultNamespace("pulling"), (stack, level, entity, seed) ->
+                entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F
         );
-        ModelPredicateProviderRegistry.register(
-                crosslauncher,
-                Identifier.ofVanilla("pulling"),
-                (stack, world, entity, seed) -> entity != null && entity.isUsingItem() && entity.getActiveItem() == stack && !CrossLauncherItem.isCharged(stack) ? 1.0F : 0.0F
+
+        ItemProperties.register(crossLauncher, ResourceLocation.withDefaultNamespace("charged"), (stack, level, entity, seed) ->
+                CrossLauncherItem.isCharged(stack) ? 1.0F : 0.0F
         );
-        ModelPredicateProviderRegistry.register(crosslauncher, Identifier.ofVanilla("charged"), (stack, world, entity, seed) -> CrossLauncherItem.isCharged(stack) ? 1.0F : 0.0F);
-        ModelPredicateProviderRegistry.register(crosslauncher, Identifier.ofVanilla("firework"), (stack, world, entity, seed) -> {
-            ChargedProjectilesComponent chargedProjectilesComponent = stack.get(DataComponentTypes.CHARGED_PROJECTILES);
-            return chargedProjectilesComponent != null && chargedProjectilesComponent.contains(Items.FIREWORK_ROCKET) ? 1.0F : 0.0F;
+
+        ItemProperties.register(crossLauncher, ResourceLocation.withDefaultNamespace("firework"), (stack, level, entity, seed) -> {
+            ChargedProjectiles chargedProjectiles = stack.get(DataComponents.CHARGED_PROJECTILES);
+            return chargedProjectiles != null && chargedProjectiles.contains(Items.FIREWORK_ROCKET) ? 1.0F : 0.0F;
         });
     }
 }

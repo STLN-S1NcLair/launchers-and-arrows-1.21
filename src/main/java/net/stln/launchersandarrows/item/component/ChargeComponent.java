@@ -1,28 +1,20 @@
 package net.stln.launchersandarrows.item.component;
 
-import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import org.joml.Vector3f;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public final class ChargeComponent {
-    public static final ChargeComponent DEFAULT = new ChargeComponent(List.of(0.0, 0.0, 0.0));
+    public static final ChargeComponent EMPTY = new ChargeComponent(List.of(0.0, 0.0, 0.0));
     public static final Codec<ChargeComponent> CODEC;
-    public static final PacketCodec<RegistryByteBuf, ChargeComponent> PACKET_CODEC;
+    public static final StreamCodec<RegistryFriendlyByteBuf, ChargeComponent> STREAM_CODEC;
     private final List<Double> charges;
 
-    private ChargeComponent(List<Double> charges) {
+    private ChargeComponent(List<Double> charges){
         this.charges = charges;
     }
 
@@ -68,15 +60,11 @@ public final class ChargeComponent {
     }
 
     static {
-        CODEC = Codec.list(Codec.DOUBLE)
-                .xmap(
-                        list -> list.stream()
-                                .filter(value -> value != null && !Double.isNaN(value))
-                                .collect(Collectors.toList()),
-                        list -> list
-                ).xmap(ChargeComponent::new, ChargeComponent::getCharges);
-        PACKET_CODEC = PacketCodec.of(
-                (component, buf) -> {
+        CODEC = Codec.list(Codec.DOUBLE).xmap(
+                list -> list.stream().filter(value -> value != null && !Double.isNaN(value)).collect(Collectors.toList()),
+                list -> list).xmap(ChargeComponent::new, ChargeComponent::getCharges);
+        STREAM_CODEC = StreamCodec.of(
+                (buf, component) -> {
                     buf.writeVarInt(component.charges.size());
                     for (double charge : component.charges) {
                         buf.writeDouble(charge);

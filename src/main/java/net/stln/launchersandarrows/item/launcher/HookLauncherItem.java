@@ -1,206 +1,214 @@
 package net.stln.launchersandarrows.item.launcher;
 
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.EnchantmentEffectComponentTypes;
-import net.minecraft.component.type.ChargedProjectilesComponent;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.*;
-import net.minecraft.item.CrossbowItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ChargedProjectiles;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.stln.launchersandarrows.entity.projectile.ItemProjectile;
 import net.stln.launchersandarrows.item.ItemInit;
 import net.stln.launchersandarrows.sound.SoundInit;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
 public class HookLauncherItem extends CrossbowItem {
-
-    private static final float DEFAULT_PULL_TIME = 1.25F;
-    public static final int RANGE = 8;
-    private boolean charged = false;
-    private boolean loaded = false;
-    private static final float CHARGE_PROGRESS = 0.2F;
-    private static final float LOAD_PROGRESS = 0.5F;
-    private static final float DEFAULT_SPEED = 3.15F;
-    private static final float FIREWORK_ROCKET_SPEED = 1.6F;
-    public static final float field_49258 = 1.6F;
-    private static final LoadingSounds DEFAULT_LOADING_SOUNDS = new LoadingSounds(
-            Optional.of(SoundEvents.ITEM_CROSSBOW_LOADING_START),
-            Optional.of(SoundEvents.ITEM_CROSSBOW_LOADING_MIDDLE),
-            Optional.of(SoundEvents.ITEM_CROSSBOW_LOADING_END)
+    private static final float MAX_CHARGE_DURATION = 1.25F;
+    public static final int DEFAULT_RANGE = 8;
+    private boolean startSoundPlayed = false;
+    private boolean midLoadSoundPlayed = false;
+    private static final float START_SOUND_PERCENT = 0.2F;
+    private static final float MID_SOUND_PERCENT = 0.5F;
+    private static final float ARROW_POWER = 3.15F;
+    private static final float FIREWORK_POWER = 1.6F;
+    public static final float MOB_ARROW_POWER = 1.6F;
+    private static final ChargingSounds DEFAULT_SOUNDS = new ChargingSounds(
+            Optional.of(SoundEvents.CROSSBOW_LOADING_START),
+            Optional.of(SoundEvents.CROSSBOW_LOADING_MIDDLE),
+            Optional.of(SoundEvents.CROSSBOW_LOADING_END)
     );
 
-    public static final Predicate<ItemStack> HOOK_LAUNCHER_PROJECTILES =
-            (stack) -> stack.isOf(ItemInit.GRAPPLING_HOOK);
+    public static final Predicate<ItemStack> HOOK_LAUNCHER_HELD_PROJECTILES =
+            (stack) -> stack.is(ItemInit.GRAPPLING_HOOK);
 
-    public HookLauncherItem(Settings settings) {
-        super(settings);
+    public HookLauncherItem(Properties properties) {
+        super(properties);
+    }
+
+    // f: getHeldProjectiles
+    @Override
+    public Predicate<ItemStack> getSupportedHeldProjectiles() {
+        return HOOK_LAUNCHER_HELD_PROJECTILES;
+    }
+
+    // f: getProjectiles
+    @Override
+    public Predicate<ItemStack> getAllSupportedProjectiles() {
+        return HOOK_LAUNCHER_HELD_PROJECTILES;
     }
 
     @Override
-    public Predicate<ItemStack> getHeldProjectiles() {
-        return HOOK_LAUNCHER_PROJECTILES;
-    }
-
-    @Override
-    public Predicate<ItemStack> getProjectiles() {
-        return HOOK_LAUNCHER_PROJECTILES;
-    }
-
-    @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        ItemStack itemStack = user.getStackInHand(hand);
-        ChargedProjectilesComponent chargedProjectilesComponent = itemStack.get(DataComponentTypes.CHARGED_PROJECTILES);
-        if (chargedProjectilesComponent != null && !chargedProjectilesComponent.isEmpty()) {
-            this.shootAll(world, user, hand, itemStack, 5, 1.0F, null);
-            return TypedActionResult.consume(itemStack);
-        } else if (!user.getProjectileType(itemStack).isEmpty()) {
-            this.charged = false;
-            this.loaded = false;
-            user.setCurrentHand(hand);
-            return TypedActionResult.consume(itemStack);
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack itemstack = player.getItemInHand(hand);
+        ChargedProjectiles chargedprojectiles = (ChargedProjectiles)itemstack.get(DataComponents.CHARGED_PROJECTILES);
+        if (chargedprojectiles != null && !chargedprojectiles.isEmpty()) {
+            this.performShooting(level, player, hand, itemstack, 5, 1.0F, (LivingEntity)null);
+            return InteractionResultHolder.consume(itemstack);
+        } else if (!player.getProjectile(itemstack).isEmpty()) {
+            this.startSoundPlayed = false;
+            this.midLoadSoundPlayed = false;
+            player.startUsingItem(hand);
+            return InteractionResultHolder.consume(itemstack);
         } else {
-            return TypedActionResult.fail(itemStack);
+            return InteractionResultHolder.fail(itemstack);
         }
     }
 
-
+    // f: onStoppedUsing
     @Override
-    protected void shoot(LivingEntity shooter, ProjectileEntity projectile, int index, float speed, float divergence, float yaw, @Nullable LivingEntity target) {
-        Vector3f vector3f;
-        if (target != null) {
-            double d = target.getX() - shooter.getX();
-            double e = target.getZ() - shooter.getZ();
-            double f = Math.sqrt(d * d + e * e);
-            double g = target.getBodyY(0.3333333333333333) - projectile.getY() + f * 0.2F;
-            vector3f = calcVelocity(shooter, new Vec3d(d, g, e), yaw);
-        } else {
-            Vec3d vec3d = shooter.getOppositeRotationVector(1.0F);
-            Quaternionf quaternionf = new Quaternionf().setAngleAxis((double)(yaw * (float) (Math.PI / 180.0)), vec3d.x, vec3d.y, vec3d.z);
-            Vec3d vec3d2 = shooter.getRotationVec(1.0F);
-            vector3f = vec3d2.toVector3f().rotate(quaternionf);
+    public void releaseUsing(ItemStack stack, Level level, LivingEntity entityLiving, int timeLeft) {
+        int i = this.getUseDuration(stack, entityLiving) - timeLeft;
+        float f = getPowerForTime(i, stack, entityLiving);
+        if (f >= 1.0F && !isCharged(stack) && tryLoadProjectiles(entityLiving, stack)) {
+            ChargingSounds crossbowitem$chargingsounds = this.getChargingSounds(stack);
+            crossbowitem$chargingsounds.end().ifPresent((sound) -> {
+                level.playSound((Player)null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), (SoundEvent)sound.value(), entityLiving.getSoundSource(), 1.0F, 1.0F / (level.getRandom().nextFloat() * 0.5F + 1.0F) + 0.2F);
+            });
         }
-
-        projectile.setVelocity((double)vector3f.x(), (double)vector3f.y(), (double)vector3f.z(), speed, divergence);
-        float h = 1.0F / (shooter.getRandom().nextFloat() * 0.5F + 1.8F) + 0.53F;
-        shooter.getWorld().playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(), SoundInit.BOW_RELEASE, shooter.getSoundCategory(), 1.0F, h);
-        shooter.getWorld().playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(), SoundEvents.BLOCK_VAULT_INSERT_ITEM, shooter.getSoundCategory(), 1.0F, h);
-        shooter.getWorld().playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(), SoundEvents.BLOCK_IRON_TRAPDOOR_OPEN, shooter.getSoundCategory(), 1.0F, h - 0.7F);
+        float h = 1.0F / (entityLiving.getRandom().nextFloat() * 0.5F + 1.8F) + 0.53F;
+        entityLiving.level().playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.DISPENSER_FAIL, entityLiving.getSoundSource(), 1.0F, h + 1.0F);
+        entityLiving.level().playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.IRON_DOOR_OPEN, entityLiving.getSoundSource(), 1.0F, h + 1.0F);
     }
 
-    private static Vector3f calcVelocity(LivingEntity shooter, Vec3d direction, float yaw) {
-        Vector3f vector3f = direction.toVector3f().normalize();
-        Vector3f vector3f2 = new Vector3f(vector3f).cross(new Vector3f(0.0F, 1.0F, 0.0F));
-        if ((double)vector3f2.lengthSquared() <= 1.0E-7) {
-            Vec3d vec3d = shooter.getOppositeRotationVector(1.0F);
-            vector3f2 = new Vector3f(vector3f).cross(vec3d.toVector3f());
-        }
-
-        Vector3f vector3f3 = new Vector3f(vector3f).rotateAxis((float) (Math.PI / 2), vector3f2.x, vector3f2.y, vector3f2.z);
-        return new Vector3f(vector3f).rotateAxis(yaw * (float) (Math.PI / 180.0), vector3f3.x, vector3f3.y, vector3f3.z);
-    }
-
-    @Override
-    public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-        int i = this.getMaxUseTime(stack, user) - remainingUseTicks;
-        float f = getPullProgress(i, stack, user);
-        if (f >= 1.0F && !isCharged(stack) && loadProjectiles(user, stack)) {
-            LoadingSounds loadingSounds = this.getLoadingSounds(stack);
-            loadingSounds.end()
-                    .ifPresent(
-                            sound -> world.playSound(
-                                    null,
-                                    user.getX(),
-                                    user.getY(),
-                                    user.getZ(),
-                                    (SoundEvent)sound.value(),
-                                    user.getSoundCategory(),
-                                    1.0F,
-                                    1.0F / (world.getRandom().nextFloat() * 0.5F + 1.0F) + 0.2F
-                            )
-                    );
-        }
-        float h = 1.0F / (user.getRandom().nextFloat() * 0.5F + 1.8F) + 0.53F;
-        user.getWorld().playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.BLOCK_DISPENSER_FAIL, user.getSoundCategory(), 1.0F, h + 1.0F);
-        user.getWorld().playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.BLOCK_IRON_DOOR_OPEN, user.getSoundCategory(), 1.0F, h + 1.0F);
-    }
-
-    LoadingSounds getLoadingSounds(ItemStack stack) {
-        return (LoadingSounds)EnchantmentHelper.getEffect(stack, EnchantmentEffectComponentTypes.CROSSBOW_CHARGING_SOUNDS)
-                .orElse(DEFAULT_LOADING_SOUNDS);
-    }
-
-    private static boolean loadProjectiles(LivingEntity shooter, ItemStack crossbow) {
-        List<ItemStack> list = load(crossbow, shooter.getProjectileType(crossbow), shooter);
+    private static boolean tryLoadProjectiles(LivingEntity shooter, ItemStack crossbowStack) {
+        List<ItemStack> list = draw(crossbowStack, shooter.getProjectile(crossbowStack), shooter);
         if (!list.isEmpty()) {
-            crossbow.set(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.of(list));
+            crossbowStack.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.of(list));
             return true;
         } else {
             return false;
         }
     }
 
+    // f: shoot
     @Override
-    protected ProjectileEntity createArrowEntity(World world, LivingEntity shooter, ItemStack weaponStack, ItemStack projectileStack, boolean critical) {
-        return new ItemProjectile(world, shooter, shooter.getX(), shooter.getEyeY() - 0.1F, shooter.getZ(), projectileStack);
+    protected void shootProjectile(LivingEntity shooter, Projectile projectile, int index, float velocity, float inaccuracy, float angle, @Nullable LivingEntity target) {
+        Vector3f vector3f;
+        if (target != null) {
+            double d0 = target.getX() - shooter.getX();
+            double d1 = target.getZ() - shooter.getZ();
+            double d2 = Math.sqrt(d0 * d0 + d1 * d1);
+            double d3 = target.getY(0.3333333333333333) - projectile.getY() + d2 * 0.2F;
+            vector3f = getProjectileShotVector(shooter, new Vec3(d0, d3, d1), angle);
+        } else {
+            Vec3 vec3 = shooter.getUpVector(1.0F);
+            Quaternionf quaternionf = (new Quaternionf()).setAngleAxis((double)(angle * (float)(Math.PI / 180.0)), vec3.x, vec3.y, vec3.z);
+            Vec3 vec31 = shooter.getViewVector(1.0F);
+            vector3f = vec31.toVector3f().rotate(quaternionf);
+        }
+
+        projectile.shoot((double)vector3f.x(), (double)vector3f.y(), (double)vector3f.z(), velocity, inaccuracy);
+        float f = 1.0F / (shooter.getRandom().nextFloat() * 0.5F + 1.8F) + 0.53F;
+        shooter.level().playSound((Player)null, shooter.getX(), shooter.getY(), shooter.getZ(), SoundInit.BOW_RELEASE.get(), shooter.getSoundSource(), 1.0F, f);
+        shooter.level().playSound((Player)null, shooter.getX(), shooter.getY(), shooter.getZ(), SoundEvents.VAULT_INSERT_ITEM, shooter.getSoundSource(), 1.0F, f);
+        shooter.level().playSound((Player)null, shooter.getX(), shooter.getY(), shooter.getZ(), SoundEvents.IRON_TRAPDOOR_OPEN, shooter.getSoundSource(), 1.0F, f - 0.7F);
     }
 
+    // f: calcVelocity
+    private static Vector3f getProjectileShotVector(LivingEntity shooter, Vec3 distance, float angle) {
+        Vector3f vector3f = distance.toVector3f().normalize();
+        Vector3f vector3f1 = (new Vector3f(vector3f)).cross(new Vector3f(0.0F, 1.0F, 0.0F));
+        if ((double)vector3f1.lengthSquared() <= 1.0E-7) {
+            Vec3 vec3 = shooter.getUpVector(1.0F);
+            vector3f1 = (new Vector3f(vector3f)).cross(vec3.toVector3f());
+        }
+
+        Vector3f vector3f2 = (new Vector3f(vector3f)).rotateAxis(1.5707964F, vector3f1.x, vector3f1.y, vector3f1.z);
+        return (new Vector3f(vector3f)).rotateAxis(angle * 0.017453292F, vector3f2.x, vector3f2.y, vector3f2.z);
+    }
+
+    // f: createArrowEntity
     @Override
-    public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
-        if (!world.isClient) {
-            LoadingSounds loadingSounds = this.getLoadingSounds(stack);
-            float f = (float)(stack.getMaxUseTime(user) - remainingUseTicks) / (float)getPullTime(stack, user);
+    protected Projectile createProjectile(Level level, LivingEntity shooter, ItemStack weapon, ItemStack ammo, boolean isCrit) {
+        return new ItemProjectile(level, shooter, shooter.getX(), shooter.getEyeY() - 0.1F, shooter.getZ(), ammo);
+    }
+
+    // f: usageTick
+    @Override
+    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int count) {
+        if (!level.isClientSide) {
+            ChargingSounds chargingsounds = this.getChargingSounds(stack);
+            float f = (float)(stack.getUseDuration(livingEntity) - count) / (float)getChargeDuration(stack, livingEntity);
             if (f < 0.2F) {
-                this.charged = false;
-                this.loaded = false;
+                this.startSoundPlayed = false;
+                this.midLoadSoundPlayed = false;
             }
 
-            if (f >= 0.2F && !this.charged) {
-                this.charged = true;
-                loadingSounds.start()
-                        .ifPresent(sound -> world.playSound(null, user.getX(), user.getY(), user.getZ(), (SoundEvent)sound.value(), SoundCategory.PLAYERS, 0.5F, 1.0F));
+            if (f >= 0.2F && !this.startSoundPlayed) {
+                this.startSoundPlayed = true;
+                chargingsounds.start().ifPresent((sound) -> {
+                    level.playSound((Player)null, livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), (SoundEvent)sound.value(), SoundSource.PLAYERS, 0.5F, 1.0F);
+                });
             }
 
-            if (f >= 0.5F && !this.loaded) {
-                this.loaded = true;
-                loadingSounds.mid()
-                        .ifPresent(sound -> world.playSound(null, user.getX(), user.getY(), user.getZ(), (SoundEvent)sound.value(), SoundCategory.PLAYERS, 0.5F, 1.0F));
+            if (f >= 0.5F && !this.midLoadSoundPlayed) {
+                this.midLoadSoundPlayed = true;
+                chargingsounds.mid().ifPresent((sound) -> {
+                    level.playSound((Player)null, livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), (SoundEvent)sound.value(), SoundSource.PLAYERS, 0.5F, 1.0F);
+                });
             }
         }
     }
 
-
+    // f: getMaxUseTime
     @Override
-    public int getMaxUseTime(ItemStack stack, LivingEntity user) {
-        return getPullTime(stack, user) + 3;
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
+        return getChargeDuration(stack, entity) + 3;
     }
 
-    public static int getPullTime(ItemStack stack, LivingEntity user) {
-        float f = EnchantmentHelper.getCrossbowChargeTime(stack, user, 0.5F);
-        return MathHelper.floor(f * 20.0F);
+    // f: getPullTime
+    public static int getChargeDuration(ItemStack stack, LivingEntity user) {
+        float f = EnchantmentHelper.modifyCrossbowChargingTime(stack, user, 0.5F);
+        return Mth.floor(f * 20.0F);
     }
 
-    private static float getPullProgress(int useTicks, ItemStack stack, LivingEntity user) {
-        float f = (float)useTicks / (float)getPullTime(stack, user);
+    // f: getLoadingSounds
+    ChargingSounds getChargingSounds(ItemStack stack) {
+        return (ChargingSounds) EnchantmentHelper.pickHighestLevel(stack, EnchantmentEffectComponents.CROSSBOW_CHARGING_SOUNDS)
+                .orElse(DEFAULT_SOUNDS);
+    }
+
+    // f: getPullProgress
+    private static float getPowerForTime(int timeLeft, ItemStack stack, LivingEntity shooter) {
+        float f = (float)timeLeft / (float)getChargeDuration(stack, shooter);
         if (f > 1.0F) {
             f = 1.0F;
         }
 
         return f;
+    }
+
+    @Override
+    public ItemStack getDefaultCreativeAmmo(@Nullable Player player, ItemStack projectileWeaponItem) {
+        return ItemInit.GRAPPLING_HOOK.get().getDefaultInstance();
     }
 }

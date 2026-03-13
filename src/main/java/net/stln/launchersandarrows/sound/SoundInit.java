@@ -1,68 +1,42 @@
 package net.stln.launchersandarrows.sound;
 
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.sounds.SoundEvent;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import net.stln.launchersandarrows.LaunchersAndArrows;
 
+import java.util.function.Supplier;
+
 public class SoundInit {
-    public static final Identifier BOW_RELEASE_ID = Identifier.of("launchers_and_arrows:bow_release");
-    public static SoundEvent BOW_RELEASE = SoundEvent.of(BOW_RELEASE_ID);
-    public static final Identifier BOLT_THROWER_ID = Identifier.of("launchers_and_arrows:bolt_thrower");
-    public static SoundEvent BOLT_THROWER = SoundEvent.of(BOLT_THROWER_ID);
-    public static final Identifier CROSSLAUNCHER_ID = Identifier.of("launchers_and_arrows:crosslauncher");
-    public static SoundEvent CROSSLAUNCHER = SoundEvent.of(CROSSLAUNCHER_ID);
+    public static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(Registries.SOUND_EVENT, LaunchersAndArrows.MOD_ID);
 
-    public static final Identifier FLAME_EFFECT_ID = Identifier.of("launchers_and_arrows:flame_effect");
-    public static SoundEvent FLAME_EFFECT = SoundEvent.of(FLAME_EFFECT_ID);
-    public static final Identifier FROST_EFFECT_ID = Identifier.of("launchers_and_arrows:frost_effect");
-    public static SoundEvent FROST_EFFECT = SoundEvent.of(FROST_EFFECT_ID);
-    public static final Identifier LIGHTNING_EFFECT_ID = Identifier.of("launchers_and_arrows:lightning_effect");
-    public static SoundEvent LIGHTNING_EFFECT = SoundEvent.of(LIGHTNING_EFFECT_ID);
-    public static final Identifier ACID_EFFECT_ID = Identifier.of("launchers_and_arrows:acid_effect");
-    public static SoundEvent ACID_EFFECT = SoundEvent.of(ACID_EFFECT_ID);
-    public static final Identifier FLOOD_EFFECT_ID = Identifier.of("launchers_and_arrows:flood_effect");
-    public static SoundEvent FLOOD_EFFECT = SoundEvent.of(FLOOD_EFFECT_ID);
-    public static final Identifier ECHO_EFFECT_ID = Identifier.of("launchers_and_arrows:echo_effect");
-    public static SoundEvent ECHO_EFFECT = SoundEvent.of(ECHO_EFFECT_ID);
-    public static final Identifier EXPLODE_ID = Identifier.of("launchers_and_arrows:explode");
-    public static SoundEvent EXPLODE = SoundEvent.of(EXPLODE_ID);
-    public static RegistryEntry.Reference<SoundEvent> EXPLODE_ENTRY = Registry.registerReference(Registries.SOUND_EVENT, EXPLODE_ID, EXPLODE);
-    public static final Identifier WAVE_ID = Identifier.of("launchers_and_arrows:wave");
-    public static SoundEvent WAVE = SoundEvent.of(WAVE_ID);
-    public static final Identifier RELOAD_ID = Identifier.of("launchers_and_arrows:reload");
-    public static SoundEvent RELOAD = SoundEvent.of(RELOAD_ID);
-    public static final Identifier GLITCH_ID = Identifier.of("launchers_and_arrows:glitch");
-    public static SoundEvent GLITCH = SoundEvent.of(GLITCH_ID);
-    public static final Identifier RICOCHET_ID = Identifier.of("launchers_and_arrows:ricochet");
-    public static SoundEvent RICOCHET = SoundEvent.of(RICOCHET_ID);
-    public static final Identifier MECHANICAL_BOW_CHARGE_ID = Identifier.of("launchers_and_arrows:mechanical_bow_charge");
-    public static SoundEvent MECHANICAL_BOW_CHARGE = SoundEvent.of(MECHANICAL_BOW_CHARGE_ID);
-    public static final Identifier MECHANICAL_BOW_LOAD_ID = Identifier.of("launchers_and_arrows:mechanical_bow_load");
-    public static SoundEvent MECHANICAL_BOW_LOAD = SoundEvent.of(MECHANICAL_BOW_LOAD_ID);
-    public static final Identifier MECHANICAL_BOW_RELEASE_ID = Identifier.of("launchers_and_arrows:mechanical_bow_release");
-    public static SoundEvent MECHANICAL_BOW_RELEASE = SoundEvent.of(MECHANICAL_BOW_RELEASE_ID);
+    public static final Supplier<SoundEvent> BOW_RELEASE = registerSoundEvent("bow_release");
+    public static final Supplier<SoundEvent> BOLT_THROWER = registerSoundEvent("bolt_thrower");
+    public static final Supplier<SoundEvent> CROSSLAUNCHER = registerSoundEvent("crosslauncher");
 
-    public static void registerSoundEvents() {
-        LaunchersAndArrows.LOGGER.info("Registering Sounds for " + LaunchersAndArrows.MOD_ID);
-        Registry.register(Registries.SOUND_EVENT, BOW_RELEASE_ID, BOW_RELEASE);
-        Registry.register(Registries.SOUND_EVENT, BOLT_THROWER_ID, BOLT_THROWER);
-        Registry.register(Registries.SOUND_EVENT, CROSSLAUNCHER_ID, CROSSLAUNCHER);
-        Registry.register(Registries.SOUND_EVENT, FLAME_EFFECT_ID, FLAME_EFFECT);
-        Registry.register(Registries.SOUND_EVENT, FROST_EFFECT_ID, FROST_EFFECT);
-        Registry.register(Registries.SOUND_EVENT, LIGHTNING_EFFECT_ID, LIGHTNING_EFFECT);
-        Registry.register(Registries.SOUND_EVENT, ACID_EFFECT_ID, ACID_EFFECT);
-        Registry.register(Registries.SOUND_EVENT, FLOOD_EFFECT_ID, FLOOD_EFFECT);
-        Registry.register(Registries.SOUND_EVENT, ECHO_EFFECT_ID, ECHO_EFFECT);
-        Registry.register(Registries.SOUND_EVENT, EXPLODE_ID, EXPLODE);
-        Registry.register(Registries.SOUND_EVENT, WAVE_ID, WAVE);
-        Registry.register(Registries.SOUND_EVENT, RELOAD_ID, RELOAD);
-        Registry.register(Registries.SOUND_EVENT, GLITCH_ID, GLITCH);
-        Registry.register(Registries.SOUND_EVENT, RICOCHET_ID, RICOCHET);
-        Registry.register(Registries.SOUND_EVENT, MECHANICAL_BOW_CHARGE_ID, MECHANICAL_BOW_CHARGE);
-        Registry.register(Registries.SOUND_EVENT, MECHANICAL_BOW_LOAD_ID, MECHANICAL_BOW_LOAD);
-        Registry.register(Registries.SOUND_EVENT, MECHANICAL_BOW_RELEASE_ID, MECHANICAL_BOW_RELEASE);
+    public static final Supplier<SoundEvent> FLAME_EFFECT = registerSoundEvent("flame_effect");
+    public static final Supplier<SoundEvent> FROST_EFFECT = registerSoundEvent("frost_effect");
+    public static final Supplier<SoundEvent> LIGHTNING_EFFECT = registerSoundEvent("lightning_effect");
+    public static final Supplier<SoundEvent> ACID_EFFECT = registerSoundEvent("acid_effect");
+    public static final Supplier<SoundEvent> FLOOD_EFFECT = registerSoundEvent("flood_effect");
+    public static final Supplier<SoundEvent> ECHO_EFFECT = registerSoundEvent("echo_effect");
+
+    public static final Supplier<SoundEvent> EXPLODE = registerSoundEvent("explode");
+    public static final Supplier<SoundEvent> WAVE = registerSoundEvent("wave");
+    public static final Supplier<SoundEvent> RELOAD = registerSoundEvent("reload");
+    public static final Supplier<SoundEvent> GLITCH = registerSoundEvent("glitch");
+    public static final Supplier<SoundEvent> RICOCHET = registerSoundEvent("ricochet");
+
+    public static final Supplier<SoundEvent> MECHANICAL_BOW_CHARGE = registerSoundEvent("mechanical_bow_charge");
+    public static final Supplier<SoundEvent> MECHANICAL_BOW_LOAD = registerSoundEvent("mechanical_bow_load");
+    public static final Supplier<SoundEvent> MECHANICAL_BOW_RELEASE = registerSoundEvent("mechanical_bow_release");
+
+    private static Supplier<SoundEvent> registerSoundEvent(String name) {
+        return SOUND_EVENTS.register(name, SoundEvent::createVariableRangeEvent);
+    }
+
+    public static void registerSoundEvents(IEventBus eventBus) {
+        SOUND_EVENTS.register(eventBus);
     }
 }

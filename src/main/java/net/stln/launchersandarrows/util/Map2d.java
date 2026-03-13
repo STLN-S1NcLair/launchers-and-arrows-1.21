@@ -7,14 +7,12 @@ import java.util.Optional;
 public class Map2d<K1, K2, V> {
     Map<K1, Map<K2,V>> map = new HashMap<>();
 
-    public void put(K1 k1, K2 k2, V v) {
+    public void put(K1 k1, K2 k2, V v){
         map.computeIfAbsent(k1, k -> new HashMap<>()).put(k2, v);
     }
 
     public V get(K1 k1, K2 k2) {
-        return Optional.ofNullable(map.get(k1))
-                .map(s -> s.get(k2))
-                .orElse(null);
+        return Optional.ofNullable(map.get(k1)).map(s -> s.get(k2)).orElse(null);
     }
 
     public boolean containsKey1(K1 k1) {

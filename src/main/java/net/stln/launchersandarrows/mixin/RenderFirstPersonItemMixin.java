@@ -1,213 +1,189 @@
 package net.stln.launchersandarrows.mixin;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.item.HeldItemRenderer;
-import net.minecraft.client.render.model.json.ModelTransformationMode;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.CrossbowItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Arm;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RotationAxis;
-import net.stln.launchersandarrows.item.ItemInit;
-import net.stln.launchersandarrows.item.bow.ModfiableBowItem;
-import net.stln.launchersandarrows.item.component.ModComponentInit;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.ItemInHandRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.*;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.stln.launchersandarrows.item.launcher.BoltThrowerItem;
 import net.stln.launchersandarrows.item.launcher.SlingShotItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Environment(EnvType.CLIENT)
-@Mixin(HeldItemRenderer.class)
+@OnlyIn(Dist.CLIENT)
+@Mixin(ItemInHandRenderer.class)
 public class RenderFirstPersonItemMixin {
 
     @Shadow
-    private void applyEquipOffset(MatrixStack matrices, Arm arm, float equipProgress) {
+    public void renderItem(LivingEntity entity, ItemStack itemStack, ItemDisplayContext displayContext, boolean leftHand, PoseStack poseStack, MultiBufferSource buffer, int seed) {
+
     }
 
     @Shadow
-    private void applySwingOffset(MatrixStack matrices, Arm arm, float swingProgress) {
+    private void applyItemArmTransform(PoseStack poseStack, HumanoidArm hand, float equippedProg) {
+
     }
 
     @Shadow
-    public void renderItem(LivingEntity entity, ItemStack stack, ModelTransformationMode renderMode,
-                           boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+    private void applyItemArmAttackTransform(PoseStack poseStack, HumanoidArm hand, float swingProgress) {
+
     }
 
-    @Inject(method = "renderFirstPersonItem", at = @At("HEAD"), cancellable = true)
-    public void renderFirstPersonItem(AbstractClientPlayerEntity player, float tickDelta, float pitch,
-                                      Hand hand, float swingProgress, ItemStack item, float equipProgress,
-                                      MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-        if (item.isOf(ItemInit.CROSSLAUNCHER) || item.isOf(ItemInit.HOOK_LAUNCHER)) {
+    @ModifyExpressionValue(
+            method = "evaluateWhichHandsToRender",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z")
+    )
+    private static boolean laA$patch(boolean original, @Local(index = 1) ItemStack main, @Local(index = 2) ItemStack off) {
+        return main.getItem() instanceof BowItem || off.getItem() instanceof BowItem || main.getItem() instanceof CrossbowItem || off.getItem() instanceof  CrossbowItem;
+    }
 
-            boolean bl = hand == Hand.MAIN_HAND;
-            Arm arm = bl ? player.getMainArm() : player.getMainArm().getOpposite();
-            matrices.push();
-
-            boolean bl2 = CrossbowItem.isCharged(item);
-            boolean bl3 = arm == Arm.RIGHT;
-            int i = bl3 ? 1 : -1;
-            if (player.isUsingItem() && player.getItemUseTimeLeft() > 0 && player.getActiveHand() == hand) {
-                this.applyEquipOffset(matrices, arm, equipProgress);
-                matrices.translate((float) i * -0.4785682F, -0.094387F, 0.05731531F);
-                matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-11.935F));
-                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((float) i * 65.3F));
-                matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((float) i * -9.785F));
-                float f = (float) item.getMaxUseTime(player) - ((float) player.getItemUseTimeLeft() - tickDelta + 1.0F);
-                float g = f / (float) CrossbowItem.getPullTime(item, player);
-                if (g > 1.0F) {
-                    g = 1.0F;
-                }
-
-                if (g > 0.1F) {
-                    float h = MathHelper.sin((f - 0.1F) * 1.3F);
-                    float j = g - 0.1F;
-                    float k = h * j;
-                    matrices.translate(k * 0.0F, k * 0.004F, k * 0.0F);
-                }
-
-                matrices.translate(g * 0.0F, g * 0.0F, g * 0.04F);
-                matrices.scale(1.0F, 1.0F, 1.0F + g * 0.2F);
-                matrices.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees((float) i * 45.0F));
-            } else {
-                float fx = -0.4F * MathHelper.sin(MathHelper.sqrt(swingProgress) * (float) Math.PI);
-                float gx = 0.2F * MathHelper.sin(MathHelper.sqrt(swingProgress) * (float) (Math.PI * 2));
-                float h = -0.2F * MathHelper.sin(swingProgress * (float) Math.PI);
-                matrices.translate((float) i * fx, gx, h);
-                this.applyEquipOffset(matrices, arm, equipProgress);
-                this.applySwingOffset(matrices, arm, swingProgress);
-                if (bl2 && swingProgress < 0.001F && bl) {
-                    matrices.translate((float) i * -0.641864F, 0.0F, 0.0F);
-                    matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((float) i * 10.0F));
-                }
-            }
-
-            this.renderItem(
-                    player,
-                    item,
-                    bl3 ? ModelTransformationMode.FIRST_PERSON_RIGHT_HAND : ModelTransformationMode.FIRST_PERSON_LEFT_HAND,
-                    !bl3,
-                    matrices,
-                    vertexConsumers,
-                    light
-            );
-            matrices.pop();
-            ci.cancel();
-        } else if (item.isOf(ItemInit.SLINGSHOT)) {
-            boolean bl = hand == Hand.MAIN_HAND;
-            Arm arm = bl ? player.getMainArm() : player.getMainArm().getOpposite();
-            matrices.push();
-
-            boolean bl2 = CrossbowItem.isCharged(item);
-            boolean bl3 = arm == Arm.RIGHT;
-            int i = bl3 ? 1 : -1;
-            if (player.isUsingItem() && player.getItemUseTimeLeft() > 0 && player.getActiveHand() == hand) {
-                this.applyEquipOffset(matrices, arm, equipProgress);
-                matrices.translate((float) i * -0.4785682F, -0.094387F, 0.05731531F);
-                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((float) i * 45));
-                float f = (float) item.getMaxUseTime(player) - ((float) player.getItemUseTimeLeft() - tickDelta + 1.0F);
-                float g = f / (float) ((ModfiableBowItem) item.getItem()).getPulltime();
-                if (g > 1.0F) {
-                    g = 1.0F;
-                }
-
-                if (g > 0.1F) {
-                    float h = MathHelper.sin((f - 0.1F) * 1.3F);
-                    float j = g - 0.1F;
-                    float k = h * j;
-                    matrices.translate(k * 0.0F, k * 0.004F, k * 0.0F);
-                }
-
-                matrices.translate(g * 0.0F, g * 0.0F, g * 0.04F);
-                matrices.scale(1.0F, 1.0F, 1.0F + g * 0.2F);
-            } else {
-                float fx = -0.4F * MathHelper.sin(MathHelper.sqrt(swingProgress) * (float) Math.PI);
-                float gx = 0.2F * MathHelper.sin(MathHelper.sqrt(swingProgress) * (float) (Math.PI * 2));
-                float h = -0.2F * MathHelper.sin(swingProgress * (float) Math.PI);
-                matrices.translate((float) i * fx, gx, h);
-                this.applyEquipOffset(matrices, arm, equipProgress);
-                this.applySwingOffset(matrices, arm, swingProgress);
-                if (bl2 && swingProgress < 0.001F && bl) {
-                    matrices.translate((float) i * -0.641864F, 0.0F, 0.0F);
-                    matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((float) i * 10.0F));
-                }
-            }
-
-            this.renderItem(
-                    player,
-                    item,
-                    bl3 ? ModelTransformationMode.FIRST_PERSON_RIGHT_HAND : ModelTransformationMode.FIRST_PERSON_LEFT_HAND,
-                    !bl3,
-                    matrices,
-                    vertexConsumers,
-                    light
-            );
-            matrices.pop();
-            ci.cancel();
-        } else if (item.isOf(ItemInit.BOLT_THROWER) || item.isOf(ItemInit.QUICK_BOLT_THROWER)) {
-
-            boolean bl = hand == Hand.MAIN_HAND;
-            Arm arm = bl ? player.getMainArm() : player.getMainArm().getOpposite();
-            matrices.push();
-
-            boolean bl2 = item.get(ModComponentInit.BOLT_COUNT_COMPONENT) != 0;
-            boolean bl3 = arm == Arm.RIGHT;
-            int i = bl3 ? 1 : -1;
-            if (player.isUsingItem() && player.getItemUseTimeLeft() > 0 && player.getActiveHand() == hand && item.get(ModComponentInit.BOLT_COUNT_COMPONENT) == 0) {
-                this.applyEquipOffset(matrices, arm, equipProgress);
-                matrices.translate((float) i * -0.4785682F, -0.094387F, 0.05731531F);
-                matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-11.935F));
-                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((float) i * 65.3F));
-                matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((float) i * -9.785F));
-                float f = (float) item.getMaxUseTime(player) - ((float) player.getItemUseTimeLeft() - tickDelta + 1.0F);
-                float g = f / (float) ((BoltThrowerItem)item.getItem()).getTickUntilMaxCharge(item);
-                if (g > 1.0F) {
-                    g = 1.0F;
-                }
-
-                if (g > 0.1F) {
-                    float h = MathHelper.sin((f - 0.1F) * 1.3F);
-                    float j = g - 0.1F;
-                    float k = h * j;
-                    matrices.translate(k * 0.0F, k * 0.004F, k * 0.0F);
-                }
-
-                matrices.translate(g * 0.0F, g * 0.0F, g * 0.04F);
-                matrices.scale(1.0F, 1.0F, 1.0F + g * 0.2F);
-                matrices.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees((float) i * 45.0F));
-            } else {
-                float fx = -0.4F * MathHelper.sin(MathHelper.sqrt(swingProgress) * (float) Math.PI);
-                float gx = 0.2F * MathHelper.sin(MathHelper.sqrt(swingProgress) * (float) (Math.PI * 2));
-                float h = -0.2F * MathHelper.sin(swingProgress * (float) Math.PI);
-                matrices.translate((float) i * fx, gx, h);
-                this.applyEquipOffset(matrices, arm, equipProgress);
-                this.applySwingOffset(matrices, arm, swingProgress);
-                if (bl2 && swingProgress < 0.001F && bl) {
-                    matrices.translate((float) i * -0.641864F, 0.0F, 0.0F);
-                    matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((float) i * 10.0F));
-                }
-            }
-
-            this.renderItem(
-                    player,
-                    item,
-                    bl3 ? ModelTransformationMode.FIRST_PERSON_RIGHT_HAND : ModelTransformationMode.FIRST_PERSON_LEFT_HAND,
-                    !bl3,
-                    matrices,
-                    vertexConsumers,
-                    light
-            );
-            matrices.pop();
-            ci.cancel();
+    @Redirect(
+            method = "selectionUsingItemWhileHoldingBowLike",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z")
+    )
+    private static boolean launchers_and_arrows$replaceCheck(ItemStack stack, Item item) {
+        if (item == Items.BOW) {
+            return stack.getItem() instanceof BowItem;
         }
+
+        if (item == Items.CROSSBOW) {
+            return stack.getItem() instanceof CrossbowItem;
+        }
+        return stack.is(item);
+    }
+
+
+    @Inject(method = "renderArmWithItem", at = @At("HEAD"), cancellable = true)
+    private void renderArmWithItem(AbstractClientPlayer player, float partialTicks, float pitch, InteractionHand hand, float swingProgress, ItemStack stack, float equippedProgress, PoseStack poseStack, MultiBufferSource buffer, int combinedLight, CallbackInfo info) {
+        if (!player.isScoping()) {
+            if(stack.getItem() instanceof BoltThrowerItem boltThrowerItem){
+                boolean flag = hand == InteractionHand.MAIN_HAND;
+                HumanoidArm humanoidarm = flag ? player.getMainArm() : player.getMainArm().getOpposite();
+                poseStack.pushPose();
+
+                boolean flag3 = BoltThrowerItem.isCharged(stack);
+                boolean flag2 = humanoidarm == HumanoidArm.RIGHT;
+                int i = flag2 ? 1 : -1;
+                if (player.isUsingItem() && player.getUseItemRemainingTicks() > 0 && player.getUsedItemHand() == hand) {
+                    this.applyItemArmTransform(poseStack, humanoidarm, equippedProgress);
+                    poseStack.translate((float)i * -0.4785682F, -0.094387F, 0.05731531F);
+                    poseStack.mulPose(Axis.XP.rotationDegrees(-11.935F));
+                    poseStack.mulPose(Axis.YP.rotationDegrees((float)i * 65.3F));
+                    poseStack.mulPose(Axis.ZP.rotationDegrees((float)i * -9.785F));
+                    float f12 = (float)stack.getUseDuration(player) - ((float)player.getUseItemRemainingTicks() - partialTicks + 1.0F);
+                    float f7 = f12 / (float)boltThrowerItem.getTickUntilMaxCharge(stack);
+                    if (f7 > 1.0F) {
+                        f7 = 1.0F;
+                    }
+
+                    if (f7 > 0.1F) {
+                        float f11 = Mth.sin((f12 - 0.1F) * 1.3F);
+                        float f14 = f7 - 0.1F;
+                        float f17 = f11 * f14;
+                        poseStack.translate(f17 * 0.0F, f17 * 0.004F, f17 * 0.0F);
+                    }
+
+                    poseStack.translate(f7 * 0.0F, f7 * 0.0F, f7 * 0.04F);
+                    poseStack.scale(1.0F, 1.0F, 1.0F + f7 * 0.2F);
+                    poseStack.mulPose(Axis.YN.rotationDegrees((float)i * 45.0F));
+                } else {
+                    float f12 = -0.4F * Mth.sin(Mth.sqrt(swingProgress) * 3.1415927F);
+                    float f7 = 0.2F * Mth.sin(Mth.sqrt(swingProgress) * 6.2831855F);
+                    float f11 = -0.2F * Mth.sin(swingProgress * 3.1415927F);
+                    poseStack.translate((float)i * f12, f7, f11);
+                    this.applyItemArmTransform(poseStack, humanoidarm, equippedProgress);
+                    this.applyItemArmAttackTransform(poseStack, humanoidarm, swingProgress);
+                    if (flag3 && swingProgress < 0.001F && flag) {
+                        poseStack.translate((float)i * -0.641864F, 0.0F, 0.0F);
+                        poseStack.mulPose(Axis.YP.rotationDegrees((float)i * 10.0F));
+                    }
+                }
+                this.renderItem(player, stack, flag2 ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND : ItemDisplayContext.FIRST_PERSON_LEFT_HAND, !flag2, poseStack, buffer, combinedLight);
+                poseStack.popPose();
+                info.cancel();
+            }
+            else if(stack.getItem() instanceof SlingShotItem slingshotItem){
+                boolean flag = hand == InteractionHand.MAIN_HAND;
+                HumanoidArm humanoidarm = flag ? player.getMainArm() : player.getMainArm().getOpposite();
+                poseStack.pushPose();
+
+                boolean flag3 = SlingShotItem.isCharged(stack);
+                boolean flag2 = humanoidarm == HumanoidArm.RIGHT;
+                int i = flag2 ? 1 : -1;
+                if (player.isUsingItem() && player.getUseItemRemainingTicks() > 0 && player.getUsedItemHand() == hand) {
+                    this.applyItemArmTransform(poseStack, humanoidarm, equippedProgress);
+                    poseStack.translate((float)i * -0.4785682F, -0.094387F, 0.05731531F);
+                    poseStack.mulPose(Axis.YP.rotationDegrees((float)i * 45));
+                    float f12 = (float)stack.getUseDuration(player) - ((float)player.getUseItemRemainingTicks() - partialTicks + 1.0F);
+                    float f7 = f12 / (float)slingshotItem.getPulltime();
+                    if (f7 > 1.0F) {
+                        f7 = 1.0F;
+                    }
+
+                    if (f7 > 0.1F) {
+                        float f11 = Mth.sin((f12 - 0.1F) * 1.3F);
+                        float f14 = f7 - 0.1F;
+                        float f17 = f11 * f14;
+                        poseStack.translate(f17 * 0.0F, f17 * 0.004F, f17 * 0.0F);
+                    }
+
+                    poseStack.translate(f7 * 0.0F, f7 * 0.0F, f7 * 0.04F);
+                    poseStack.scale(1.0F, 1.0F, 1.0F + f7 * 0.2F);
+                } else {
+                    float f12 = -0.4F * Mth.sin(Mth.sqrt(swingProgress) * 3.1415927F);
+                    float f7 = 0.2F * Mth.sin(Mth.sqrt(swingProgress) * 6.2831855F);
+                    float f11 = -0.2F * Mth.sin(swingProgress * 3.1415927F);
+                    poseStack.translate((float)i * f12, f7, f11);
+                    this.applyItemArmTransform(poseStack, humanoidarm, equippedProgress);
+                    this.applyItemArmAttackTransform(poseStack, humanoidarm, swingProgress);
+                    if (flag3 && swingProgress < 0.001F && flag) {
+                        poseStack.translate((float)i * -0.641864F, 0.0F, 0.0F);
+                        poseStack.mulPose(Axis.YP.rotationDegrees((float)i * 10.0F));
+                    }
+                }
+                this.renderItem(player, stack, flag2 ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND : ItemDisplayContext.FIRST_PERSON_LEFT_HAND, !flag2, poseStack, buffer, combinedLight);
+                poseStack.popPose();
+                info.cancel();
+            }
+        }
+
+    }
+
+    @Unique
+    private static boolean laA$isCharged(ItemStack stack) {
+        if(stack.getItem() instanceof CrossbowItem){
+            return CrossbowItem.isCharged(stack);
+        }
+        else if(stack.getItem() instanceof BoltThrowerItem){
+            return BoltThrowerItem.isCharged(stack);
+        }
+        return false;
+    }
+
+    @Inject(method = "isChargedCrossbow", at = @At("HEAD"), cancellable = true)
+    private static void isChargedCrossbow(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
+        boolean flag = false;
+        if(stack.getItem() instanceof CrossbowItem){
+            flag = CrossbowItem.isCharged(stack);
+        }
+        else if(stack.getItem() instanceof BoltThrowerItem){
+            flag = BoltThrowerItem.isCharged(stack);
+        }
+        cir.setReturnValue(flag);
     }
 }

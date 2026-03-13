@@ -8,5 +8,4 @@ public interface BypassDamageCooldownProjectile {
     default void setBypass(boolean flag) {
 
     }
-
 }

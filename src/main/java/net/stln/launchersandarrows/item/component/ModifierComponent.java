@@ -2,18 +2,19 @@ package net.stln.launchersandarrows.item.component;
 
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+
 import java.util.Iterator;
 import java.util.List;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
 
 public final class ModifierComponent {
-    public static final ModifierComponent DEFAULT = new ModifierComponent(List.of());
+    public static final ModifierComponent EMPTY = new ModifierComponent(List.of());
     public static final Codec<ModifierComponent> CODEC;
-    public static final PacketCodec<RegistryByteBuf, ModifierComponent> PACKET_CODEC;
+    public static final StreamCodec<RegistryFriendlyByteBuf, ModifierComponent> STREAM_CODEC;
     private final List<ItemStack> modifiers;
 
     private ModifierComponent(List<ItemStack> modifiers) {
@@ -38,7 +39,7 @@ public final class ModifierComponent {
             }
 
             itemStack = (ItemStack)var2.next();
-        } while(!itemStack.isOf(item));
+        } while(!itemStack.is(item));
 
         return true;
     }
@@ -58,7 +59,7 @@ public final class ModifierComponent {
             boolean var10000;
             if (o instanceof ModifierComponent) {
                 ModifierComponent modifierComponent = (ModifierComponent)o;
-                if (ItemStack.stacksEqual(this.modifiers, modifierComponent.modifiers)) {
+                if (ItemStack.listMatches(this.modifiers, modifierComponent.modifiers)) {
                     var10000 = true;
                     return var10000;
                 }
@@ -70,7 +71,7 @@ public final class ModifierComponent {
     }
 
     public int hashCode() {
-        return ItemStack.listHashCode(this.modifiers);
+        return ItemStack.hashStackList(this.modifiers);
     }
 
     public String toString() {
@@ -78,7 +79,7 @@ public final class ModifierComponent {
     }
 
     static {
-        CODEC = ItemStack.CODEC.listOf().xmap(ModifierComponent::new, (modifierComponent) -> modifierComponent.modifiers);
-        PACKET_CODEC = ItemStack.PACKET_CODEC.collect(PacketCodecs.toList()).xmap(ModifierComponent::new, (modifierComponent) -> modifierComponent.modifiers);
+        CODEC = ItemStack.CODEC.listOf().xmap(ModifierComponent::new, c -> c.modifiers);
+        STREAM_CODEC = ItemStack.STREAM_CODEC.apply(ByteBufCodecs.list()).map(ModifierComponent::new, c -> c.modifiers);
     }
 }

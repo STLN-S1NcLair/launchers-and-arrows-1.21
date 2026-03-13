@@ -1,6 +1,6 @@
 package net.stln.launchersandarrows.item.util;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import net.stln.launchersandarrows.util.Map2d;
 
 public class AttributeModifierDictionary {

@@ -1,11 +1,7 @@
 package net.stln.launchersandarrows.item.util;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import net.stln.launchersandarrows.util.Map2d;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 public class AttributeEffectsDictionary {
     private static final Map2d<Item, Integer, Integer> dict = new Map2d<>();

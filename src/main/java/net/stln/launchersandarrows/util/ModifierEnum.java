@@ -11,7 +11,7 @@ public enum ModifierEnum {
 
     private final int id;
 
-    private ModifierEnum(int i) {
+    private ModifierEnum(int i){
         this.id = i;
     }
 

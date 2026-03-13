@@ -1,74 +1,68 @@
 package net.stln.launchersandarrows.entity.projectile;
 
-import it.unimi.dsi.fastutil.objects.Reference2ObjectArrayMap;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.TorchBlock;
-import net.minecraft.entity.*;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageSources;
-import net.minecraft.entity.damage.DamageTypes;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.particle.ItemStackParticleEffect;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.*;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.*;
+import net.minecraft.core.particles.*;
+import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.common.util.FakePlayerFactory;
 import net.stln.launchersandarrows.LaunchersAndArrows;
-import net.stln.launchersandarrows.entity.BypassDamageCooldownProjectile;
 import net.stln.launchersandarrows.entity.EntityInit;
 import net.stln.launchersandarrows.item.ItemInit;
-import net.stln.launchersandarrows.item.util.AttributeEffectsDictionary;
-import net.stln.launchersandarrows.status_effect.StatusEffectInit;
-import net.stln.launchersandarrows.status_effect.util.StatusEffectUtil;
-import net.stln.launchersandarrows.util.AttributeEnum;
+import net.stln.launchersandarrows.mob_effect.util.MobEffectUtil;
 
 import java.util.List;
 
-public class ItemProjectile extends ThrownItemEntity {
+public class ItemProjectile extends ThrowableItemProjectile {
 
-    private static final TrackedData<Integer> HIT_EFFECT_TICK = DataTracker.registerData(ItemProjectile.class, TrackedDataHandlerRegistry.INTEGER);
-    private static final TrackedData<Boolean> HIT = DataTracker.registerData(ItemProjectile.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final EntityDataAccessor<Integer> HIT_EFFECT_TICK =
+            SynchedEntityData.defineId(ItemProjectile.class, EntityDataSerializers.INT);
 
-    public ItemProjectile(EntityType<ItemProjectile> entityType, World world) {
-        super(entityType, world);
+    private static final EntityDataAccessor<Boolean> HIT =
+            SynchedEntityData.defineId(ItemProjectile.class, EntityDataSerializers.BOOLEAN);
+
+
+    public ItemProjectile(EntityType<ItemProjectile> type, Level level) {
+        super(type, level);
     }
 
-    public ItemProjectile(EntityType<? extends ThrownItemEntity> entityType, World world, ItemStack stack) {
-        super(entityType, world);
+    public ItemProjectile(EntityType<? extends ThrowableItemProjectile> type, Level level, ItemStack stack) {
+        super(type, level);
         this.setItem(stack);
     }
 
-    public ItemProjectile(World world, LivingEntity owner, ItemStack stack) {
-        super(EntityInit.ITEM_PROJECTILE, owner, world);
+    public ItemProjectile(Level level, LivingEntity owner, ItemStack stack) {
+        super(EntityInit.ITEM_PROJECTILE.get(), owner, level);
         this.setItem(stack);
     }
 
-    public ItemProjectile(World world, LivingEntity owner, double x, double y, double z, ItemStack stack) {
-        super(EntityInit.ITEM_PROJECTILE, x, y, z, world);
+    public ItemProjectile(Level level, LivingEntity owner, double x, double y, double z, ItemStack stack) {
+        super(EntityInit.ITEM_PROJECTILE.get(), x, y, z, level);
         this.setOwner(owner);
         this.setItem(stack);
     }
@@ -78,57 +72,58 @@ public class ItemProjectile extends ThrownItemEntity {
         return Items.SLIME_BALL;
     }
 
-
-    private ParticleEffect getParticleParameters() {
-        ItemStack itemStack = this.getStack();
-        return (ParticleEffect)(itemStack.isEmpty() ? ParticleTypes.ITEM_SNOWBALL : new ItemStackParticleEffect(ParticleTypes.ITEM, itemStack));
+    private ParticleOptions getParticleParameters() {
+        ItemStack stack = this.getItem();
+        return stack.isEmpty() ? ParticleTypes.ITEM_SNOWBALL : new ItemParticleOption(ParticleTypes.ITEM, stack);
     }
 
     public void handleStatus(byte status) {
-        if (this.getDataTracker().get(HIT)) {
+        if (this.entityData.get(HIT)) {
             status = 0;
         }
-        if (status == EntityStatuses.PLAY_DEATH_SOUND_OR_ADD_PROJECTILE_HIT_PARTICLES) {
-            ParticleEffect particleEffect = this.getParticleParameters();
+        if (status == 3) {
+            ParticleOptions particle = this.getParticleParameters();
 
-            for(int i = 0; i < 8; ++i) {
-                this.getWorld().addParticle(particleEffect, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
+            for (int i = 0; i < 8; i++) {
+                level().addParticle(particle, getX(), getY(), getZ(), 0, 0, 0);
             }
         }
-
     }
 
     @Override
     public void tick() {
-        if (this.getStack().isOf(ItemInit.GRAPPLING_HOOK)) {
+        if (this.getItem().is(ItemInit.GRAPPLING_HOOK)) {
             Entity owner = this.getOwner();
-            if (owner == null || owner.isSneaking()) {
+            if (owner == null || owner.isShiftKeyDown()) {
                 this.kill();
             } else {
-                Vec3d hookPos = this.getPos();
-                Vec3d ownerPos = owner.getEyePos().add(0, -0.5, 0);
-                Vec3d subtract = hookPos.subtract(ownerPos);
+                Vec3 hookPos = this.position();
+                Vec3 ownerPos = owner.getEyePosition().add(0, -0.5, 0);
+                Vec3 subtract = hookPos.subtract(ownerPos);
                 double length = subtract.length();
                 for (int i = 0; i < length * 3; i++) {
-                    ownerPos = ownerPos.add(subtract.multiply(1 / (length * 3)));
-                    this.getWorld().addParticle(ParticleTypes.CRIT, ownerPos.x, ownerPos.y, ownerPos.z, 0, 0, 0);
+                    ownerPos = ownerPos.add(subtract.scale(1 / (length * 3)));
+                    this.level().addParticle(ParticleTypes.CRIT, ownerPos.x, ownerPos.y, ownerPos.z, 0, 0, 0);
                 }
             }
         }
-        if (this.getDataTracker().get(HIT)) {
-            this.getDataTracker().set(HIT_EFFECT_TICK, this.getDataTracker().get(HIT_EFFECT_TICK) + 1);
-            if (this.getStack().isOf(Items.ENDER_EYE)) {
-                this.setVelocity(0, 0, 0);
-                List<Entity> entityList = this.getWorld().getOtherEntities(this, new Box(this.getX() - 5, this.getY() - 5, this.getZ() - 5, this.getX() + 5, this.getY() + 5, this.getZ() + 5));
-                for (Entity entity : entityList) {
-                    double dx = 0.1 / (this.getX() - entity.getX() < 0 ? Math.min((this.getX() - entity.getX()), -1) : Math.max((this.getX() - entity.getX()), 1));
-                    double dy = 0.1 / (this.getY() - entity.getY() < 0 ? Math.min((this.getY() - entity.getY()), -1) : Math.max((this.getY() - entity.getY()), 1));
-                    double dz = 0.1 / (this.getZ() - entity.getZ() < 0 ? Math.min((this.getZ() - entity.getZ()), -1) : Math.max((this.getZ() - entity.getZ()), 1));
-                    entity.addVelocity(dx, dy, dz);
+
+        if (this.entityData.get(HIT)) {
+            this.entityData.set(HIT_EFFECT_TICK, this.entityData.get(HIT_EFFECT_TICK) + 1);
+            if (this.getItem().is(Items.ENDER_EYE)) {
+                this.setDeltaMovement(Vec3.ZERO);
+                List<Entity> list = level().getEntities(this, new AABB(getX()-5,getY()-5,getZ()-5,getX()+5,getY()+5,getZ()+5));
+
+                for (Entity e : list) {
+                    double dx = 0.1/(getX()-e.getX()<0?Math.min(getX()-e.getX(),-1):Math.max(getX()-e.getX(),1));
+                    double dy = 0.1/(getY()-e.getY()<0?Math.min(getY()-e.getY(),-1):Math.max(getY()-e.getY(),1));
+                    double dz = 0.1/(getZ()-e.getZ()<0?Math.min(getZ()-e.getZ(),-1):Math.max(getZ()-e.getZ(),1));
+
+                    e.push(dx,dy,dz);
                 }
-                if (this.getWorld().isClient()) {
+                if(this.level().isClientSide()){
                     for (int i = 0; i < 5; i++) {
-                        this.getWorld().addParticle(ParticleTypes.PORTAL,
+                        this.level().addParticle(ParticleTypes.PORTAL,
                                 this.getX() + this.getRandom().nextFloat() - 0.5F,
                                 this.getY() + this.getRandom().nextFloat() - 1.0F,
                                 this.getZ() + this.getRandom().nextFloat() - 0.5F,
@@ -137,289 +132,278 @@ public class ItemProjectile extends ThrownItemEntity {
                                 this.getRandom().nextFloat() / 10);
                     }
                 }
-            } else if (this.getStack().isOf(ItemInit.GRAPPLING_HOOK)) {
-                this.setVelocity(0, 0, 0);
+            } else if(this.getItem().is(ItemInit.GRAPPLING_HOOK)){
+                this.setDeltaMovement(0,0,0);
                 Entity owner = this.getOwner();
-                if (owner == null || owner.isSneaking()) {
+                if(owner == null || owner.isShiftKeyDown()){
                     this.kill();
-                } else {
-                    Vec3d hookPos = this.getPos();
-                    Vec3d ownerPos = owner.getEyePos().add(0, -0.5, 0);
-                    Vec3d subtract = hookPos.subtract(ownerPos);
+                } else{
+                    Vec3 hookPos = this.position();
+                    Vec3 ownerPos = owner.getEyePosition().add(0, -0.5, 0);
+                    Vec3 subtract = hookPos.subtract(ownerPos);
                     double length = subtract.length();
-                    int lefttick = this.getLifeTimeAfterHit() - this.getDataTracker().get(HIT_EFFECT_TICK);
+                    int lefttick = this.getLifeTimeAfterHit() - this.entityData.get(HIT_EFFECT_TICK);
                     length = Math.clamp(length, 0, 50);
                     double strength = 0.125 / length;
                     double control = 0.075;
-                    double vx = subtract.x * strength + owner.getFacing().getOffsetX() * control;
-                    double vy = subtract.y * strength + owner.getFacing().getOffsetY() * control + Math.max(owner.getFinalGravity() * lefttick * 1.5 / getLifeTimeAfterHit(), owner.getFinalGravity());
-                    double vz = subtract.z * strength + owner.getFacing().getOffsetZ() * control;
-                    owner.addVelocity(vx, vy, vz);
+                    double vx = subtract.x * strength + owner.getDirection().getStepX() * control;
+                    double vy = subtract.y * strength + owner.getDirection().getStepY() * control + Math.max(owner.getGravity() * lefttick * 1.5 / getLifeTimeAfterHit(), owner.getGravity());
+                    double vz = subtract.z * strength + owner.getDirection().getStepZ() * control;
+                    owner.push(vx, vy, vz);
                     owner.fallDistance = 0;
-                    LaunchersAndArrows.LOGGER.info(String.valueOf(length));
-                    this.getWorld().playSound(null, BlockPos.ofFloored(owner.getPos()), SoundEvents.ENTITY_FISHING_BOBBER_RETRIEVE, SoundCategory.PLAYERS,
+                    // LaunchersAndArrows.LOGGER.info(String.valueOf(length));
+                    this.level().playSound(null, BlockPos.containing(owner.position()), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.PLAYERS,
                             1.0F, 1.0F / (this.getRandom().nextFloat() * 0.5F + 1.8F) + 0.33F);
                     if (length < 2) {
                         this.kill();
-                        this.getWorld().playSound(null, this.getBlockPos(), getHitSound(), SoundCategory.PLAYERS,
+                        this.level().playSound(null, this.blockPosition(), getHitSound(), SoundSource.PLAYERS,
                                 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.5F + 1.8F) + 0.33F);
                     }
                 }
             }
-            if (this.getDataTracker().get(HIT_EFFECT_TICK) >= getLifeTimeAfterHit()) {
+            if (this.entityData.get(HIT_EFFECT_TICK) >= getLifeTimeAfterHit()) {
                 this.kill();
-                if (getWorld().isClient) {
-                    ParticleEffect particleEffect = this.getParticleParameters();
-                    for (int i = 0; i < 8; ++i) {
-                        this.getWorld().addParticle(particleEffect, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
+
+                if (level().isClientSide) {
+                    ParticleOptions particle = getParticleParameters();
+
+                    for (int i = 0; i < 8; i++) {
+                        level().addParticle(particle,getX(),getY(),getZ(),0,0,0);
                     }
                 }
-                this.getWorld().playSound(null, this.getBlockPos(), getHitSound(), SoundCategory.PLAYERS,
-                        1.0F, 1.0F / (this.getRandom().nextFloat() * 0.5F + 1.8F) + 0.33F);
+
+                level().playSound(null, blockPosition(), getHitSound(), SoundSource.PLAYERS, 1F, 1F/(random.nextFloat()*0.5F+1.8F)+0.33F);
             }
         }
         super.tick();
     }
 
     private int getLifeTimeAfterHit() {
-        if (this.getStack().isOf(Items.ENDER_EYE)) return 100;
-        if (this.getStack().isOf(ItemInit.GRAPPLING_HOOK)) return 100;
+        if (getItem().is(Items.ENDER_EYE)) return 100;
+        if (getItem().is(ItemInit.GRAPPLING_HOOK.get())) return 100;
         return 0;
     }
 
+    // f: onEntityHit
     @Override
-    protected void onEntityHit(EntityHitResult entityHitResult) {
-        super.onEntityHit(entityHitResult);
-        Entity entity = entityHitResult.getEntity();
+    protected void onHitEntity(EntityHitResult result) {
+        super.onHitEntity(result);
+        Entity entity = result.getEntity();
         float damage = 0;
-        DamageSource damageSource = this.getDamageSources().thrown(this, this.getOwner());
-        if (this.getStack().isOf(Items.SLIME_BALL)) {
-            if (entity instanceof LivingEntity livingEntity) {
-                livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 100, 2));
-                livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.MINING_FATIGUE, 100, 2));
+        DamageSource source = damageSources().thrown(this,getOwner());
+
+        if(getItem().is(Items.SLIME_BALL)) {
+            if(entity instanceof LivingEntity livingEntity){
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 2));
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 100, 2));
+                Vec3 movement = this.getDeltaMovement();
+                livingEntity.addDeltaMovement(movement.multiply(2.5, (livingEntity.onGround() && movement.y() < 0) ? -0.5 : 1.5, 2.5));
             }
-        } else if (this.getStack().isOf(Items.TORCH)) {
-            if (entity instanceof LivingEntity livingEntity) {
-                livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 40, 0));
+        }
+        else if(getItem().is(Items.TORCH)){
+            if(entity instanceof LivingEntity livingEntity){
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 40, 0));
             }
-            entity.setOnFireForTicks(40);
-        } else if (this.getStack().isOf(Items.GLOW_INK_SAC)) {
-            if (entity instanceof LivingEntity livingEntity) {
-                livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 400, 0));
-                livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 400, 0));
+            entity.setRemainingFireTicks(40);
+        }
+        else if(getItem().is(Items.GLOW_INK_SAC)){
+            if(entity instanceof LivingEntity livingEntity){
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 400, 0));
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 400, 0));
             }
-        } else if (this.getStack().isOf(Items.INK_SAC)) {
-            if (entity instanceof LivingEntity livingEntity) {
-                livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 100, 0));
+        }
+        else if(getItem().is(Items.INK_SAC)){
+            if(entity instanceof LivingEntity livingEntity){
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 0));
             }
-        } else if (this.getStack().isOf(Items.AMETHYST_SHARD)) {
+        }
+        else if (getItem().is(Items.AMETHYST_SHARD)) {
             damage = 1;
-            damageSource = this.getDamageSources().mobProjectile(this, (LivingEntity) this.getOwner());
-            entity.timeUntilRegen = 0;
-        } else if (this.getStack().isOf(Items.POINTED_DRIPSTONE)) {
+            source = damageSources().mobProjectile(this,(LivingEntity)getOwner());
+            if (entity instanceof LivingEntity living) living.invulnerableTime = 0;
+        }
+        else if(getItem().is(Items.POINTED_DRIPSTONE)){
             damage = 3;
-            damageSource = this.getDamageSources().fallingStalactite(this.getOwner());
-        } else if (this.getStack().isOf(Items.ECHO_SHARD)) {
-            if (entity instanceof LivingEntity livingEntity) {
-                livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 100, 0));
+            source = damageSources().fallingStalactite(this.getOwner());
+        }
+        else if(getItem().is(Items.ECHO_SHARD)){
+            if(entity instanceof LivingEntity livingEntity){
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 100, 0));
             }
-        } else if (this.getStack().isOf(Items.HEART_OF_THE_SEA)) {
+        }
+        else if(getItem().is(Items.HEART_OF_THE_SEA)){
             for (int i = -1; i < 2; i++) {
                 for (int j = -1; j < 2; j++) {
                     for (int k = -1; k < 2; k++) {
-                        BlockPos pos = entity.getBlockPos();
-                        if (entity.getWorld().getBlockState(new BlockPos(pos.getX() + i, pos.getY() + j, pos.getZ() + k)).isOf(Blocks.AIR)) {
-                            entity.getWorld().setBlockState(new BlockPos(pos.getX() + i, pos.getY() + j, pos.getZ() + k),
-                                    Fluids.FLOWING_WATER.getDefaultState().getBlockState());
+                        BlockPos pos = entity.blockPosition();
+                        if (entity.level().getBlockState(new BlockPos(pos.getX() + i, pos.getY() + j, pos.getZ() + k)).is(Blocks.AIR)) {
+                            entity.level().setBlock(new BlockPos(pos.getX() + i, pos.getY() + j, pos.getZ() + k),
+                                    Fluids.FLOWING_WATER.defaultFluidState().createLegacyBlock(), 3);
                         }
                     }
                 }
             }
-        } else if (this.getStack().isOf(Items.HEAVY_CORE)) {
+        }
+        else if(getItem().is(Items.HEAVY_CORE)){
             if (entity instanceof LivingEntity livingEntity) {
-                livingEntity.takeKnockback(4, -this.getVelocity().x, -this.getVelocity().z);
+                livingEntity.knockback(4, -this.getDeltaMovement().x, -this.getDeltaMovement().z);
                 damage = 10;
-                damageSource = this.getDamageSources().mobProjectile(this, (LivingEntity) this.getOwner());
+                source = damageSources().mobProjectile(this,(LivingEntity)getOwner());
             }
-            this.getWorld().spawnEntity(new ItemEntity(this.getWorld(), this.getX(), this.getY(), this.getZ(), new ItemStack(Items.HEAVY_CORE)));
-        } else if (this.getStack().getItem() instanceof BlockItem blockItem) {
+            this.level().addFreshEntity(new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), new ItemStack(Items.HEAVY_CORE)));
+        }
+        else if(getItem().getItem() instanceof BlockItem blockItem){
             Block block = blockItem.getBlock();
-                damage = (float) Math.ceil(Math.sqrt(Math.max(block.getHardness(), 0)) * 2);
-                damageSource = this.getDamageSources().mobProjectile(this, (LivingEntity) this.getOwner());
+            damage = (float) Math.ceil(Math.sqrt(Math.max(block.defaultDestroyTime(), 0)) * 2);
         }
-        this.getWorld().playSound(null, entity.getBlockPos(), getHitSound(), SoundCategory.PLAYERS,
-                1.0F, 1.0F / (entity.getRandom().nextFloat() * 0.5F + 1.8F) + 0.53F);
-        entity.damage(damageSource, damage);
-        if (entity instanceof LivingEntity livingEntity) {
-            StatusEffectUtil.applyAttributeEffect(livingEntity, this.getStack());
+        level().playSound(null,entity.blockPosition(), getHitSound(), SoundSource.PLAYERS, 1F, 1F/(entity.getRandom().nextFloat()*0.5F+1.8F)+0.53F);
+        entity.hurt(source,damage);
+        if (entity instanceof LivingEntity living){
+            MobEffectUtil.applyAttributeEffect(living,this.getItem());
         }
     }
 
+    // f: onBlockHit
     @Override
-    protected void onBlockHit(BlockHitResult blockHitResult) {
-        super.onBlockHit(blockHitResult);
-            if (this.getStack().isOf(Items.TORCH)) {
-                BlockPos pos = blockHitResult.getBlockPos();
-                Direction direction = blockHitResult.getSide();
-                if (this.getWorld().getBlockState(pos).isOf(Blocks.AIR)) {
-                    this.getWorld().setBlockState(pos, Blocks.TORCH.getDefaultState());
-                } else {
-                    int x = 0;
-                    int y = 0;
-                    int z = 0;
-                    switch (direction) {
-                        case UP -> y = 1;
-                        case NORTH -> z = -1;
-                        case SOUTH -> z = 1;
-                        case EAST -> x = 1;
-                        case WEST -> x = -1;
-                    }
-                    pos = new BlockPos(pos.getX() + x, pos.getY() + y, pos.getZ() + z);
-                    if (this.getWorld().getBlockState(pos).isOf(Blocks.AIR)) {
-                        switch (direction) {
-                            case UP -> this.getWorld().setBlockState(pos, Blocks.TORCH.getDefaultState());
-                            case NORTH -> this.getWorld().setBlockState(pos, Blocks.WALL_TORCH.getDefaultState());
-                            case SOUTH ->
-                                    this.getWorld().setBlockState(pos, Blocks.WALL_TORCH.getDefaultState().rotate(BlockRotation.CLOCKWISE_180));
-                            case EAST ->
-                                    this.getWorld().setBlockState(pos, Blocks.WALL_TORCH.getDefaultState().rotate(BlockRotation.CLOCKWISE_90));
-                            case WEST ->
-                                    this.getWorld().setBlockState(pos, Blocks.WALL_TORCH.getDefaultState().rotate(BlockRotation.COUNTERCLOCKWISE_90));
-                        }
-                    } else {
-                        this.getWorld().spawnEntity(new ItemEntity(this.getWorld(), pos.getX(), pos.getY(), pos.getZ(), new ItemStack(Items.TORCH)));
-                    }
-                }
-            } else if (this.getStack().isOf(ItemInit.GRAPPLING_HOOK)) {
-                this.getDataTracker().set(HIT, true);
+    protected void onHitBlock(BlockHitResult blockHitResult) {
+        super.onHitBlock(blockHitResult);
+        if (getItem().is(ItemInit.GRAPPLING_HOOK.get())){
+            entityData.set(HIT, true);
+        }
+        else if(getItem().is(Items.HEART_OF_THE_SEA)){
+            BlockPos pos = blockHitResult.getBlockPos();
+            for (int i = -1; i < 2; i++) {
+                for (int j = -1; j < 2; j++) {
+                    for (int k = -1; k < 2; k++) {
+                        BlockPos target = new BlockPos(pos.getX() + i, pos.getY() + j, pos.getZ() + k);
 
-            } else if (this.getStack().isOf(Items.HEART_OF_THE_SEA)) {
-                for (int i = -1; i < 2; i++) {
-                    for (int j = -1; j < 2; j++) {
-                        for (int k = -1; k < 2; k++) {
-                            BlockPos pos = blockHitResult.getBlockPos();
-                            if (this.getWorld().getBlockState(new BlockPos(pos.getX() + i, pos.getY() + j, pos.getZ() + k)).isOf(Blocks.AIR)) {
-                                this.getWorld().setBlockState(new BlockPos(pos.getX() + i, pos.getY() + j, pos.getZ() + k),
-                                        Fluids.FLOWING_WATER.getDefaultState().getBlockState());
-                            }
+                        if (level().getBlockState(target).is(Blocks.AIR)) {
+                            level().setBlock(target, Fluids.FLOWING_WATER.defaultFluidState().createLegacyBlock(), 3);
                         }
-                    }
-                }
-            } else if (this.getStack().getItem() instanceof BlockItem blockItem) {
-                Block block = blockItem.getBlock();
-                BlockPos pos = blockHitResult.getBlockPos();
-                Direction direction = blockHitResult.getSide();
-                if (this.getWorld().getBlockState(pos).isOf(Blocks.AIR)) {
-                    this.getWorld().setBlockState(pos, Blocks.HEAVY_CORE.getDefaultState());
-                } else {
-                    int x = 0;
-                    int y = 0;
-                    int z = 0;
-                    switch (direction) {
-                        case UP -> y = 1;
-                        case DOWN -> y = -1;
-                        case NORTH -> z = -1;
-                        case SOUTH -> z = 1;
-                        case EAST -> x = 1;
-                        case WEST -> x = -1;
-                    }
-                    pos = new BlockPos(pos.getX() + x, pos.getY() + y, pos.getZ() + z);
-                    if (this.getWorld().getBlockState(pos).isOf(Blocks.AIR)) {
-                        this.getWorld().setBlockState(pos, block.getDefaultState());
-                    } else {
-                        this.getWorld().spawnEntity(new ItemEntity(this.getWorld(), pos.getX(), pos.getY(), pos.getZ(), new ItemStack(blockItem)));
                     }
                 }
             }
-            this.getWorld().playSound(null, blockHitResult.getBlockPos(), getHitSound(), SoundCategory.PLAYERS,
-                    1.0F, 1.0F / (this.getRandom().nextFloat() * 0.5F + 1.8F) + 0.53F);
+        }
+        else if(this.getItem().getItem() instanceof BlockItem blockItem){
+            if (!(this.level() instanceof ServerLevel serverLevel)) return;
 
+            BlockPos pos = blockHitResult.getBlockPos();
+            Direction face = blockHitResult.getDirection();
+
+            // LaunchersAndArrows.LOGGER.info("result face: {}", face);
+            // LaunchersAndArrows.LOGGER.info("result pos: {}", pos);
+
+            FakePlayer fakePlayer = FakePlayerFactory.getMinecraft(serverLevel);
+            fakePlayer.setYRot(- this.getYRot());
+            fakePlayer.setXRot(- this.getXRot());
+            fakePlayer.setPos(pos.getX(), pos.getY(), pos.getZ());
+
+            BlockPlaceContext context = new BlockPlaceContext(fakePlayer, InteractionHand.MAIN_HAND, this.getItem(),
+                    new BlockHitResult(blockHitResult.getLocation(), face, pos, false)
+            );
+
+            InteractionResult result = blockItem.place(context);
+
+            if (!result.consumesAction()) {
+                this.level().addFreshEntity(
+                        new ItemEntity(this.level(),
+                                pos.getX(),
+                                pos.getY(),
+                                pos.getZ(),
+                                this.getItem()
+                        )
+                );
+            }
+        }
+
+        level().playSound(null,blockHitResult.getBlockPos(), getHitSound(), SoundSource.PLAYERS,
+                1F, 1F/(random.nextFloat()*0.5F+1.8F)+0.53F);
     }
 
+    // f: onCollision
     @Override
-    protected void onCollision(HitResult hitResult) {
-        if (this.getStack().isOf(Items.ENDER_EYE)) {
-            this.getDataTracker().set(HIT, true);
-            this.getWorld().playSound(null, this.getBlockPos(), SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.PLAYERS,
-                    1.0F, 1.0F / (this.getRandom().nextFloat() * 0.5F + 1.8F) + 0.53F);
-        } else if (this.getStack().isOf(ItemInit.GRAPPLING_HOOK)) {
-            this.getDataTracker().set(HIT, true);
-        } else {
+    protected void onHit(HitResult hitResult) {
+
+        if (getItem().is(Items.ENDER_EYE)){
+            entityData.set(HIT, true);
+            this.level().playSound(null, this.blockPosition(), SoundEvents.PORTAL_AMBIENT, SoundSource.PLAYERS,
+                    1.0F, 1.0F  / (this.getRandom().nextFloat() * 0.5F + 1.8F) + 0.53F);
+        }
+        else if (getItem().is(ItemInit.GRAPPLING_HOOK.get())){
+            entityData.set(HIT, true);
+        }
+        else {
             this.kill();
         }
-        super.onCollision(hitResult);
+        super.onHit(hitResult);
     }
 
+    // f: onBlockCollision
     @Override
-    protected void onBlockCollision(BlockState state) {
-        super.onBlockCollision(state);
-        if (!this.getWorld().isClient) {
-            this.getWorld().sendEntityStatus(this, EntityStatuses.PLAY_DEATH_SOUND_OR_ADD_PROJECTILE_HIT_PARTICLES);
+    protected void onInsideBlock(BlockState state) {
+        super.onInsideBlock(state);
+
+        if (!level().isClientSide) {
+            level().broadcastEntityEvent(this, (byte)3);
         }
     }
 
     private SoundEvent getHitSound() {
-        if (this.getStack().isOf(Items.SLIME_BALL) || this.getStack().isOf(Items.MAGMA_CREAM)) {
-            return SoundEvents.ENTITY_SLIME_JUMP;
-        }
-        if (this.getStack().isOf(Items.TORCH)) {
-            return SoundEvents.BLOCK_WOOD_BREAK;
-        }
-        if (this.getStack().isOf(Items.GLOW_INK_SAC) || this.getStack().isOf(Items.INK_SAC)) {
-            return SoundEvents.ENTITY_SQUID_SQUIRT;
-        }
-        if (this.getStack().isOf(Items.AMETHYST_SHARD)) {
-            return SoundEvents.BLOCK_AMETHYST_BLOCK_BREAK;
-        }
-        if (this.getStack().isOf(Items.ENDER_EYE)) {
-            return SoundEvents.ENTITY_ENDER_EYE_DEATH;
-        }
-        if (this.getStack().isOf(Items.LIGHTNING_ROD)) {
-            return SoundEvents.ITEM_TRIDENT_THUNDER.value();
-        }
-        if (this.getStack().isOf(Items.ECHO_SHARD)) {
-            return SoundEvents.BLOCK_SCULK_SHRIEKER_SHRIEK;
-        }
-        if (this.getStack().isOf(Items.HEART_OF_THE_SEA)) {
-            return SoundEvents.BLOCK_CONDUIT_ACTIVATE;
-        }
-        if (this.getStack().isOf(Items.HEAVY_CORE)) {
-            return SoundEvents.BLOCK_HEAVY_CORE_BREAK;
-        }
-        if (this.getStack().isOf(Items.POINTED_DRIPSTONE)) {
-            return SoundEvents.BLOCK_DRIPSTONE_BLOCK_BREAK;
-        }
-        if (this.getStack().isOf(Items.POINTED_DRIPSTONE)) {
-            return SoundEvents.BLOCK_DRIPSTONE_BLOCK_BREAK;
-        }
-        if (this.getStack().isOf(ItemInit.GRAPPLING_HOOK)) {
-            return SoundEvents.BLOCK_IRON_TRAPDOOR_OPEN;
-        }
-        if (this.getStack().getItem() instanceof BlockItem blockItem) {
-            return blockItem.getBlock().getDefaultState().getSoundGroup().getPlaceSound();
-        }
-        return SoundEvents.BLOCK_STONE_BREAK;
+        if (getItem().is(Items.SLIME_BALL) || getItem().is(Items.MAGMA_CREAM))
+            return SoundEvents.SLIME_JUMP;
 
+        if (getItem().is(Items.TORCH))
+            return SoundEvents.WOOD_BREAK;
+
+        if (getItem().is(Items.GLOW_INK_SAC) || getItem().is(Items.INK_SAC))
+            return SoundEvents.SQUID_SQUIRT;
+
+        if (getItem().is(Items.AMETHYST_SHARD))
+            return SoundEvents.AMETHYST_BLOCK_BREAK;
+
+        if (getItem().is(Items.ENDER_EYE))
+            return SoundEvents.ENDER_EYE_DEATH;
+
+        if (getItem().is(Items.ECHO_SHARD))
+            return SoundEvents.SCULK_SHRIEKER_SHRIEK;
+
+        if (getItem().is(Items.HEART_OF_THE_SEA))
+            return SoundEvents.CONDUIT_ACTIVATE;
+
+        if (getItem().is(Items.HEAVY_CORE))
+            return SoundEvents.HEAVY_CORE_BREAK;
+
+        if (getItem().is(Items.POINTED_DRIPSTONE))
+            return SoundEvents.DRIPSTONE_BLOCK_BREAK;
+
+        if (getItem().is(ItemInit.GRAPPLING_HOOK.get()))
+            return SoundEvents.IRON_TRAPDOOR_OPEN;
+
+        if (getItem().getItem() instanceof BlockItem block)
+            return block.getBlock().defaultBlockState().getSoundType().getPlaceSound();
+
+        return SoundEvents.STONE_BREAK;
     }
 
     @Override
-    protected void initDataTracker(DataTracker.Builder builder) {
-        super.initDataTracker(builder);
-        builder.add(HIT_EFFECT_TICK, 0);
-        builder.add(HIT, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+
+        builder.define(HIT_EFFECT_TICK, 0);
+        builder.define(HIT, false);
     }
 
     @Override
-    public void writeCustomDataToNbt(NbtCompound nbt) {
-        super.writeCustomDataToNbt(nbt);
-        nbt.putInt("HitEffectTick", this.getDataTracker().get(HIT_EFFECT_TICK));
-        nbt.putBoolean("Hit", this.getDataTracker().get(HIT));
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putInt("HitEffectTick",entityData.get(HIT_EFFECT_TICK));
+        tag.putBoolean("Hit",entityData.get(HIT));
     }
 
     @Override
-    public void readCustomDataFromNbt(NbtCompound nbt) {
-        super.readCustomDataFromNbt(nbt);
-        this.getDataTracker().set(HIT_EFFECT_TICK, nbt.getInt("HitEffectTick"));
-        this.getDataTracker().set(HIT, nbt.getBoolean("Hit"));
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        entityData.set(HIT_EFFECT_TICK,tag.getInt("HitEffectTick"));
+        entityData.set(HIT,tag.getBoolean("Hit"));
     }
 }

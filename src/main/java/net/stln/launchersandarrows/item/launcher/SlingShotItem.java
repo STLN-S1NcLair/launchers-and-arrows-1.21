@@ -1,102 +1,99 @@
 package net.stln.launchersandarrows.item.launcher;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
-import net.minecraft.world.World;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ChargedProjectiles;
+import net.minecraft.world.level.Level;
 import net.stln.launchersandarrows.entity.projectile.ItemProjectile;
 import net.stln.launchersandarrows.item.FovModifierItem;
-import net.stln.launchersandarrows.item.bow.ModfiableBowItem;
+import net.stln.launchersandarrows.item.bow.ModifiableBowItem;
 import net.stln.launchersandarrows.sound.SoundInit;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-public class SlingShotItem extends ModfiableBowItem implements FovModifierItem {
-
+public class SlingShotItem extends ModifiableBowItem implements FovModifierItem {
     float fov = 1.0F;
 
-    public static final Predicate<ItemStack> SLINGSHOT_HELD_PROJECTILES = (stack) -> {
-        return stack.getItem() instanceof BlockItem && !stack.isOf(Items.HEAVY_CORE);
-    };
+    public static final Predicate<ItemStack> SLINGSHOT_HELD_PROJECTILES = (stack -> {
+        return stack.getItem() instanceof BlockItem && !stack.is(Items.HEAVY_CORE);
+    });
 
-    public SlingShotItem(Settings settings) {
-        super(settings);
+    public SlingShotItem(Properties properties) {
+        super(properties);
         pulltime = 10;
         slotsize = 0;
     }
 
-
+    // f: getHeldProjectiles
     @Override
-    public Predicate<ItemStack> getHeldProjectiles() {
-        return SLINGSHOT_HELD_PROJECTILES;
-    }
-    @Override
-    public Predicate<ItemStack> getProjectiles() {
+    public Predicate<ItemStack> getSupportedHeldProjectiles() {
         return SLINGSHOT_HELD_PROJECTILES;
     }
 
+    // f: getProjectiles
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        world.playSound((Entity) user, user.getBlockPos(), SoundEvents.ITEM_CROSSBOW_LOADING_END.value(), SoundCategory.PLAYERS, 1f, 1.5f);
-        world.playSound((Entity) user, user.getBlockPos(), SoundEvents.ITEM_CROSSBOW_LOADING_MIDDLE.value(), SoundCategory.PLAYERS, 1f, 1.5f);
-        return super.use(world, user, hand);
+    public Predicate<ItemStack> getAllSupportedProjectiles() {
+        return SLINGSHOT_HELD_PROJECTILES;
     }
 
     @Override
-    public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
-        this.fov = 1.0f - getPullProgress(getMaxUseTime(stack, user) - remainingUseTicks) / 9.0f;
-        if (user.isSneaking()) {
-            this.fov *= 0.75f;
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.CROSSBOW_LOADING_END, SoundSource.PLAYERS, 1F, 1.5F);
+        level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.CROSSBOW_LOADING_MIDDLE, SoundSource.PLAYERS, 1F, 1.5F);
+        return super.use(level, player, hand);
+    }
+
+    // f: usageTick
+    @Override
+    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
+        this.fov = 1.0F - getModifiedPullProgress(getUseDuration(stack, livingEntity) - remainingUseDuration, stack) / 4.0F;
+        if(livingEntity.isShiftKeyDown()){
+            this.fov *= 0.5F;
         }
     }
 
+    // f: onStoppedUsing
     @Override
-    public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-        if (user instanceof PlayerEntity playerEntity) {
-            ItemStack itemStack = this.getProjectileTypeWithSelector(playerEntity, stack);
-            if (!itemStack.isEmpty()) {
-                int i = this.getMaxUseTime(stack, user) - remainingUseTicks;
+    public void releaseUsing(ItemStack stack, Level level, LivingEntity entityLiving, int timeLeft) {
+        if (entityLiving instanceof Player player) {
+            ItemStack itemstack = player.getProjectile(stack);
+            if (!itemstack.isEmpty()) {
+                int i = this.getUseDuration(stack, entityLiving) - timeLeft;
                 float f = getModifiedPullProgress(i, stack);
-                if (!((double)f < 0.3)) {
-                    List<ItemStack> list = load(stack, itemStack, playerEntity);
-                    if (world instanceof ServerWorld serverWorld && !list.isEmpty()) {
-                        this.shootAll(serverWorld, playerEntity, playerEntity.getActiveHand(), stack, list, f * 6.0F, 1.0F, f == 1.0F, null);
+                if (!((double) f < 0.3)) {
+                    List<ItemStack> list = draw(stack, itemstack, player);
+                    if (level instanceof ServerLevel serverlevel && !list.isEmpty()) {
+                        this.shoot(serverlevel, player, player.getUsedItemHand(), stack, list, f * 6.0F, 1.0F, f == 1.0F, (LivingEntity) null);
                     }
 
-                    world.playSound(
-                            null,
-                            playerEntity.getX(),
-                            playerEntity.getY(),
-                            playerEntity.getZ(),
-                            SoundInit.BOW_RELEASE,
-                            SoundCategory.PLAYERS,
-                            1.5F,
-                            2.0F / (world.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F
-                    );
-                    playerEntity.incrementStat(Stats.USED.getOrCreateStat(this));
+                    level.playSound((Player) null, player.getX(), player.getY(), player.getZ(), SoundInit.BOW_RELEASE.get(), SoundSource.PLAYERS, 1.5F, 0.75F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+                    player.awardStat(Stats.ITEM_USED.get(this));
                 }
             }
         }
     }
 
+    // f: createArrowEntity
     @Override
-    protected ProjectileEntity createArrowEntity(World world, LivingEntity shooter, ItemStack weaponStack, ItemStack projectileStack, boolean critical) {
-        return new ItemProjectile(world, shooter, shooter.getX(), shooter.getEyeY() - 0.1F, shooter.getZ(), projectileStack);
+    protected Projectile createProjectile(Level level, LivingEntity shooter, ItemStack weapon, ItemStack ammo, boolean isCrit) {
+        return new ItemProjectile(level, shooter, shooter.getX(), shooter.getEyeY() - 0.1F, shooter.getZ(), ammo);
+    }
+
+    public static boolean isCharged(ItemStack slingshotStack) {
+        ChargedProjectiles chargedprojectiles = (ChargedProjectiles) slingshotStack.getOrDefault(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.EMPTY);
+        return !chargedprojectiles.isEmpty();
     }
 
     @Override

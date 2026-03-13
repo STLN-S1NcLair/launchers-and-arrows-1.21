@@ -1,7 +1,6 @@
 package net.stln.launchersandarrows.entity;
 
 public interface RicochetProjectile {
-
     default int getRicochet() {
         return 0;
     }

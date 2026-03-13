@@ -1,12 +1,11 @@
 package net.stln.launchersandarrows.item;
 
-import net.minecraft.item.Item;
-import net.stln.launchersandarrows.item.bow.ModfiableBowItem;
+import net.minecraft.world.item.Item;
 import net.stln.launchersandarrows.item.launcher.BoltThrowerItem;
 
 public class BoltThrowerModifierItem extends ModifierItem{
-    public BoltThrowerModifierItem(Settings settings) {
-        super(settings);
+    public BoltThrowerModifierItem(Properties properties){
+        super(properties);
     }
 
     @Override
