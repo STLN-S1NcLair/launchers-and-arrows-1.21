@@ -196,6 +196,8 @@ public class ItemProjectile extends ThrowableItemProjectile {
             if(entity instanceof LivingEntity livingEntity){
                 livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 2));
                 livingEntity.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 100, 2));
+                Vec3 movement = this.getDeltaMovement();
+                livingEntity.addDeltaMovement(movement.multiply(2.5, (livingEntity.onGround() && movement.y() < 0) ? -0.5 : 1.5, 2.5));
             }
         }
         else if(getItem().is(Items.TORCH)){
