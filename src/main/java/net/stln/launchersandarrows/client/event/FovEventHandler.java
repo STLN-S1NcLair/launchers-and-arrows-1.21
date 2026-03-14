@@ -10,6 +10,10 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ComputeFovModifierEvent;
 import net.stln.launchersandarrows.LaunchersAndArrows;
 import net.stln.launchersandarrows.item.FovModifierItem;
+import net.stln.launchersandarrows.item.ItemInit;
+import net.stln.launchersandarrows.item.bow.LongBowItem;
+import net.stln.launchersandarrows.item.bow.MultiShotBowItem;
+import net.stln.launchersandarrows.item.bow.RainShotBowItem;
 
 @EventBusSubscriber(modid = LaunchersAndArrows.MOD_ID, value = Dist.CLIENT)
 public class FovEventHandler {
@@ -23,8 +27,7 @@ public class FovEventHandler {
 
         if (stack.getItem() instanceof FovModifierItem item) {
 
-            float fov = item.getFov();
-            item.resetFov();
+            float fov = item.getFovModifier(player, stack);
 
             if (player.getAbilities().flying) {
                 fov *= 1.1F;

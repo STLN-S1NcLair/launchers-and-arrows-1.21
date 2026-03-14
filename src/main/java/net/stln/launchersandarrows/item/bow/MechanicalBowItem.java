@@ -11,6 +11,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.stln.launchersandarrows.item.FovModifierItem;
 import net.stln.launchersandarrows.item.component.ChargeComponent;
 import net.stln.launchersandarrows.item.component.ComponentInit;
 import net.stln.launchersandarrows.sound.SoundInit;
@@ -18,9 +19,7 @@ import net.stln.launchersandarrows.sound.SoundInit;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MechanicalBowItem extends ModifiableBowItem {
-
-    // float fov = 1.0F;
+public class MechanicalBowItem extends ModifiableBowItem implements FovModifierItem {
 
     int chargeSlot = 3;
 
@@ -140,15 +139,10 @@ public class MechanicalBowItem extends ModifiableBowItem {
         player.awardStat(Stats.ITEM_USED.get(this));
     }
 
-    /*
     @Override
-    public float getFov(){
-        return this.fov;
+    public float getFovModifier(Player player, ItemStack stack) {
+        int useTicks = player.getTicksUsingItem();
+        float progress = getModifiedPullProgress(useTicks, stack);
+        return 1.0F - progress / 9.0F;
     }
-
-    @Override
-    public void resetFov(){
-        this.fov = 1.0F;
-    }
-    */
 }

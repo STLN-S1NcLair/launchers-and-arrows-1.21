@@ -16,9 +16,7 @@ import net.stln.launchersandarrows.sound.SoundInit;
 
 import java.util.List;
 
-public class LongBowItem extends ModifiableBowItem implements FovModifierItem {
-
-    float fov = 1.0F;
+public class LongBowItem extends ModifiableBowItem implements FovModifierItem{
 
     public LongBowItem(Properties properties) {
         super(properties);
@@ -30,15 +28,6 @@ public class LongBowItem extends ModifiableBowItem implements FovModifierItem {
         level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.CROSSBOW_LOADING_END, SoundSource.PLAYERS, 1.0F, 1.5F);
         level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.CROSSBOW_LOADING_MIDDLE, SoundSource.PLAYERS, 1.0F, 0.5F);
         return super.use(level, player, hand);
-    }
-
-    //f: usageTick
-    @Override
-    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
-        this.fov = 1.0F - getModifiedPullProgress(getUseDuration(stack, livingEntity) - remainingUseDuration, stack) / 4.0F;
-        if(livingEntity.isShiftKeyDown()){
-            this.fov *= 0.5F;
-        }
     }
 
     //f: onStoppedUsing
@@ -63,12 +52,13 @@ public class LongBowItem extends ModifiableBowItem implements FovModifierItem {
     }
 
     @Override
-    public float getFov(){
-        return this.fov;
-    }
-
-    @Override
-    public void resetFov(){
-        this.fov = 1.0F;
+    public float getFovModifier(Player player, ItemStack stack) {
+        int useTicks = player.getTicksUsingItem();
+        float progress = getModifiedPullProgress(useTicks, stack);
+        float fov = 1.0F - progress / 4.0F;
+        if(player.isShiftKeyDown()){
+            fov *= 0.5F;
+        }
+        return fov;
     }
 }

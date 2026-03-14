@@ -15,8 +15,7 @@ import net.stln.launchersandarrows.sound.SoundInit;
 
 import java.util.List;
 
-public class ModularBowItem extends ModifiableBowItem implements FovModifierItem {
-    float fov = 1.0F;
+public class ModularBowItem extends ModifiableBowItem implements FovModifierItem{
 
     public ModularBowItem(Properties properties) {
         super(properties);
@@ -53,12 +52,9 @@ public class ModularBowItem extends ModifiableBowItem implements FovModifierItem
     }
 
     @Override
-    public float getFov(){
-        return this.fov;
-    }
-
-    @Override
-    public void resetFov(){
-        this.fov = 1.0F;
+    public float getFovModifier(Player player, ItemStack stack) {
+        int useTicks = player.getTicksUsingItem();
+        float progress = getModifiedPullProgress(useTicks, stack);
+        return 1.0F - progress / 9.0F;
     }
 }
