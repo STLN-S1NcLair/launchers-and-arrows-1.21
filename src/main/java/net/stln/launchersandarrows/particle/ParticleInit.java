@@ -3,8 +3,6 @@ package net.stln.launchersandarrows.particle;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -25,9 +23,8 @@ public class ParticleInit {
     public static final Supplier<SimpleParticleType> HOMING_EFFECT = PARTICLE_TYPES.register("homing_effect", () -> new SimpleParticleType(true));
     public static final Supplier<SimpleParticleType> GLITCH_EFFECT = PARTICLE_TYPES.register("glitch_effect", () -> new SimpleParticleType(true));
 
-    @OnlyIn(Dist.CLIENT)
-    public static void registerParticleClient(IEventBus eventBus) {
-        LaunchersAndArrows.LOGGER.info("Registering Client Particle for " + LaunchersAndArrows.MOD_ID);
+    public static void registerParticle(IEventBus eventBus) {
+        LaunchersAndArrows.LOGGER.info("Registering Particle for " + LaunchersAndArrows.MOD_ID);
         PARTICLE_TYPES.register(eventBus);
     }
 
