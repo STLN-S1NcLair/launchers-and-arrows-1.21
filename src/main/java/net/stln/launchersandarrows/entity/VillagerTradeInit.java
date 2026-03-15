@@ -54,7 +54,7 @@ public class VillagerTradeInit {
                             5, 7, 0.05F));
 
             /*
-            CUSTOM TICKET -> STRINGS
+            CUSTOM TICKET
              */
 
             trades.get(1).add((e, r) -> new MerchantOffer(
@@ -75,6 +75,96 @@ public class VillagerTradeInit {
             trades.get(1).add((e, r) -> new MerchantOffer(
                     new ItemCost(ItemInit.CUSTOMMADE_TICKET.get()),
                     new ItemStack(ItemInit.DETERIORATION_STRING.get()),
+                    2, 20, 0.05F));
+
+            trades.get(1).add((e, r) -> new MerchantOffer(
+                    new ItemCost(ItemInit.CUSTOMMADE_TICKET.get()),
+                    new ItemStack(ItemInit.PERMEATION_STRING.get()),
+                    2, 20, 0.05F));
+
+            trades.get(1).add((e, r) -> new MerchantOffer(
+                    new ItemCost(ItemInit.CUSTOMMADE_TICKET.get()),
+                    new ItemStack(ItemInit.VIBRATING_STRING.get()),
+                    2, 20, 0.05F));
+
+            trades.get(1).add((e, r) -> new MerchantOffer(
+                    new ItemCost(ItemInit.CUSTOMMADE_TICKET.get()),
+                    new ItemStack(ItemInit.RANGE_STRING.get()),
+                    2, 20, 0.05F));
+
+            trades.get(1).add((e, r) -> new MerchantOffer(
+                    new ItemCost(ItemInit.CUSTOMMADE_TICKET.get()),
+                    new ItemStack(ItemInit.STURDY_STRING.get()),
+                    2, 20, 0.05F));
+
+            trades.get(1).add((e, r) -> new MerchantOffer(
+                    new ItemCost(ItemInit.CUSTOMMADE_TICKET.get()),
+                    new ItemStack(ItemInit.LIGHTWEIGHT_STRING.get()),
+                    2, 20, 0.05F));
+
+            trades.get(1).add((e, r) -> new MerchantOffer(
+                    new ItemCost(ItemInit.CUSTOMMADE_TICKET.get()),
+                    new ItemStack(ItemInit.SLIMY_STRING.get()),
+                    2, 20, 0.05F));
+
+            trades.get(1).add((e, r) -> new MerchantOffer(
+                    new ItemCost(ItemInit.CUSTOMMADE_TICKET.get()),
+                    new ItemStack(ItemInit.PRECISION_STRING.get()),
+                    2, 20, 0.05F));
+
+            trades.get(1).add((e, r) -> new MerchantOffer(
+                    new ItemCost(ItemInit.CUSTOMMADE_TICKET.get()),
+                    new ItemStack(ItemInit.OVERLOADED_STRING.get()),
+                    2, 20, 0.05F));
+
+            trades.get(1).add((e, r) -> new MerchantOffer(
+                    new ItemCost(ItemInit.CUSTOMMADE_TICKET.get()),
+                    new ItemStack(ItemInit.IGNITION_PULLEY.get()),
+                    2, 20, 0.05F));
+
+            trades.get(1).add((e, r) -> new MerchantOffer(
+                    new ItemCost(ItemInit.CUSTOMMADE_TICKET.get()),
+                    new ItemStack(ItemInit.COOLING_PULLEY.get()),
+                    2, 20, 0.05F));
+
+            trades.get(1).add((e, r) -> new MerchantOffer(
+                    new ItemCost(ItemInit.CUSTOMMADE_TICKET.get()),
+                    new ItemStack(ItemInit.POWER_GENERATION_PULLEY.get()),
+                    2, 20, 0.05F));
+
+            trades.get(1).add((e, r) -> new MerchantOffer(
+                    new ItemCost(ItemInit.CUSTOMMADE_TICKET.get()),
+                    new ItemStack(ItemInit.CORROSION_RESISTANT_PULLEY.get()),
+                    2, 20, 0.05F));
+
+            trades.get(1).add((e, r) -> new MerchantOffer(
+                    new ItemCost(ItemInit.CUSTOMMADE_TICKET.get()),
+                    new ItemStack(ItemInit.HYDROPHILIC_PULLEY.get()),
+                    2, 20, 0.05F));
+
+            trades.get(1).add((e, r) -> new MerchantOffer(
+                    new ItemCost(ItemInit.CUSTOMMADE_TICKET.get()),
+                    new ItemStack(ItemInit.CONDUCTION_PULLEY.get()),
+                    2, 20, 0.05F));
+
+            trades.get(1).add((e, r) -> new MerchantOffer(
+                    new ItemCost(ItemInit.CUSTOMMADE_TICKET.get()),
+                    new ItemStack(ItemInit.COMPOUND_PULLEY.get()),
+                    2, 20, 0.05F));
+
+            trades.get(1).add((e, r) -> new MerchantOffer(
+                    new ItemCost(ItemInit.CUSTOMMADE_TICKET.get()),
+                    new ItemStack(ItemInit.REINFORCED_PULLEY.get()),
+                    2, 20, 0.05F));
+
+            trades.get(1).add((e, r) -> new MerchantOffer(
+                    new ItemCost(ItemInit.CUSTOMMADE_TICKET.get()),
+                    new ItemStack(ItemInit.LUBRICATION_PULLEY.get()),
+                    2, 20, 0.05F));
+
+            trades.get(1).add((e, r) -> new MerchantOffer(
+                    new ItemCost(ItemInit.CUSTOMMADE_TICKET.get()),
+                    new ItemStack(ItemInit.POWERED_PULLEY.get()),
                     2, 20, 0.05F));
 
             /*
@@ -143,6 +233,30 @@ public class VillagerTradeInit {
                     new MerchantOffer(
                             new ItemCost(ItemInit.METAL_ARROWHEAD.get(), 1),
                             new ItemStack(ItemInit.COOLANT.get(), 5),
+                            20, 5, 0.05F));
+
+            trades.get(3).add((entity, random) ->
+                    new MerchantOffer(
+                            new ItemCost(ItemInit.METAL_ARROWHEAD.get(), 1),
+                            new ItemStack(ItemInit.REDSTONE_CAPACITOR.get(), 5),
+                            20, 5, 0.05F));
+
+            trades.get(3).add((entity, random) ->
+                    new MerchantOffer(
+                            new ItemCost(ItemInit.METAL_ARROWHEAD.get(), 1),
+                            new ItemStack(ItemInit.ACID.get(), 5),
+                            20, 5, 0.05F));
+
+            trades.get(3).add((entity, random) ->
+                    new MerchantOffer(
+                            new ItemCost(ItemInit.METAL_ARROWHEAD.get(), 1),
+                            new ItemStack(ItemInit.VISCOUS_WATER.get(), 5),
+                            20, 5, 0.05F));
+
+            trades.get(3).add((entity, random) ->
+                    new MerchantOffer(
+                            new ItemCost(ItemInit.METAL_ARROWHEAD.get(), 1),
+                            new ItemStack(ItemInit.ECHO_COIL.get(), 5),
                             20, 5, 0.05F));
 
             /*
