@@ -207,9 +207,9 @@ public class ArrowEffectMixin implements RicochetEffectProjectile {
                 setRicochet = true;
             }
             arrow.pickup = AbstractArrow.Pickup.DISALLOWED;
-            CompoundTag nbt = new CompoundTag();
-            arrow.addAdditionalSaveData(nbt);
-            if (nbt.getBoolean("inGround")) {
+            CompoundTag compound = new CompoundTag();
+            arrow.addAdditionalSaveData(compound);
+            if (compound.getBoolean("inGround")) {
                 if (inGroundTime == 0) {
                     arrow.level().playSound(null, arrow.blockPosition(), SoundInit.WAVE.get(), SoundSource.PLAYERS);
                 }
@@ -238,7 +238,7 @@ public class ArrowEffectMixin implements RicochetEffectProjectile {
                 arrow.addDeltaMovement(velocity.scale(1 / velocity.length() / 5));
             }
         } else if (itemStack.is(ItemInit.LINEAR_ARROW)) {
-            arrow.setNoGravity(true);
+            arrow.setNoGravity(arrow.tickCount < 300);
         } else if (itemStack.is(ItemInit.BURST_ARROW)) {
             arrow.pickup = AbstractArrow.Pickup.DISALLOWED;
             CompoundTag nbt = new CompoundTag();
